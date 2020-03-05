@@ -29,4 +29,13 @@
 
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon fa fa-terminal'></i> Logs</a></li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('backup') }}'><i class='nav-icon fa fa-hdd-o'></i> Backups</a></li>
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('useraddresses') }}'><i class='nav-icon fa fa-question'></i> UserAddresses</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('useraddress') }}'><i class='nav-icon fa fa-question'></i> UserAddresses</a></li>
+
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('icon') }}'><i class='nav-icon fa fa-question'></i> Icons</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('product') }}'><i class='nav-icon fa fa-question'></i> Products</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('product_sku') }}'><i class='nav-icon fa fa-question'></i> Product_skus</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('product') }}'><i class='nav-icon fa fa-question'></i> Products</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('product_sku') }}'><i class='nav-icon fa fa-question'></i> Product_skus</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('chapter') }}'><i class='nav-icon fa fa-question'></i> Chapters</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('book') }}'><i class='nav-icon fa fa-question'></i> Books</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('tag') }}'><i class='nav-icon fa fa-question'></i> Tags</a></li>

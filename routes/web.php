@@ -11,7 +11,30 @@
 |
 */
 
-Route::get('/', 'PagesController@root')->name('root');
+//Route::get('/', 'PagesController@root')->name('root');
+Route::redirect('/', '/books')->name('root');
+Route::get('books', 'BooksController@index')->name('books.index');
+
+Route::get('books/{book}', 'BooksController@show')->name('books.show');
+Route::get('read/{book}', 'BooksController@read')->name('book.read');
+Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
+
+//wechat
+// https://github.com/overtrue/laravel-wechat
+
+Route::any('/wechat', 'WeChatController@serve');
+Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
+    Route::get('/user', function () {
+        $user = session('wechat.oauth_user.default'); // 拿到授权用户资料
+
+        dd($user);
+    });
+});
+
+//end wechat route
+
+
+
 Auth::routes(['verify' => true]);
 //Auth::routes();
 

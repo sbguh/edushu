@@ -1,6 +1,6 @@
 <?php
 
-namespace Backpack\NewsCRUD\app\Models;
+namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -25,6 +25,12 @@ class Tag extends Model
     protected $fillable = ['name', 'slug'];
     // protected $hidden = [];
     // protected $dates = [];
+
+    public function books()
+      {
+          return $this->belongsToMany('App\Models\Book', 'book_tag');
+      }
+
 
     /**
      * Return the sluggable configuration array for this model.

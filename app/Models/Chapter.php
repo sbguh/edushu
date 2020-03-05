@@ -5,7 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class UserAddress extends Model
+class Chapter extends Model
 {
     use CrudTrait;
 
@@ -15,38 +15,38 @@ class UserAddress extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'user_addresses';
-
-    protected $fillable = [
-        'province',
-        'city',
-        'district',
-        'address',
-        'zip',
-        'contact_name',
-        'contact_phone',
-        'last_used_at',
-    ];
-
+    protected $table = 'chapters';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
+    public $casts = [
+        'details'       => 'object',
+        'extras' => 'object',
+    ];
+
+    protected $fillable = ['title','url','content', 'book_id', 'extras','images','sort','state','read_count','word_count','word_count'];
+
+
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
-    protected $dates = ['last_used_at'];
 
-
-    public function user()
+    public function book()
     {
-        return $this->belongsTo("App\User");
+        return $this->belongsTo('App\Models\Book', 'book_id');
     }
 
-    public function getFullAddressAttribute()
+/*
+    public function nextchapter()
     {
-        return "{$this->province}{$this->city}{$this->district}{$this->address}";
+        return $this->belongsTo('App\Models\Book', 'book_id');
     }
 
+    public function previouschapter()
+    {
+        return $this->belongsTo('App\Models\Book', 'book_id');
+    }
+*/
 
     /*
     |--------------------------------------------------------------------------

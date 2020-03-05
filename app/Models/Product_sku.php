@@ -5,7 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class UserAddress extends Model
+class Product_sku extends Model
 {
     use CrudTrait;
 
@@ -15,36 +15,19 @@ class UserAddress extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'user_addresses';
-
-    protected $fillable = [
-        'province',
-        'city',
-        'district',
-        'address',
-        'zip',
-        'contact_name',
-        'contact_phone',
-        'last_used_at',
-    ];
-
+    protected $table = 'product_skus';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
-    protected $dates = ['last_used_at'];
 
+    protected $fillable = ['title', 'description', 'price', 'stock','product_id'];
 
-    public function user()
+    public function product()
     {
-        return $this->belongsTo("App\User");
-    }
-
-    public function getFullAddressAttribute()
-    {
-        return "{$this->province}{$this->city}{$this->district}{$this->address}";
+        return $this->belongsTo(Product::class);
     }
 
 
