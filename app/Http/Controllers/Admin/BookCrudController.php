@@ -47,16 +47,7 @@ class BookCrudController extends CrudController
             'visibleInTable' => true,
             'visibleInModal' => true,
         ]);
-        CRUD::addColumn([
-            // 1-n relationship
-            'label'          => 'Category', // Table column heading
-            'type'           => 'select',
-            'name'           => 'category_id', // the column that contains the ID of that connected entity;
-            'entity'         => 'category', // the method that defines the relationship in your Model
-            'attribute'      => 'name', // foreign key attribute that is shown to user
-            'visibleInTable' => true,
-            'visibleInModal' => false,
-        ]);
+
 
     }
 
@@ -191,17 +182,6 @@ class BookCrudController extends CrudController
             'tab'  => 'Texts',
         ]);
 
-        CRUD::addField([  // Select2
-            'label'     => 'Category',
-            'type'      => 'select2',
-            'name'      => 'category_id', // the db column for the foreign key
-            'entity'    => 'category', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
-            // 'wrapperAttributes' => [
-            //     'class' => 'form-group col-md-6'
-            //   ], // extra HTML attributes for the field wrapper - mostly for resizing fields
-            'tab' => 'Basic Info',
-        ]);
 
         CRUD::addField([   // Number
             'name'  => 'price',

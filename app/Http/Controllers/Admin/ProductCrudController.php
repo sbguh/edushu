@@ -12,7 +12,7 @@ class ProductCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\BulkCloneOperation;
@@ -26,7 +26,7 @@ class ProductCrudController extends CrudController
 
     protected function setupListOperation()
     {
-        CRUD::addColumns(['id','name', 'description']); // add multiple columns, at the end of the stack
+        CRUD::addColumns(['id','name']); // add multiple columns, at the end of the stack
         CRUD::addColumn([
             'name'           => 'price',
             'type'           => 'number',
@@ -34,16 +34,7 @@ class ProductCrudController extends CrudController
             'visibleInTable' => false,
             'visibleInModal' => true,
         ]);
-        CRUD::addColumn([
-            // 1-n relationship
-            'label'          => 'Category', // Table column heading
-            'type'           => 'select',
-            'name'           => 'category_id', // the column that contains the ID of that connected entity;
-            'entity'         => 'category', // the method that defines the relationship in your Model
-            'attribute'      => 'name', // foreign key attribute that is shown to user
-            'visibleInTable' => true,
-            'visibleInModal' => false,
-        ]);
+
     }
 
     protected function setupCreateOperation()
@@ -71,6 +62,20 @@ class ProductCrudController extends CrudController
             //'readonly'=>'readonly',
         ]);
 
+        CRUD::addField([   // Number
+            'name'  => 'price',
+            'label' => 'Price',
+            'type'  => 'text', //number
+            // optionals
+            // 'attributes' => ["step" => "any"], // allow decimals
+            'prefix' => '$',
+          //  'suffix' => '.00',
+            // 'wrapperAttributes' => [
+            //    'class' => 'form-group col-md-6'
+            //  ], // extra HTML attributes for the field wrapper - mostly for resizing fields
+            'tab' => 'Texts',
+        ]);
+
         CRUD::addField([   // Textarea
             'name'  => 'description',
             'label' => 'Description',
@@ -84,6 +89,8 @@ class ProductCrudController extends CrudController
             'type'  => 'wysiwyg',
             'tab'   => 'Texts',
         ]);
+
+
 
         CRUD::addField([
             'label' => "Profile Image",
@@ -136,31 +143,8 @@ class ProductCrudController extends CrudController
             'tab'  => 'Texts',
         ]);
 
-        CRUD::addField([  // Select2
-            'label'     => 'Category',
-            'type'      => 'select2',
-            'name'      => 'category_id', // the db column for the foreign key
-            'entity'    => 'category', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
-            // 'wrapperAttributes' => [
-            //     'class' => 'form-group col-md-6'
-            //   ], // extra HTML attributes for the field wrapper - mostly for resizing fields
-            'tab' => 'Basic Info',
-        ]);
 
-        CRUD::addField([   // Number
-            'name'  => 'price',
-            'label' => 'Price',
-            'type'  => 'text', //number
-            // optionals
-            // 'attributes' => ["step" => "any"], // allow decimals
-            'prefix' => '$',
-          //  'suffix' => '.00',
-            // 'wrapperAttributes' => [
-            //    'class' => 'form-group col-md-6'
-            //  ], // extra HTML attributes for the field wrapper - mostly for resizing fields
-            'tab' => 'Basic Info',
-        ]);
+
 
         CRUD::addFields([
             [ // Text
