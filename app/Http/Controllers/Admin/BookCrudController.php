@@ -28,6 +28,8 @@ class BookCrudController extends CrudController
       //$this->setAjaxEntity('entity');
       $this->setAjaxStoreRequest(\RequestNamespace\StoreRequest::class);
       $this->setAjaxUpdateRequest(\RequestNamespace\UpdateRequest::class);
+      //$this->crud->setEditView('vendor.backpack.crud.books.edit');
+      $this->crud->setCreateView('vendor.backpack.crud.books.create');
         $this->crud->setModel('App\Models\Book');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/book');
         $this->crud->setEntityNameStrings('book', 'books');
@@ -65,6 +67,7 @@ class BookCrudController extends CrudController
             'label' => '标题',
             'type'  => 'text',
             'tab'   => 'Texts',
+            'attributes'=>['v-model'=>'name'],
 
             // optional
             //'prefix' => '',

@@ -1,9 +1,11 @@
-<footer class="footer">
+<footer class="footer navbar-default navbar-fixed-bottom">
+  <nav>
   <div class="container">
     <p class="float-left">
-      由 <a href="https://leo108.com" target="_blank">Leo</a> 设计和编码 <span style="color: #e27575;font-size: 14px;">❤</span>
+      <a href="https://book.edushu.co" target="_blank">共享书房</a>
     </p>
 
-    <p class="float-right"><a href="mailto:name@email.com">联系我们</a></p>
+    <p class="float-right"><a href="mailto:liyuping1984@gmail.com">联系我们</a></p>
   </div>
+  <nav>
 </footer>

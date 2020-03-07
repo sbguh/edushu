@@ -1,8 +1,9 @@
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-static-top">
   <div class="container">
     <!-- Branding Image -->
     <a class="navbar-brand " href="{{ url('/') }}">
-      Laravel Shop
+      共享书房
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -13,7 +14,7 @@
       <ul class="navbar-nav mr-auto">
 
       </ul>
-
+@section('Navbar')
       <!-- Right Side Of Navbar -->
       <ul class="navbar-nav navbar-right">
         <!-- 登录注册链接开始 -->
@@ -38,6 +39,8 @@
         @endguest
         <!-- 登录注册链接结束 -->
       </ul>
+
+@show
     </div>
   </div>
 </nav>
