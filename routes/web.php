@@ -53,7 +53,14 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 });
 
 
-Route::group(['middleware' => ['wechat','web', 'wechat.oauth']], function () {
+
+Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
+    Route::get('wechat/auth', function () {
+        $user = session('wechat.oauth_user.default'); // 拿到授权用户资料
+    });
+});
+
+Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 
   Route::get('books', 'BooksController@index')->name('books.index');
 

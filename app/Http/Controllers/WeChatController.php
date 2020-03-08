@@ -224,9 +224,12 @@ class WeChatController extends Controller
           // web outh 微信登录验证后保存数据到本地服务器数据库中
     public function wechatoauth(){
 
+      $app = app('wechat.official_account');
 
-      $user = session('wechat.oauth_user');
-$user =$user['default'];
+      $user = session('wechat.oauth_user.default');
+
+      //$user = $app->user->get($user->id);
+
 $openid =  $user->id;
 $email = $user->email;
 if($email==false){
@@ -241,12 +244,11 @@ $password = 'Edushuco2020!@';
 
       if(User::where('openid',$openid)->count()){
 
-
         if ( Auth::attempt(['openid' => $openid,'password' => $password]) ){
           $user_info = User::where('openid',$openid)->first();
 
-          if($user_info->nickname != $nickname){
-            $user_info->nickname = $nickname;
+          if($user_info->name != $name){
+            $user_info->name = $nickname;
             $user_info->save();
           }
 
@@ -255,14 +257,10 @@ $password = 'Edushuco2020!@';
             $user_info->save();
           }
 
-          if($user_info->avatar != $avatar){
-            $user_info->avatar = $avatar;
-            $user_info->save();
-          }
           session(['wechatuser' => $openid]);
-
-          return redirect(session("return_web_url"));
-          //Redirect::back();
+          return redirect(route('books.index'));
+        //  return redirect(session("return_web_url"));
+          Redirect::back();
           //$oauth->redirect()->send();
         }
       }else{
@@ -270,17 +268,23 @@ $password = 'Edushuco2020!@';
             'name' => $name,
             'email' => $email,
             'openid' => $openid,
-            'extras' => $user,
+            'extras' => $user->toArray() ,
 
-            'password' => bcrypt('Edushuco2020!@'),
+            'password' => bcrypt($password),
         ];
 
-        //dd($data);
+      //  dd($data);
         User::create($data);
         session(['wechatuser' => $openid]);
 
+        if ( Auth::attempt(['openid' => $openid,'password' => $password]) ){
+          //return redirect(session("return_web_url"));
+          //return redirect(route('books.index'));
+          Redirect::back();
+        }
+        Redirect::back();
 //die("test2");
-        return redirect(route('wechatcourse'));
+        //return redirect(route('books.index'));
       }
 
 

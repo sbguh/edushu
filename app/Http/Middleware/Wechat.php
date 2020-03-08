@@ -23,7 +23,7 @@ class Wechat
       $tmp_url = url()->full();
       session(['return_web_url'=> $tmp_url]);
       if ($user ==false) {
-        return redirect()->route('wechatoauth');
+        return redirect()->route('books.index');
       }
       return $next($request);
 

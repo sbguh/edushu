@@ -14,6 +14,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use CrudTrait;
     use HasRoles;
+    use CrudTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','extras','phonenumber','openid',
     ];
 
     /**
@@ -40,6 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'extras' => 'object',
     ];
 
 
