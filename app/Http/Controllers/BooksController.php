@@ -47,6 +47,7 @@ class BooksController extends Controller
           return redirect(route('book.read',$book->id), 301);
 
         }
+        $app = app('wechat.official_account');
 
         $chapters = Chapter::where('book_id',$book->id)->get();
 
@@ -54,7 +55,7 @@ class BooksController extends Controller
 
         $next = Chapter::where('book_id',$book->id)->where('id', '>', $chapter->id)->orderBy('id', 'asc')->first();
 
-        return view('books.chapter', ['book' => $book,'chapter'=>$chapter,'prev'=>$prev,'next'=>$next,'chapters'=>$chapters]);
+        return view('books.chapter', ['book' => $book,'chapter'=>$chapter,'prev'=>$prev,'next'=>$next,'chapters'=>$chapters,'app'=>$app]);
     }
 
 
