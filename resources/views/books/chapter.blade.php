@@ -1,5 +1,5 @@
 @extends('layouts.wechat_default')
-@section('title', $chapter->title." - "$book->title)
+@section('title', $chapter->title." - ".$book->title)
 
 
 @section('jssdk')
