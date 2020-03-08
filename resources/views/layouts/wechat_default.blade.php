@@ -10,16 +10,17 @@
     <!-- 样式 -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
-
+@section('jssdk')
     <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
+
 <script type="text/javascript" charset="utf-8">
     wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData'), false) !!});
 
   wx.ready(function () {
         wx.updateAppMessageShareData({
-            title: '', // 分享标题
-            desc: '', // 分享描述
-            link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            title: '中小学生免费借书平台', // 分享标题
+            desc: '中小学必读书目免费借，中小学身边的免费借书平台', // 分享描述
+            link: 'https://book.edushu.co', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
             imgUrl: '', // 分享图标
             success: function () {
               // 设置成功
@@ -29,7 +30,7 @@
 
 
 </script>
-
+@show
 
 </head>
 <body>
