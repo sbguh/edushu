@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.wechat_default')
 @section('title', '商品列表')
 
 @section('content')
