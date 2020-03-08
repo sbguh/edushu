@@ -15,8 +15,9 @@ class BooksController extends Controller
     {
 
         $books = Book::where('state',1)->paginate();
+        $app = app('wechat.official_account');
 
-        return view('books.index', ['books' => $books]);
+        return view('books.index', ['books' => $books,'app'=>$app]);
     }
 
     public function show(Book $book, Request $request)
@@ -25,15 +26,17 @@ class BooksController extends Controller
         if (!$book->state) {
             throw new \Exception('商品未上架');
         }
+        $app = app('wechat.official_account');
 
-        return view('books.show', ['book' => $book]);
+        return view('books.show', ['book' => $book,'app'=>$app]);
     }
 
     public function read(Book $book, Request $request)
     {
         // 判断商品是否已经上架，如果没有上架则抛出异常。
         $chapters = $book->chapters()->get();
-        return view('books.read', ['book' => $book,'chapters'=>$chapters]);
+        $app = app('wechat.official_account');
+        return view('books.read', ['book' => $book,'chapters'=>$chapters,'app'=>$app]);
     }
 
     public function chapter(Book $book, Chapter $chapter, Request $request)
