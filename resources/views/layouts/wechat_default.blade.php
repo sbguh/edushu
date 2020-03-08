@@ -11,10 +11,10 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
 @section('jssdk')
-    <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
 
 <script type="text/javascript" charset="utf-8">
-    wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData'), false) !!});
+wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','updateTimelineShareData'), false) !!});
 
   wx.ready(function () {
         wx.updateAppMessageShareData({
