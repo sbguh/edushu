@@ -26,7 +26,7 @@
   wx.ready(function () {
         wx.updateAppMessageShareData({
             title: {$book->title}, // 分享标题
-            desc: "免费在线阅读".$book->title, // 分享描述
+            desc: "免费在线阅读"+{{$book->title}}, // 分享描述
             link: {{route('books.show',$book->id)}}, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
             imgUrl: '', // 分享图标
             success: function () {
