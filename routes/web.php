@@ -38,22 +38,33 @@ Route::get('products', 'ProductsController@index')->name('products.index');
 Route::get('products', 'ProductsController@index')->name('products.index');
 Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 
-Route::get('books', 'BooksController@index')->name('books.index');
-
-Route::get('books/{book}', 'BooksController@show')->name('books.show');
-Route::get('read/{book}', 'BooksController@read')->name('book.read');
-Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
 
 //wechat
 // https://github.com/overtrue/laravel-wechat
 
 Route::any('/wechat', 'WeChatController@serve');
+Route::any('/wechat/usermenu', 'WeChatController@usermenu');  //自定义菜单
 Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
     Route::get('/user', function () {
         $user = session('wechat.oauth_user.default'); // 拿到授权用户资料
 
         dd($user);
     });
+});
+
+
+Route::group(['middleware' => ['wechat','web', 'wechat.oauth']], function () {
+
+  Route::get('books', 'BooksController@index')->name('books.index');
+
+  Route::get('books/{book}', 'BooksController@show')->name('books.show');
+  Route::get('read/{book}', 'BooksController@read')->name('book.read');
+  Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
+
+
+  Route::any('/jssdk', 'WeChatController@jssdk')->name('jssdk');
+  Route::any('/wechatoauth', 'WeChatController@wechatoauth')->name('wechatoauth');
+
 });
 
 //end wechat route
