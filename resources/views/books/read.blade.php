@@ -31,7 +31,6 @@
             imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
             success: function () {
               // 设置成功
-              alert("test ok");
             }
           })
 

@@ -15,9 +15,6 @@
             link: "{{route('books.index')}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
             imgUrl: "https://book.edushu.co/uploads/images/logo1.png", // 分享图标
             success: function () {
-              // 设置成功
-
-              alert("test ok");
             }
           })
 
