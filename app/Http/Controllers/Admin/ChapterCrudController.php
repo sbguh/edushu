@@ -81,6 +81,25 @@ class ChapterCrudController extends CrudController
         ]);
 
 
+        CRUD::addField([ // Table
+          'name' => 'audio',
+          'label' => 'MP3音频',
+          'type' => 'upload',
+          'disk' => 'edushu',
+          'upload' => true,
+            'tab' => 'Texts',
+        ]);
+
+        CRUD::addField([ // Table
+          'name' => 'video',
+          'label' => 'MP4视频',
+          'type' => 'upload',
+          'disk' => 'edushu',
+          'upload' => true,
+            'tab' => 'Texts',
+        ]);
+
+
 
         CRUD::addField([ // Table
             'name'            => 'features',

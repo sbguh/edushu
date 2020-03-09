@@ -39,27 +39,61 @@
 
 
 @section('content')
-<div class="row">
-<div class="col-lg-10 offset-lg-1">
-<div class="card">
-  <h3>{{$chapter->title}}</h3>
-<div>{!!$chapter->content!!}</div>
-@if($prev)
-<div>上一章: <a href="{{route('book.read.chapter',[$book->id,$prev->id])}}">{{$prev->title}}</a></div>
-@endif
+
+<div class="page">
+  <div class="weui-flex">
+
+    @if($prev)
+    <div class="weui-flex__item"><div class="placeholder">上一章: <a href="{{route('book.read.chapter',[$book->id,$prev->id])}}">{{$prev->title}}</a></div></div>
+    @endif
+    @if($next)
+
+    <div class="weui-flex__item"><div class="placeholder">下一章: <a href="{{route('book.read.chapter',[$book->id,$next->id])}}">{{$next->title}}</a></div></div>
+    @endif
+
+  </div>
+</div>
+<div class="row page">
 
 
-@if($next)
-<div>下一章: <a href="{{route('book.read.chapter',[$book->id,$next->id])}}">{{$next->title}}</a></div>
-@endif
+    <div class="page__hd">
+        <h1 class="page__title"></h1>
+        <p class="page__desc">{{$book->title}}</p>
+    </div>
+    <div class="page__bd">
+        <article class="weui-article">
+            <section>
+                <h2 class="title">{{$chapter->title}}</h2>
+                <section>
+                  @if($chapter->audio)
+                  听书: <audio src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" controls="controls" autoplay ></audio>
+                  @endif
+                    {!!$chapter->content!!}
+                </section>
+
+            </section>
+        </article>
+    </div>
+
+    <div class="weui-flex">
+
+      @if($prev)
+      <div class="weui-flex__item"><div class="placeholder">上一章: <a href="{{route('book.read.chapter',[$book->id,$prev->id])}}">{{$prev->title}}</a></div></div>
+      @endif
+      @if($next)
+
+      <div class="weui-flex__item"><div class="placeholder">下一章: <a href="{{route('book.read.chapter',[$book->id,$next->id])}}">{{$next->title}}</a></div></div>
+      @endif
+
+    </div>
 
 </div>
-</div>
 
-</div>
 @endsection
 
 @section('Navbar')
+
+
 <ul class="navbar-nav navbar-right">
   <!-- 登录注册链接开始 -->
   <li class="nav-item dropdown">
@@ -69,12 +103,17 @@
         目录
       </a>
 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-  <ul>
+
   @foreach($chapters as $chapterItem)
-  <li><a href="{{route('book.read.chapter',[$book->id,$chapterItem->id])}}">{{$chapterItem->title}}</a></li>
+
+        <div class="weui-cell  weui-cell_example">
+             <div class="weui-cell__ft"><a href="{{route('book.read.chapter',[$book->id,$chapterItem->id])}}">{{$chapterItem->title}}</a></div>
+         </div>
+
 
   @endforeach
-  </ul>
+
+
 </div>
 </li>
 </ul>

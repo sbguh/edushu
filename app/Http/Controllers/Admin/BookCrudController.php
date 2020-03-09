@@ -85,6 +85,13 @@ class BookCrudController extends CrudController
         ]);
 
         CRUD::addField([ // Text
+            'name'  => 'barcode',
+            'label' => '条码',
+            'type'  => 'text',
+            'tab'   => 'Texts',
+        ]);
+
+        CRUD::addField([ // Text
             'name'  => 'author',
             'label' => '作者',
             'type'  => 'text',
@@ -154,6 +161,25 @@ class BookCrudController extends CrudController
           'upload' => true,
             'tab' => 'Texts',
         ]);
+
+        CRUD::addField([ // Table
+          'name' => 'audio',
+          'label' => 'MP3音频',
+          'type' => 'upload',
+          'disk' => 'edushu',
+          'upload' => true,
+            'tab' => 'Texts',
+        ]);
+
+        CRUD::addField([ // Table
+          'name' => 'video',
+          'label' => 'MP4视频',
+          'type' => 'upload',
+          'disk' => 'edushu',
+          'upload' => true,
+            'tab' => 'Texts',
+        ]);
+
 
 
         CRUD::addField([ // Table

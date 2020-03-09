@@ -32,7 +32,7 @@ class Book extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
 
-    protected $fillable = ['name','slug','author','press','press_date','price', 'description', 'details', 'features', 'category_id', 'extras','images','image','sort','state','read_count','last_chapter','word_count'];
+    protected $fillable = ['name','slug','barcode','audio','video','author','press','press_date','price', 'description', 'details', 'features', 'category_id', 'extras','images','image','sort','state','read_count','last_chapter','word_count'];
 
     // protected $fillable = [];
     // protected $hidden = [];
@@ -95,7 +95,27 @@ class Book extends Model
                 $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
             }
         }
+        public function setAudioAttribute($value)
+            {
+                $attribute_name = "audio";
+                $disk = "edushu";
+                $destination_path = "books/audio";
 
+                $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+
+            // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
+            }
+
+       public function setVideoAttribute($value)
+                {
+                    $attribute_name = "video";
+                    $disk = "edushu";
+                    $destination_path = "books/video";
+
+                    $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+
+                // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
+                }
 
     public function chapters()
     {

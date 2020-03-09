@@ -36,7 +36,9 @@ class BooksController extends Controller
         // 判断商品是否已经上架，如果没有上架则抛出异常。
         $chapters = $book->chapters()->get();
         $app = app('wechat.official_account');
-        return view('books.read', ['book' => $book,'chapters'=>$chapters,'app'=>$app]);
+        $chapter = Chapter::where('book_id',$book->id)->first();
+        return redirect(route('book.read.chapter',[$book->id,$chapter->id]), 301);
+        //return view('books.read', ['book' => $book,'chapters'=>$chapters,'app'=>$app]);
     }
 
     public function chapter(Book $book, Chapter $chapter, Request $request)
@@ -47,7 +49,7 @@ class BooksController extends Controller
         }
         if($book->id != $chapter->book_id){
           $chapter = Chapter::where('book_id',$book->id)->first();
-          return redirect(route('book.read',$book->id), 301);
+          return redirect(route('book.read.chapter',[$book->id,$chapter->id]), 301);
 
         }
         $app = app('wechat.official_account');

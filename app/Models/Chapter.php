@@ -24,7 +24,7 @@ class Chapter extends Model
         'extras' => 'object',
     ];
 
-    protected $fillable = ['title','url','content', 'book_id', 'extras','images','sort','state','read_count','word_count','word_count'];
+    protected $fillable = ['title','url','content', 'book_id', 'extras','images','sort','state','read_count','word_count','word_count','audio','video'];
 
 
     // protected $fillable = [];
@@ -35,6 +35,29 @@ class Chapter extends Model
     {
         return $this->belongsTo('App\Models\Book', 'book_id');
     }
+
+    public function setAudioAttribute($value)
+        {
+            $attribute_name = "audio";
+            $disk = "edushu";
+            $destination_path = "books/audio";
+
+            $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+
+        // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
+        }
+
+   public function setVideoAttribute($value)
+            {
+                $attribute_name = "video";
+                $disk = "edushu";
+                $destination_path = "books/video";
+
+                $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+
+            // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
+            }
+            
 
 /*
     public function nextchapter()
