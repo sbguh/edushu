@@ -63,7 +63,10 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 
 
-
+Route::get('books', 'BooksController@index')->name('books.index');
+Route::get('books/{book}', 'BooksController@show')->name('books.show');
+Route::get('read/{book}', 'BooksController@read')->name('book.read');
+Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
 
 
 
@@ -71,10 +74,7 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
   Route::any('/wechatoauth', 'WeChatController@wechatoauth')->name('wechatoauth');
 
 });
-  Route::get('books', 'BooksController@index')->name('books.index');
-Route::get('books/{book}', 'BooksController@show')->name('books.show');
-Route::get('read/{book}', 'BooksController@read')->name('book.read');
-Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
+
 
 //end wechat route
 
