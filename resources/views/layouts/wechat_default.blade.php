@@ -9,22 +9,23 @@
     <title>@yield('title', '中小学生免费借书平台') - 共享书房</title>
     <!-- 样式 -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-
+<script src="{{ mix('js/app.js') }}"></script>
 @section('jssdk')
 
 @show
 
 </head>
 <body>
-
+<div id="app" class="{{ route_class() }}-page">
         @include('layouts._header')
         <div class="container wechat_content">
             @yield('content')
         </div>
+</div>        
         @include('layouts.wechat_footer')
 
     <!-- JS 脚本 -->
-    <script src="{{ mix('js/app.js') }}"></script>
+
     @yield('scriptsAfterJs')
 </body>
 </html>

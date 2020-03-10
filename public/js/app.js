@@ -53532,8 +53532,10 @@ __webpack_require__(/*! ./components/UserAddressesCreateAndEdit */ "./resources/
  */
 
 
-var app = new Vue({
-  el: '#app'
+$(function () {
+  var app = new Vue({
+    el: '#app'
+  });
 });
 
 /***/ }),

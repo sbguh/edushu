@@ -4,6 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+
 require('./bootstrap');
 
 window.Vue = require('vue');
@@ -29,6 +30,10 @@ require('./components/UserAddressesCreateAndEdit');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-    el: '#app',
-});
+ $(function(){
+
+   const app = new Vue({
+       el: '#app',
+   });
+
+ })

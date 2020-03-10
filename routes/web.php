@@ -59,12 +59,12 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
         $user = session('wechat.oauth_user.default'); // 拿到授权用户资料
     });
 });
-
+Route::get('books/{book}', 'BooksController@show')->name('books.show');
 Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 
 
 Route::get('books', 'BooksController@index')->name('books.index');
-Route::get('books/{book}', 'BooksController@show')->name('books.show');
+
 Route::get('read/{book}', 'BooksController@read')->name('book.read');
 Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
 

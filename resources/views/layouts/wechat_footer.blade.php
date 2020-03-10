@@ -1,12 +1,15 @@
-<script type="text/javascript">
-    $(function(){
-        $('.weui-navbar__item').on('click', function () {
-            $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
-        });
-    });
+<script type="text/javascript" charset="utf-8">
+
+
+var audio = document.getElementById("weaudio");
+audio.load();
+audio.play();
+document.addEventListener("WeixinJSBridgeReady", function () {
+        audio.play();
+}, false);
+
+
 </script>
-
-
 
 
 <div class="col-xs-12">
