@@ -34,21 +34,21 @@
 
 
 
-        function audioAutoPlay(){
-            var audio = document.getElementById("weaudio");
-            audio.play();
-            document.addEventListener("WeixinJSBridgeReady", function () {
-                    audio.play();
-            }, false);
+function audioAutoPlay(){
 
 
 
-        }
-
-        audioAutoPlay();
 
 
-      });
+}
+var audio = document.getElementById("weaudio");
+audio.load();
+audio.play();
+document.addEventListener("WeixinJSBridgeReady", function () {
+        audio.play();
+}, false);
+
+audioAutoPlay();
 
 
 </script>
