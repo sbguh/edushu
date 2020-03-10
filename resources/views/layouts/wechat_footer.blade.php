@@ -1,16 +1,3 @@
-<script type="text/javascript" charset="utf-8">
-
-
-var audio = document.getElementById("weaudio");
-audio.load();
-audio.play();
-document.addEventListener("WeixinJSBridgeReady", function () {
-        audio.play();
-}, false);
-
-
-</script>
-
 
 <div class="col-xs-12">
   <footer class="footer">

@@ -4,7 +4,23 @@
 @section('jssdk')
 
 
+<script type="text/javascript" charset="utf-8">
 
+
+$(function(){
+
+  var audio = document.getElementById("weaudio");
+  audio.load();
+  audio.play();
+  document.addEventListener("WeixinJSBridgeReady", function () {
+          audio.play();
+  }, false);
+
+
+
+});
+
+</script>
 @endsection
 
 
