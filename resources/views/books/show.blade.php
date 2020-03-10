@@ -46,7 +46,7 @@
 
 
         }
-
+        audioAutoPlay();
 
 
       });
