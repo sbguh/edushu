@@ -30,17 +30,9 @@
             })
 
             wx.error(function(res){
-});
+            });
 
 
-
-function audioAutoPlay(){
-
-
-
-
-
-}
 var audio = document.getElementById("weaudio");
 audio.load();
 audio.play();
@@ -48,6 +40,8 @@ document.addEventListener("WeixinJSBridgeReady", function () {
         audio.play();
 }, false);
 audioAutoPlay();
+
+}
 
 
 </script>
@@ -80,10 +74,11 @@ audioAutoPlay();
         <article class="weui-article">
             <section>
                 <h2 class="title">{{$chapter->title}}</h2>
+                <p>@if($chapter->audio)
+                听书: <audio src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" controls="controls" autoplay id="weaudio" width="100%" style="width:100%"></audio>
+                @endif</p>
                 <section>
-                  @if($chapter->audio)
-                  听书: <audio src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" controls="controls" autoplay id="weaudio"></audio>
-                  @endif
+
                     {!!$chapter->content!!}
                 </section>
 

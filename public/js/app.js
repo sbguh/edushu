@@ -53531,13 +53531,6 @@ __webpack_require__(/*! ./components/UserAddressesCreateAndEdit */ "./resources/
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-
-$(function () {
-  var app = new Vue({
-    el: '#app'
-  });
-});
-
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":

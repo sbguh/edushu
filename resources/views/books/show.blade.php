@@ -9,6 +9,14 @@
 
 $(function(){
 
+  const app = new Vue({
+      el: '#app',
+      data: {
+        loading: true
+      }
+  });
+
+  var loading;
   var audio = document.getElementById("weaudio");
   audio.load();
   audio.play();
@@ -17,6 +25,10 @@ $(function(){
   }, false);
 
 
+  audio.addEventListener("canplay", function(){//监听audio是否加载完毕，如果加载完毕，则读取audio播放时间
+       //console.log('mp3加载完成............')
+       app.loading = false;
+   });
 
 });
 
@@ -56,10 +68,14 @@ $(function(){
     <div class="page__bd">
         <article class="weui-article">
             <section>
+
+                @if($book->audio)
+              <h2 class="title"><audio src="{{env('APP_URL')}}/uploads/{{$book->audio}}" controls="controls" autoplay id="weaudio" width="100%" style="width:100%"></audio></h2>
+
+              <p v-if="loading">正在加载音频， 请稍后...</p>
+              @endif
                 <section>
-                  @if($book->audio)
-                  试听: <audio src="{{env('APP_URL')}}/uploads/{{$book->audio}}" controls="controls" autoplay id="weaudio"></audio>
-                  @endif
+
 
                     {!! $book->description !!}
                 </section>
