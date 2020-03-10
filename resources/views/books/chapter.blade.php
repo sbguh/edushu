@@ -3,46 +3,32 @@
 
 
 @section('jssdk')
-    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
 
 <script type="text/javascript" charset="utf-8">
-    wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','updateTimelineShareData'), false) !!});
+$(function(){
 
-  wx.ready(function () {
-    document.getElementById('weaudio').play();
-        wx.updateAppMessageShareData({
-            title: "{{$chapter->title}} - {{$book->name}}", // 分享标题
-            desc: "免费在线阅读中小学生必读书目, 免费借阅!{{$chapter->title}} - {{$book->name}}", // 分享描述
-            link: "{{route('book.read.chapter',[$book->id,$chapter->id])}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
-            success: function () {
-            }
-          })
+  const app = new Vue({
+      el: '#app',
+      data: {
+        loading: true
+      }
+  });
 
-          wx.updateTimelineShareData({
-            title: "{{$chapter->title}} - {{$book->name}}", // 分享标题
-            desc: "免费在线阅读中小学生必读书目, 免费借阅!{{$chapter->title}} - {{$book->name}}", // 分享描述
-            link: "{{route('book.read.chapter',[$book->id,$chapter->id])}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
-              success: function () {
-                // 设置成功
-              }
-            })
-
-            wx.error(function(res){
-            });
+  var loading;
+  var audio = document.getElementById("weaudio");
+  audio.load();
+  audio.play();
+  document.addEventListener("WeixinJSBridgeReady", function () {
+          audio.play();
+  }, false);
 
 
-var audio = document.getElementById("weaudio");
-audio.load();
-audio.play();
-document.addEventListener("WeixinJSBridgeReady", function () {
-        audio.play();
-}, false);
-audioAutoPlay();
+  audio.addEventListener("canplay", function(){//监听audio是否加载完毕，如果加载完毕，则读取audio播放时间
+       //console.log('mp3加载完成............')
+       app.loading = false;
+   });
 
-}
-
+});
 
 </script>
 @endsection
