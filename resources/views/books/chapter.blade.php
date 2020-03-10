@@ -9,6 +9,7 @@
     wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','updateTimelineShareData'), false) !!});
 
   wx.ready(function () {
+    document.getElementById('weaudio').play();
         wx.updateAppMessageShareData({
             title: "{{$chapter->title}} - {{$book->name}}", // 分享标题
             desc: "免费在线阅读中小学生必读书目, 免费借阅!{{$chapter->title}} - {{$book->name}}", // 分享描述
@@ -85,7 +86,7 @@
                 <h2 class="title">{{$chapter->title}}</h2>
                 <section>
                   @if($chapter->audio)
-                  听书: <audio src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" controls="controls" autoplay id="weaudio" with="100%"></audio>
+                  听书: <audio src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" controls="controls" autoplay id="weaudio"  style="width:100%; height:100%;object-fit:fill"></audio>
                   @endif
                     {!!$chapter->content!!}
                 </section>
