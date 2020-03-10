@@ -32,9 +32,6 @@
             wx.error(function(res){
 });
 
-      });
-
-      $(function() {
 
 
         function audioAutoPlay(){
@@ -51,8 +48,8 @@
         audioAutoPlay();
 
 
-
       });
+
 
 </script>
 @endsection
@@ -86,7 +83,7 @@
                 <h2 class="title">{{$chapter->title}}</h2>
                 <section>
                   @if($chapter->audio)
-                  听书: <audio src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" controls="controls" autoplay id="weaudio"  style="width:100%; height:100%;object-fit:fill"></audio>
+                  听书: <audio src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" controls="controls" autoplay id="weaudio"></audio>
                   @endif
                     {!!$chapter->content!!}
                 </section>

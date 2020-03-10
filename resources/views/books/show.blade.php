@@ -33,24 +33,21 @@
 
 });
 
-      });
-      $(function() {
-
-
-        function audioAutoPlay(){
-            var audio = document.getElementById("weaudio");
+function audioAutoPlay(){
+    var audio = document.getElementById("weaudio");
+    audio.play();
+    document.addEventListener("WeixinJSBridgeReady", function () {
             audio.play();
-            document.addEventListener("WeixinJSBridgeReady", function () {
-                    audio.play();
-            }, false);
+    }, false);
 
 
 
-        }
-        audioAutoPlay();
+}
+audioAutoPlay();
 
 
       });
+
 
 </script>
 @endsection
@@ -90,7 +87,7 @@
             <section>
                 <section>
                   @if($book->audio)
-                  试听: <audio src="{{env('APP_URL')}}/uploads/{{$book->audio}}" controls="controls" autoplay id="weaudio" style="width:100%; height:100%;object-fit:fill"></audio>
+                  试听: <audio src="{{env('APP_URL')}}/uploads/{{$book->audio}}" controls="controls" autoplay id="weaudio"></audio>
                   @endif
 
                     {!! $book->description !!}
