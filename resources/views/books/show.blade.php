@@ -33,7 +33,23 @@
 });
 
       });
+      $(function() {
 
+
+        function audioAutoPlay(){
+            var audio = document.getElementById("weaudio");
+            audio.play();
+            document.addEventListener("WeixinJSBridgeReady", function () {
+                    audio.play();
+            }, false);
+
+
+
+        }
+
+
+
+      });
 
 </script>
 @endsection
@@ -73,7 +89,7 @@
             <section>
                 <section>
                   @if($book->audio)
-                  试听: <audio src="{{env('APP_URL')}}/uploads/{{$book->audio}}" controls="controls" autoplay ></audio>
+                  试听: <audio src="{{env('APP_URL')}}/uploads/{{$book->audio}}" controls="controls" autoplay id="weaudio" width="100%"></audio>
                   @endif
 
                     {!! $book->description !!}

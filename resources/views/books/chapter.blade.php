@@ -33,6 +33,23 @@
 
       });
 
+      $(function() {
+
+
+        function audioAutoPlay(){
+            var audio = document.getElementById("weaudio");
+            audio.play();
+            document.addEventListener("WeixinJSBridgeReady", function () {
+                    audio.play();
+            }, false);
+
+
+
+        }
+
+
+
+      });
 
 </script>
 @endsection
@@ -66,7 +83,7 @@
                 <h2 class="title">{{$chapter->title}}</h2>
                 <section>
                   @if($chapter->audio)
-                  听书: <audio src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" controls="controls" autoplay ></audio>
+                  听书: <audio src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" controls="controls" autoplay id="weaudio" with="100%"></audio>
                   @endif
                     {!!$chapter->content!!}
                 </section>
