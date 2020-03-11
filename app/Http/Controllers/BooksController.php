@@ -28,7 +28,16 @@ class BooksController extends Controller
         }
         $app = app('wechat.official_account');
 
-        return view('books.show', ['book' => $book,'app'=>$app]);
+        $favored = false;
+        // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
+        if($user = $request->user()) {
+            // 从当前用户已收藏的商品中搜索 id 为当前商品 id 的商品
+            // boolval() 函数用于把值转为布尔值
+            $favored = boolval($user->favoriteBooks()->find($book->id));
+        }
+
+
+        return view('books.show', ['book' => $book,'app'=>$app,'favored' => $favored]);
     }
 
     public function read(Book $book, Request $request)
@@ -60,8 +69,49 @@ class BooksController extends Controller
 
         $next = Chapter::where('book_id',$book->id)->where('id', '>', $chapter->id)->orderBy('id', 'asc')->first();
 
-        return view('books.chapter', ['book' => $book,'chapter'=>$chapter,'prev'=>$prev,'next'=>$next,'chapters'=>$chapters,'app'=>$app]);
+        $favored = false;
+        // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
+        if($user = $request->user()) {
+            // 从当前用户已收藏的商品中搜索 id 为当前商品 id 的商品
+            // boolval() 函数用于把值转为布尔值
+            $favored = boolval($user->favoriteBooks()->find($book->id));
+        }
+
+
+        return view('books.chapter', ['book' => $book,'chapter'=>$chapter,'prev'=>$prev,'next'=>$next,'chapters'=>$chapters,'app'=>$app,'favored' => $favored]);
     }
+
+
+
+    public function favor(Book $book, Request $request)
+    {
+        $user = $request->user();
+        if ($user->favoriteBooks()->find($book->id)) {
+            return [];
+        }
+
+        $user->favoriteBooks()->attach($book);
+
+        return [];
+    }
+
+
+    public function disfavor(Book $book, Request $request)
+     {
+         $user = $request->user();
+         $user->favoriteBooks()->detach($book);
+
+         return [];
+     }
+
+     public function favorites(Request $request)
+    {
+        $books = $request->user()->favoriteBooks()->paginate(16);
+
+        return view('books.favorites', ['books' => $books]);
+    }
+
+
 
 
 }

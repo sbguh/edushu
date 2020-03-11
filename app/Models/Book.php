@@ -32,7 +32,7 @@ class Book extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
 
-    protected $fillable = ['name','slug','barcode','audio','video','author','press','press_date','price', 'description', 'details', 'features', 'category_id', 'extras','images','image','sort','state','read_count','last_chapter','word_count'];
+    protected $fillable = ['name','slug','barcode','audio','video','sold_count','review_count','stock','on_sale','author','press','press_date','price', 'description', 'details', 'features', 'category_id', 'extras','images','image','sort','state','read_count','last_chapter','word_count'];
 
     // protected $fillable = [];
     // protected $hidden = [];

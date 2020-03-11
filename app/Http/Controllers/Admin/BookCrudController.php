@@ -92,6 +92,39 @@ class BookCrudController extends CrudController
         ]);
 
         CRUD::addField([ // Text
+            'name'  => 'stock',
+            'label' => '库存',
+            'type'  => 'text',
+            'tab'   => 'Texts',
+        ]);
+
+
+        CRUD::addField([ // Text
+          'name'        => 'on_sale', // the name of the db column
+           'label'       => 'on sale', // the input label
+           'type'        => 'radio',
+           'options'     => [
+               // the key will be stored in the db, the value will be shown as label;
+               0 => "False",
+               1 => "True"
+           ],
+           'tab'   => 'Texts',
+        ]);
+
+
+        CRUD::addField([ // Text
+          'name'        => 'state', // the name of the db column
+           'label'       => 'state', // the input label
+           'type'        => 'radio',
+           'options'     => [
+               // the key will be stored in the db, the value will be shown as label;
+               0 => "disable",
+               1 => "enable"
+           ],
+           'tab'   => 'Texts',
+        ]);
+
+        CRUD::addField([ // Text
             'name'  => 'author',
             'label' => '作者',
             'type'  => 'text',
