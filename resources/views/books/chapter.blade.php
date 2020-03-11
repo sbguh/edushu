@@ -137,6 +137,7 @@ $(function(){
           // 如果返回码是 401 代表没登录
           if (error.response && error.response.status === 401) {
             swal('请先登录', '', 'error');
+            $(window).attr('location','{{route("wechatoauth")}}');
           } else if (error.response && (error.response.data.msg || error.response.data.message)) {
             // 其他有 msg 或者 message 字段的情况，将 msg 提示给用户
             swal(error.response.data.msg ? error.response.data.msg : error.response.data.message, '', 'error');
