@@ -20,7 +20,7 @@ Route::redirect('/', '/books')->name('root');
 Auth::routes(['verify' => true]);
 //Auth::routes();
 
-Route::group(['middleware' => ['auth', 'verified']], function() {
+Route::group(['middleware' => ['auth', 'wechat.oauth']], function() {
     Route::get('user_addresses', 'UserAddressesController@index')->name('user_addresses.index');
     Route::get('user_addresses/create', 'UserAddressesController@create')->name('user_addresses.create');
     Route::post('user_addresses', 'UserAddressesController@store')->name('user_addresses.store');
@@ -69,19 +69,16 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 
 
-
-
-
-
+  Route::get('books', 'BooksController@index')->name('books.index');
+  Route::get('books/{book}', 'BooksController@show')->name('books.show');
+  Route::get('read/{book}', 'BooksController@read')->name('book.read');
+  Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
   Route::any('/jssdk', 'WeChatController@jssdk')->name('jssdk');
   Route::any('/wechatoauth', 'WeChatController@wechatoauth')->name('wechatoauth');
 
 });
 
-Route::get('books', 'BooksController@index')->name('books.index');
-Route::get('books/{book}', 'BooksController@show')->name('books.show');
-Route::get('read/{book}', 'BooksController@read')->name('book.read');
-Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
+
 //end wechat route
 
 
