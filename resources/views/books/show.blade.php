@@ -9,44 +9,31 @@
 
 $(function(){
 
-  const app = new Vue({
-      el: '#app',
-      data: {
-        loading: true
-      }
-  });
-
-  var loading;
   var audio = document.getElementById("weaudio");
   audio.load();
   audio.play();
+
+  var loading;
+
   document.addEventListener("WeixinJSBridgeReady", function () {
           audio.play();
   }, false);
 
+  $('.weui-navbar__item').on('click', function () {
+      $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+  });
 
-  audio.addEventListener("canplay", function(){//监听audio是否加载完毕，如果加载完毕，则读取audio播放时间
-       //console.log('mp3加载完成............')
-       app.loading = false;
-   });
+  $('.check_1').on('click', function () {
 
-});
+      $('.weui-tab__panel1').css("display","block").siblings().css("display","none");
+  });
+  $('.check_2').on('click', function () {
 
-
-$(function(){
-        $('.weui-navbar__item').on('click', function () {
-            $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
-        });
-
-        $('.check_1').on('click', function () {
-            $('.weui-tab__panel1').css("display","block").siblings().css("display","none");
-        });
-        $('.check_2').on('click', function () {
-            $('.weui-tab__panel2').css("display","block").siblings().css("display","none");
-        });
-        $('.check_3').on('click', function () {
-            $('.weui-tab__panel3').css("display","block").siblings().css("display","none");
-        });
+      $('.weui-tab__panel2').css("display","block").siblings().css("display","none");
+  });
+  $('.check_3').on('click', function () {
+      $('.weui-tab__panel3').css("display","block").siblings().css("display","none");
+  });
 
     });
 
@@ -101,7 +88,11 @@ $(function(){
                    <a href="{{route('book.read',$book->id)}}"><button class="btn btn-primary btn-add-to-cart">在线免费阅读</button></a>
                    @endif
      </p>
-
+     <div class="tags">
+       @foreach($tags as $tag)
+          <p>{{$tag->name}}</p>
+       @endforeach
+     </div>
                     </div>
                     <div class="page__bd">
                         <article class="weui-article">
@@ -110,7 +101,7 @@ $(function(){
                                 @if($book->audio)
                               <h2 class="title"><audio src="{{env('APP_URL')}}/uploads/{{$book->audio}}" controls="controls" autoplay id="weaudio" width="100%" style="width:100%"></audio></h2>
 
-                              <p v-if="loading">正在加载音频， 请稍后...</p>
+
                               @endif
                                 <section>
 

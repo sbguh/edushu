@@ -7,12 +7,7 @@
 <script type="text/javascript" charset="utf-8">
 $(function(){
 
-  const app = new Vue({
-      el: '#app',
-      data: {
-        loading: true
-      }
-  });
+
 
   var loading;
   var audio = document.getElementById("weaudio");
@@ -22,11 +17,6 @@ $(function(){
           audio.play();
   }, false);
 
-
-  audio.addEventListener("canplay", function(){//监听audio是否加载完毕，如果加载完毕，则读取audio播放时间
-       //console.log('mp3加载完成............')
-       app.loading = false;
-   });
 
 });
 

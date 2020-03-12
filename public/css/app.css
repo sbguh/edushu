@@ -14935,3 +14935,12 @@ body[data-weui-theme=dark] .weui-picker__mask {
   margin: 5px;
 }
 
+.tags p {
+  display: inline;
+  color: #b2adad;
+  margin: 0px 5px;
+  padding: 2px;
+  border: 1px solid #b2adad;
+  border-radius: 4px;
+}
+

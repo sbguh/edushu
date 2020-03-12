@@ -6,7 +6,7 @@
   <div class="container">
     <!-- Branding Image -->
     <a class="navbar-brand " href="{{ url('/') }}">
-      <img src="https://book.edushu.co/uploads/images/logo.png" alt="共享书房" width="40px">
+      <img src="https://book.edushu.co/uploads/images/logo.png" alt="共享书房" width="40px">首页
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -75,4 +75,6 @@
             </div>
         </div>
     </div>
+
+
 </div>

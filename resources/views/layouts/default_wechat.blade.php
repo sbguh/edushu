@@ -35,7 +35,90 @@ wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','update
 
 @show
 
+<script type="text/javascript">
+    $(function(){
 
+      var app = new Vue({
+          el: '#app',
+          delimiters : ['[[', ']]'],
+          data: {
+            //message: 'Hello Vue!'
+            value:'',
+            inputVal:'',
+            result:[],
+          },
+          methods: {
+                searchkeyword: function (e) {
+                  // `this` 在方法里指向当前 Vue 实例
+                  this.value = e.target.value;
+                  $searchResult.show();
+                  if(this.value.length) {
+                    $searchResult.show();
+                    axios.post('/search/' + this.value)
+                    .then(
+                      response => {
+                        this.result=response.data;
+                        //alert(typeof(this.result));
+                        console.log(this.result)
+
+                      }
+                    )
+                }
+
+
+
+                }
+              }
+
+        })
+
+        var $searchBar = $('#searchBar'),
+            $searchResult = $('#searchResult'),
+            $searchText = $('#searchText'),
+            $searchInput = $('#searchInput'),
+            $searchClear = $('#searchClear'),
+            $searchCancel = $('#searchCancel');
+
+            $searchResult.hide();
+            //$searchResult.hide();
+        function hideSearchResult(){
+            $searchResult.hide();
+            $searchInput.val('');
+        }
+        function cancelSearch(){
+            hideSearchResult();
+            $searchBar.removeClass('weui-search-bar_focusing');
+            $searchText.show();
+        }
+
+        $searchText.on('click', function(){
+            $searchBar.addClass('weui-search-bar_focusing');
+            $searchInput.focus();
+        });
+        $searchInput
+            .on('blur', function () {
+                if(!this.value.length) cancelSearch();
+            })
+            .on('input', function(){
+                if(this.value.length) {
+                    $searchResult.show();
+                } else {
+                    $searchResult.hide();
+                }
+            })
+        ;
+        $searchClear.on('click', function(){
+            hideSearchResult();
+
+            $searchInput.focus();
+        });
+        $searchCancel.on('click', function(){
+            cancelSearch();
+
+            $searchInput.blur();
+        });
+    });
+</script>
 
 </head>
 <body>

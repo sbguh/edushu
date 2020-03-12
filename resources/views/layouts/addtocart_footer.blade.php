@@ -1,13 +1,3 @@
-<script type="text/javascript">
-    $(function(){
-        $('.weui-navbar__item').on('click', function () {
-            $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
-        });
-    });
-</script>
-
-
-
 
 <div class="col-xs-12">
   <footer class="footer">

@@ -57,7 +57,7 @@
             $searchClear = $('#searchClear'),
             $searchCancel = $('#searchCancel');
 
-
+            $searchResult.hide();
             //$searchResult.hide();
         function hideSearchResult(){
             $searchResult.hide();
