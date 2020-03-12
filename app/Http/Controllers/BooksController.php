@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Book;
 use App\Models\Chapter;
+use App\Models\Category;
 
 class BooksController extends Controller
 {
@@ -27,6 +28,10 @@ class BooksController extends Controller
             throw new \Exception('商品未上架');
         }
         $app = app('wechat.official_account');
+        $category= Category::where('name','适读年龄')->select('id')->first();
+
+        $categories = $book->categories()->where('parent_id',$category->id)->get();
+        //$categories = $book->categories()->where('parent_id',)
 
         $tags = $book->tags()->get();
 
@@ -39,7 +44,7 @@ class BooksController extends Controller
         }
 
 
-        return view('books.show', ['book' => $book,'app'=>$app,'favored' => $favored,'tags'=>$tags]);
+        return view('books.show', ['book' => $book,'app'=>$app,'favored' => $favored,'tags'=>$tags,'categories'=>$categories]);
     }
 
     public function read(Book $book, Request $request)

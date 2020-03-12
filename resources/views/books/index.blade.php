@@ -12,12 +12,12 @@
 
 <div class="page">
   <div class="page__hd">
-    <h6 class="page__title">欢迎关注公众号获取更多免费必读书目！</h6>
+    <h6 class="page__title">欢迎关注公众号获取更多免费资源！</h6>
       <p class="page__desc"><img src="https://book.edushu.co/uploads/images/wechat1.png" width="100%"/></p>
   </div>
 
   <div class="page__hd">
-      <p class="page__desc">猜你想要</p>
+      <p class="page__desc page_header_title">猜你想要</p>
   </div>
   <div class="row">
     @foreach($books as $book)

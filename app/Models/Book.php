@@ -134,6 +134,11 @@ class Book extends Model
         return $this->belongsToMany('App\Models\Tag', 'book_tag');
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany('App\Models\Category', 'book_category');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

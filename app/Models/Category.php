@@ -1,6 +1,6 @@
 <?php
 
-namespace Backpack\NewsCRUD\app\Models;
+namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -22,7 +22,7 @@ class Category extends Model
     protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['name', 'slug', 'parent_id'];
+    protected $fillable = ['name', 'slug','image', 'parent_id'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -72,6 +72,21 @@ class Category extends Model
     {
         return $this->hasMany('Backpack\NewsCRUD\app\Models\Article');
     }
+
+
+    public function books()
+      {
+          return $this->belongsToMany('App\Models\Book', 'book_category');
+      }
+
+    public function hasManyChildren(){
+        return $this->hasMany('App\Models\Category', "parent_id");
+    }
+
+    public function belongsToParent(){
+    return $this->belongsTo("App\Models\Category", "parent_id");
+}
+
 
     /*
     |--------------------------------------------------------------------------

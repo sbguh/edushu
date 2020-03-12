@@ -4,40 +4,7 @@
 @section('jssdk')
 
 
-<script type="text/javascript" charset="utf-8">
 
-
-$(function(){
-
-  var audio = document.getElementById("weaudio");
-  audio.load();
-  audio.play();
-
-  var loading;
-
-  document.addEventListener("WeixinJSBridgeReady", function () {
-          audio.play();
-  }, false);
-
-  $('.weui-navbar__item').on('click', function () {
-      $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
-  });
-
-  $('.check_1').on('click', function () {
-
-      $('.weui-tab__panel1').css("display","block").siblings().css("display","none");
-  });
-  $('.check_2').on('click', function () {
-
-      $('.weui-tab__panel2').css("display","block").siblings().css("display","none");
-  });
-  $('.check_3').on('click', function () {
-      $('.weui-tab__panel3').css("display","block").siblings().css("display","none");
-  });
-
-    });
-
-</script>
 @endsection
 
 
@@ -85,13 +52,18 @@ $(function(){
 
                    @endif
                    @if($book->chapters()->count())
-                   <a href="{{route('book.read',$book->id)}}"><button class="btn btn-primary btn-add-to-cart">在线免费阅读</button></a>
+                   <a href="{{route('book.read',$book->id)}}"><button class="btn btn-primary btn-read-online">在线免费阅读</button></a>
                    @endif
      </p>
      <div class="tags">
        @foreach($tags as $tag)
           <p>{{$tag->name}}</p>
        @endforeach
+       <div>适合:
+         @foreach($categories as $category)
+            <p>{{$category->name}}</p>
+         @endforeach
+       </div>
      </div>
                     </div>
                     <div class="page__bd">
@@ -115,10 +87,10 @@ $(function(){
                 </div>
               </div>
               <div class="weui-tab__panel2" style="display:none">
-                  暂无
+                  <p>由隆回共读书房为您提供服务.</p>
               </div>
               <div class="weui-tab__panel3" style="display:none">
-                  免费借书.
+                  暂无.
               </div>
             </div>
 
@@ -132,6 +104,28 @@ $(function(){
 
 
 @section('scriptsAfterJs')
+
+<script type="text/javascript" charset="utf-8">
+
+
+$(function(){
+
+  var audio = document.getElementById("weaudio");
+  audio.load();
+  audio.play();
+
+  var loading;
+
+  document.addEventListener("WeixinJSBridgeReady", function () {
+          audio.play();
+  }, false);
+
+
+
+    });
+
+</script>
+
 <script>
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip({trigger: 'hover'});

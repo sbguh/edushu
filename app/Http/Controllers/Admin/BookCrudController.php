@@ -156,6 +156,23 @@ class BookCrudController extends CrudController
             'tab'   => 'Texts',
         ]);
 
+        CRUD::addField([   // Textarea
+            'label' => "Categories",
+            'type' => 'select2_multiple',
+            'name' => 'categories', // the method that defines the relationship in your Model
+            'entity' => 'categories', // the method that defines the relationship in your Model
+            'attribute' => 'name', // foreign key attribute that is shown to user
+            'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
+
+            // optional
+            'model' => "App\Models\Category", // foreign key model
+            'options'   => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+
+            'tab'   => 'Texts',
+        ]);
+
 /*
         CRUD::addField([   // Textarea
             'label' => "chapters",

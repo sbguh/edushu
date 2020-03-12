@@ -95,6 +95,25 @@
 
             $searchInput.blur();
         });
+
+
+        $('.weui-navbar__item').on('click', function () {
+            $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+        });
+
+        $('.check_1').on('click', function () {
+
+            $('.weui-tab__panel1').css("display","block").siblings().css("display","none");
+        });
+        $('.check_2').on('click', function () {
+
+            $('.weui-tab__panel2').css("display","block").siblings().css("display","none");
+        });
+        $('.check_3').on('click', function () {
+
+            $('.weui-tab__panel3').css("display","block").siblings().css("display","none");
+        });
+
     });
 </script>
 </head>

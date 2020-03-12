@@ -4,23 +4,7 @@
 
 @section('jssdk')
 
-<script type="text/javascript" charset="utf-8">
-$(function(){
 
-
-
-  var loading;
-  var audio = document.getElementById("weaudio");
-  audio.load();
-  audio.play();
-  document.addEventListener("WeixinJSBridgeReady", function () {
-          audio.play();
-  }, false);
-
-
-});
-
-</script>
 @endsection
 
 
@@ -109,6 +93,25 @@ $(function(){
 
 
 @section('scriptsAfterJs')
+
+<script type="text/javascript" charset="utf-8">
+$(function(){
+
+
+
+  var loading;
+  var audio = document.getElementById("weaudio");
+  audio.load();
+  audio.play();
+  document.addEventListener("WeixinJSBridgeReady", function () {
+          audio.play();
+  }, false);
+
+
+});
+
+</script>
+
 <script>
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip({trigger: 'hover'});
