@@ -258,9 +258,10 @@ $password = 'Edushuco2020!@';
           }
 
           session(['wechatuser' => $openid]);
+          //return redirect(route('books.index'));
           return redirect(route('books.index'));
         //  return redirect(session("return_web_url"));
-          Redirect::back();
+          //Redirect::back();
           //$oauth->redirect()->send();
         }
       }else{
@@ -280,9 +281,11 @@ $password = 'Edushuco2020!@';
         if ( Auth::attempt(['openid' => $openid,'password' => $password]) ){
           //return redirect(session("return_web_url"));
           //return redirect(route('books.index'));
-          Redirect::back();
+          //Redirect::back();
+          return redirect(route('books.index'));
         }
-        Redirect::back();
+        //Redirect::back();
+        return redirect(route('books.index'));
 //die("test2");
         //return redirect(route('books.index'));
       }
