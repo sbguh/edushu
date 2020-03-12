@@ -30,7 +30,12 @@ wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','update
 
 
 </script>
+
+
+
 @show
+
+
 
 </head>
 <body>

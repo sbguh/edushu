@@ -112,6 +112,16 @@ class BooksController extends Controller
     }
 
 
+    public function search($keyword, Request $request)
+     {
+         //$keyword  = $request->get('keyword');
+         //dd( $keyword);
+         $result = Book::where('name','like','%'.$keyword.'%')->where('state',1)->select('id','name','image')->get()->toJson();
+         return $result;
+         //return view('books.favorites', ['books' => $books]);
+     }
+
+
 
 
 }
