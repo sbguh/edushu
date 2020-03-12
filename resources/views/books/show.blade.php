@@ -90,7 +90,9 @@
        @foreach($tags as $tag)
           <p>{{$tag->name}}</p>
        @endforeach
-       <div>适合:
+       <div>@if($categories->count())
+         <span>适合:</span>
+         @endif
          @foreach($categories as $category)
             <p>{{$category->name}}</p>
          @endforeach
