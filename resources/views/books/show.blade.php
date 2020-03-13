@@ -9,7 +9,7 @@
 
   wx.ready(function () {
         wx.updateAppMessageShareData({
-            title: "{{$user->name.'推荐了一本好书<<'$book->name.'>>'}}", // 分享标题
+            title: "{{$user->name.'推荐了一本好书<<'.$book->name.'>>'}}", // 分享标题
             desc: "{{$book->extras->meta_description?$book->extras->meta_description:'精选好书<<'.$book->name.'>>, 最权威的中小学必读书城！'}}", // 分享描述
             link: "{{route('books.show',$book->id)}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
             imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
