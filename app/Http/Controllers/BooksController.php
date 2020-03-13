@@ -35,6 +35,7 @@ class BooksController extends Controller
 
         $tags = $book->tags()->get();
         $user = session('wechat.oauth_user.default');
+
         $favored = false;
         // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
         if($user = $request->user()) {
