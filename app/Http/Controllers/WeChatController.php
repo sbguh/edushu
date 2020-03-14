@@ -184,7 +184,7 @@ class WeChatController extends Controller
             //设置个性菜单
 
           $app = app('wechat.official_account');
-          //$app->menu->delete(); 
+          //$app->menu->delete();
             $buttons = [
               [
                   "type" => "click",
@@ -193,12 +193,12 @@ class WeChatController extends Controller
               ],
               [
                   "type" => "view",
-                  "name" => "精选好书",
+                  "name" => "必读图书",
                   "key"  => "https://book.edushu.co/category"
               ],
                 [
                   "type" => "view",
-                  "name" => "免费儿童文学",
+                  "name" => "免费图书",
                   "url"  => "https://book.edushu.co"
               ]
           ];
