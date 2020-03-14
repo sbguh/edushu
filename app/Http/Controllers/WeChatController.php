@@ -194,7 +194,7 @@ class WeChatController extends Controller
               [
                   "type" => "view",
                   "name" => "必读图书",
-                  "key"  => "https://book.edushu.co/category"
+                  "key"  => "https://book.edushu.co"
               ],
                 [
                   "type" => "view",
