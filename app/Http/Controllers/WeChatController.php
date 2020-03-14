@@ -182,7 +182,9 @@ class WeChatController extends Controller
             //dd($current);
 
             //设置个性菜单
+
           $app = app('wechat.official_account');
+          $app->menu->delete(); 
             $buttons = [
               [
                   "type" => "click",
