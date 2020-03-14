@@ -41,33 +41,28 @@
 
 
 @section('content')
-<div class="row">
-<div class="col-sm-12 col-xs-12 col-lg-12 ">
-<div class="card">
-  <div class="card-body">
-    <div class="row products-list" >
-      @foreach($books as $book)
-        <div class="col-xs-2 col-sm-4 col-lg-3 product-item">
-          <div class="product-content">
-            <div class="top">
-              <div class="img"><a href="{{route('books.show',$book->id)}}"><img src="{{ $book->image }}" alt="" width="120px"></a></div>
-              <div class="price"><b>￥</b>{{ $book->price }}</div>
-              <div class="title">{{ $book->name }}</div>
-            </div>
-            <div class="bottom">
-              <div>@if($book->chapters()->count())
-              <a href="{{route('book.read',$book->id)}}"><button class="btn btn-success btn-favor">在线阅读</button></a>
-              @endif</div>
-              <div class="sold_count">
-              <a href="{{route('books.show',$book->id)}}"><button class="btn btn-primary btn-add-to-cart">新书订购</button></a>
-              <a href="{{route('books.show',$book->id)}}"><button class="btn btn-primary btn-add-to-cart">免费借</button> </a></div>
-            </div>
-          </div>
-        </div>
-      @endforeach
-    </div>
+
+
+<div class="page">
+  <div class="page__hd">
+    <h6 class="page__title">欢迎关注公众号获取更多免费资源！</h6>
+      <p class="page__desc"><img src="https://book.edushu.co/uploads/images/wechat1.png" width="100%"/></p>
   </div>
-</div>
+
+  <div class="page__hd">
+      <p class="page__desc page_header_title">猜你想要</p>
+  </div>
+  <div class="row">
+    @foreach($books as $book)
+    <div class="col-5" style="border:1px solid #ededed;margin:5px;padding:5px;">
+      <div class="weui-flex__item ">
+        <div class="placeholder ">
+          <a href="{{route('books.show',$book->id)}}"><img src="{{ $book->image }}" alt="" width="110px"></a>
+          <div class="title">{{ $book->name }}</div>
+        </div>
+      </div>
+    </div>
+    @endforeach
 </div>
 </div>
 @endsection

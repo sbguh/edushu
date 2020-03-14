@@ -1,4 +1,4 @@
-@extends('layouts.addtocart_app')
+@extends('layouts.wechat_default')
 @section('title', $chapter->title." - ".$book->title)
 
 

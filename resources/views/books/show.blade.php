@@ -1,4 +1,4 @@
-@extends('layouts.addtocart_app')
+@extends('layouts.wechat_default')
 @section('title', $book->name)
 
 @section('jssdk')
@@ -86,18 +86,22 @@
                    <a href="{{route('book.read',$book->id)}}"><button class="btn btn-primary btn-read-online">在线免费阅读</button></a>
                    @endif
      </p>
+     @if($book->categories()->count())
      <div class="tags">
-       @foreach($tags as $tag)
-          <p>{{$tag->name}}</p>
-       @endforeach
-       <div>@if($categories->count())
-         <span>适合:</span>
-         @endif
-         @foreach($categories as $category)
-            <p>{{$category->name}}</p>
+       <div class="clearfix">
+         <div class="float-left title">适合:</div>
+         @foreach($book->categories()->where('parent_id',1)->take(2)->get() as $category)
+            <p><a href="{{route('category.show',$category->id)}}">{{$category->name}}</a></p>
+         @endforeach
+       </div>
+       <div class="clearfix">
+         <div class="float-left title">标签:</div>
+         @foreach($book->tags()->take(2)->get() as $tag)
+            <p><a href="{{route('tags.show',$tag->id)}}">{{$tag->name}}</a></p>
          @endforeach
        </div>
      </div>
+     @endif
                     </div>
                     <div class="page__bd">
                         <article class="weui-article">
@@ -120,7 +124,7 @@
                 </div>
               </div>
               <div class="weui-tab__panel2" style="display:none">
-                  <p>由隆回共读书房为您提供服务.</p>
+                  <p>暂无.</p>
               </div>
               <div class="weui-tab__panel3" style="display:none">
                   暂无.

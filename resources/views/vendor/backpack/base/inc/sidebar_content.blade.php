@@ -38,3 +38,4 @@
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('book') }}'><i class='nav-icon fa fa-question'></i> Books</a></li>
 
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('cartitem') }}'><i class='nav-icon fa fa-question'></i> CartItems</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('category') }}'><i class='nav-icon fa fa-question'></i> Categories</a></li>

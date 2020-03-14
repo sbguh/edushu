@@ -22,8 +22,9 @@
           </div>
         </div>
       @endforeach
+
     </div>
-    <div class="float-right">{{ $products->render() }}</div>  <!-- 只需要添加这一行 -->
+<div style="margin-bottom:10px;">{{ $books->render() }}</div>  <!-- 只需要添加这一行 -->
   </div>
 </div>
 </div>

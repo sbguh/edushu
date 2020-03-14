@@ -14869,6 +14869,7 @@ body[data-weui-theme=dark] .weui-picker__mask {
   position: fixed;
   bottom: 0;
   width: 100%;
+  z-index: 10000;
 }
 
 .wechat_content {
@@ -14935,13 +14936,25 @@ body[data-weui-theme=dark] .weui-picker__mask {
   margin: 5px;
 }
 
-.tags p {
-  display: inline;
-  color: #b2adad;
-  margin: 0px 5px;
+.tags .title {
+  font-size: 12px;
+  margin: 2px 5px;
   padding: 2px;
+}
+
+.tags p {
+  float: left;
+  margin: 1px 3px;
+  padding: 1px 3px;
   border: 1px solid #b2adad;
   border-radius: 4px;
+}
+
+.tags p a:link,
+.tags p a:visited,
+.tags p a:hover,
+.tags p a:active {
+  font-size: 11px;
 }
 
 .navbar-brand {
