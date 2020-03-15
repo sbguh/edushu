@@ -67,22 +67,22 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 });
 
 
-Route::get('books/audio/{book}', 'BooksController@bookaudio')->name('books.audio');
-Route::get('chapter/audio/{chapter}', 'BooksController@chapteraudio')->name('chapter.audio');
 
-Route::get('books', 'BooksController@index')->name('books.index');
-Route::get('books/{book}', 'BooksController@show')->name('books.show');
-Route::get('read/{book}', 'BooksController@read')->name('book.read');
-Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
-Route::any('search/{keyword}', 'BooksController@search')->name('books.search');
-
-Route::get('category', 'CategoryController@index')->name('category.index');
-Route::get('category/{category}', 'CategoryController@show')->name('category.show');
-Route::get('tags/{tag}', 'TagsController@show')->name('tags.show');
 
 Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 
+  Route::get('books/audio/{book}', 'BooksController@bookaudio')->name('books.audio');
+  Route::get('chapter/audio/{chapter}', 'BooksController@chapteraudio')->name('chapter.audio');
 
+  Route::get('books', 'BooksController@index')->name('books.index');
+  Route::get('books/{book}', 'BooksController@show')->name('books.show');
+  Route::get('read/{book}', 'BooksController@read')->name('book.read');
+  Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
+  Route::any('search/{keyword}', 'BooksController@search')->name('books.search');
+
+  Route::get('category', 'CategoryController@index')->name('category.index');
+  Route::get('category/{category}', 'CategoryController@show')->name('category.show');
+  Route::get('tags/{tag}', 'TagsController@show')->name('tags.show');
 
   Route::any('/jssdk', 'WeChatController@jssdk')->name('jssdk');
   Route::any('/wechatoauth', 'WeChatController@wechatoauth')->name('wechatoauth');
