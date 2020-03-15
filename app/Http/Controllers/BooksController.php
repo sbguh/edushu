@@ -129,6 +129,32 @@ class BooksController extends Controller
          //return view('books.favorites', ['books' => $books]);
      }
 
+     public function bookaudio(Book $book, Request $request)
+     {
+       $audio = env('APP_URL')."/uploads/".$book->audio;
+
+      // dd($audio);
+       header('Content-Type: audio/mpeg');
+        header('Content-Disposition: inline; filename="'.$audio.'"');
+        header('X-Pad: avoid browser bug');
+        header('Cache-Control: no-cache');
+        readfile($audio);
+
+     }
+
+     public function chapteraudio(Chapter $chapter, Request $request)
+     {
+
+       $audio = env('APP_URL')."/uploads/".$chapter->audio;
+
+      //dd($audio);
+       header('Content-Type: audio/mpeg');
+        header('Content-Disposition: inline; filename="'.$audio.'"');
+        header('X-Pad: avoid browser bug');
+        header('Cache-Control: no-cache');
+        readfile($audio);
+     }
+
 
 
 

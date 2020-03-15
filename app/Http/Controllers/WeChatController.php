@@ -191,14 +191,10 @@ class WeChatController extends Controller
                   "name" => "最新活动",
                   "key" =>"LatestEvents"
               ],
-              [
-                  "type" => "view",
-                  "name" => "必读图书",
-                  "key"  => "https://book.edushu.co"
-              ],
+
                 [
                   "type" => "view",
-                  "name" => "免费图书",
+                  "name" => "精选必读好书",
                   "url"  => "https://book.edushu.co"
               ]
           ];
