@@ -15,7 +15,7 @@ class CategoryController extends Controller
     {
 
         $categories = Category::where('enable',1)->whereNull('parent_id')->get();
-        $books = Book::where('state',1)->paginate(8);
+        $books = Book::where('state',1)->orderBy('id','DESC')->paginate(8);
       //  dd($categories->hasManyChildren()->get());
         $app = app('wechat.official_account');
 

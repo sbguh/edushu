@@ -24,6 +24,13 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 require('./components/SelectDistrict');
 require('./components/UserAddressesCreateAndEdit');
+
+import Aplayer from 'vue-aplayer'
+
+window.Aplayer = Aplayer
+
+//const {Howl, Howler} = require('howler');
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

@@ -15,7 +15,7 @@ class BooksController extends Controller
     public function index(Request $request)
     {
 
-        $books = Book::where('state',1)->paginate(8);
+        $books = Book::where('state',1)->orderBy('id','DESC')->paginate(8);
         $app = app('wechat.official_account');
 
         return view('books.index', ['books' => $books,'app'=>$app]);

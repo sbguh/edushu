@@ -14,6 +14,7 @@
 
 @show
 <script type="text/javascript">
+
     $(function(){
 
       var app = new Vue({
@@ -25,6 +26,10 @@
             inputVal:'',
             result:[],
           },
+          components: {
+                  Aplayer
+              },
+
           methods: {
                 searchkeyword: function (e) {
                   // `this` 在方法里指向当前 Vue 实例
@@ -112,7 +117,7 @@
 
             $('.weui-tab__panel3').css("display","block").siblings().css("display","none");
         });
-        
+
     });
 </script>
 

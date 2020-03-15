@@ -6,7 +6,6 @@
 @endsection
 
 
-
 @section('content')
 
 <div class="page">
@@ -57,13 +56,13 @@
      <div class="tags">
        <div class="clearfix">
          <div class="float-left title">适合:</div>
-         @foreach($book->categories()->where('parent_id',1)->take(2)->get() as $category)
+         @foreach($book->categories()->where('parent_id',1)->get() as $category)
             <p><a href="{{route('category.show',$category->id)}}">{{$category->name}}</a></p>
          @endforeach
        </div>
        <div class="clearfix">
          <div class="float-left title">标签:</div>
-         @foreach($book->tags()->take(2)->get() as $tag)
+         @foreach($book->tags()->get() as $tag)
             <p><a href="{{route('tags.show',$tag->id)}}">{{$tag->name}}</a></p>
          @endforeach
        </div>
@@ -75,9 +74,16 @@
                             <section>
 
                                 @if($book->audio)
-                              <h2 class="title"><audio controls="controls" src="{{route('books.audio',$book->id)}}" controls="controls" autoplay preload="auto" id="weaudio" width="100%" style="width:100%"></audio></h2>
-
-
+                              <h2 class="title">
+                              <aplayer autoplay
+                                :music="{
+                                  title: '{{$book->name}}',
+                                  artist: '{{$book->name}}',
+                                  src: '{{env('APP_URL')}}/uploads/{{$book->audio}}',
+                                  pic: 'https://moeplayer.b0.upaiyun.com/aplayer/secretbase.jpg'
+                                }"
+                              />
+                                </h2>
                               @endif
                                 <section>
 
