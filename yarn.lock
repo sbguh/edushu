@@ -1919,6 +1919,11 @@ core-js-compat@^3.6.2:
     browserslist "^4.8.3"
     semver "7.0.0"
 
+core-js@^3.6.4:
+  version "3.6.4"
+  resolved "https://registry.npm.taobao.org/core-js/download/core-js-3.6.4.tgz#440a83536b458114b9cb2ac1580ba377dc470647"
+  integrity sha1-RAqDU2tFgRS5yyrBWAujd9xHBkc=
+
 core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/core-util-is/download/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
@@ -2167,6 +2172,11 @@ csso@^4.0.2:
   integrity sha1-5fgas6Vrju+38Aks5yeTKfRU3j0=
   dependencies:
     css-tree "1.0.0-alpha.37"
+
+custom-event-polyfill@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.npm.taobao.org/custom-event-polyfill/download/custom-event-polyfill-1.0.7.tgz#9bc993ddda937c1a30ccd335614c6c58c4f87aee"
+  integrity sha1-m8mT3dqTfBowzNM1YUxsWMT4eu4=
 
 cyclist@^1.0.1:
   version "1.0.1"
@@ -3997,6 +4007,11 @@ loader-utils@^1.0.2, loader-utils@^1.1.0, loader-utils@^1.2.3:
     emojis-list "^3.0.0"
     json5 "^1.0.1"
 
+loadjs@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.npm.taobao.org/loadjs/download/loadjs-4.2.0.tgz#2a0336376397a6a43edf98c9ec3229ddd5abb6f6"
+  integrity sha1-KgM2N2OXpqQ+35jJ7DIp3dWrtvY=
+
 locate-path@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/locate-path/download/locate-path-3.0.0.tgz#dbec3b3ab759758071b58fe59fc41871af21400e"
@@ -4968,6 +4983,17 @@ pkg-dir@^4.1.0:
   dependencies:
     find-up "^4.0.0"
 
+plyr@^3.5.10:
+  version "3.5.10"
+  resolved "https://registry.npm.taobao.org/plyr/download/plyr-3.5.10.tgz#631fb379135abd17ea822817db3046b484c8166c"
+  integrity sha1-Yx+zeRNavRfqgigX2zBGtITIFmw=
+  dependencies:
+    core-js "^3.6.4"
+    custom-event-polyfill "^1.0.7"
+    loadjs "^4.2.0"
+    rangetouch "^2.0.0"
+    url-polyfill "^1.1.8"
+
 popper.js@^1.12:
   version "1.16.1"
   resolved "https://registry.npm.taobao.org/popper.js/download/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
@@ -5473,6 +5499,11 @@ range-parser@^1.2.1, range-parser@~1.2.1:
   version "1.2.1"
   resolved "https://registry.npm.taobao.org/range-parser/download/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha1-PPNwI9GZ4cJNGlW4SADC8+ZGgDE=
+
+rangetouch@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.npm.taobao.org/rangetouch/download/rangetouch-2.0.1.tgz#c01105110fd3afca2adcb1a580692837d883cb70"
+  integrity sha1-wBEFEQ/Tr8oq3LGlgGkoN9iDy3A=
 
 raw-body@2.4.0:
   version "2.4.0"
@@ -6608,6 +6639,11 @@ url-parse@^1.4.3:
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
+
+url-polyfill@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.npm.taobao.org/url-polyfill/download/url-polyfill-1.1.8.tgz#21eb58ad61192f52b77dcac8ab5293ae7bc67060"
+  integrity sha1-IetYrWEZL1K3fcrIq1KTrnvGcGA=
 
 url-toolkit@^2.1.6:
   version "2.1.6"

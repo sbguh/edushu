@@ -134,6 +134,7 @@ $(function(){
   audio.load();
   audio.play();
   document.addEventListener("WeixinJSBridgeReady", function () {
+          audio.load();
           audio.play();
   }, false);
 

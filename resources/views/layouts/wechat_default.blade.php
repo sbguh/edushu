@@ -10,10 +10,13 @@
     <!-- 样式 -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 <script src="{{ mix('js/app.js') }}"></script>
+
+
 @section('jssdk')
 
 @show
 <script type="text/javascript">
+
 
     $(function(){
 
@@ -26,9 +29,7 @@
             inputVal:'',
             result:[],
           },
-          components: {
-                  Aplayer
-              },
+
 
           methods: {
                 searchkeyword: function (e) {

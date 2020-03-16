@@ -74,16 +74,9 @@
                             <section>
 
                                 @if($book->audio)
-                              <h2 class="title">
-                              <aplayer autoplay
-                                :music="{
-                                  title: '{{$book->name}}',
-                                  artist: '{{$book->name}}',
-                                  src: '{{env('APP_URL')}}/uploads/{{$book->audio}}',
-                                  pic: 'https://moeplayer.b0.upaiyun.com/aplayer/secretbase.jpg'
-                                }"
-                              />
-                                </h2>
+                                <audio id="player" playsinline  controls>
+                                    <source src="{{env('APP_URL')}}/uploads/{{$book->audio}}" type="audio/mp3" />
+                                </audio>
                               @endif
                                 <section>
 
@@ -120,15 +113,12 @@
 
 $(function(){
 
-  var audio = document.getElementById("weaudio");
-  audio.load();
-  audio.play();
-
+//  var audio = document.getElementById("weaudio");
+//  audio.load();
+//  audio.play();
+//alert(player);
   var loading;
-
-  document.addEventListener("WeixinJSBridgeReady", function () {
-          audio.play();
-  }, false);
+const player = new Plyr('audio', {autoplay:true});
 
 
 
