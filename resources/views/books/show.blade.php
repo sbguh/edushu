@@ -118,8 +118,11 @@ $(function(){
 //  audio.play();
 //alert(player);
   var loading;
-const player = new Plyr('audio', {autoplay:true});
-
+const player = new Plyr('#player', {autoplay:true});
+player.play();
+document.addEventListener("WeixinJSBridgeReady", function () {
+        audio.play();
+}, false);
 
 
     });
