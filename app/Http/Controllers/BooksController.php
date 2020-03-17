@@ -44,8 +44,9 @@ class BooksController extends Controller
             $favored = boolval($user->favoriteBooks()->find($book->id));
         }
 
+        $audiofile =env('APP_URL')."/uploads/".$book->audio;
 
-        return view('books.show', ['book' => $book,'app'=>$app,'favored' => $favored,'tags'=>$tags,'categories'=>$categories,'user'=>$user]);
+        return view('books.show', ['book' => $book,'app'=>$app,'favored' => $favored,'tags'=>$tags,'categories'=>$categories,'user'=>$user,'audiofile'=>$audiofile]);
     }
 
     public function read(Book $book, Request $request)

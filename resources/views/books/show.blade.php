@@ -75,7 +75,10 @@
 
                                 @if($book->audio)
                                 <audio id="player" playsinline  controls>
-                                    <source src="{{env('APP_URL')}}/uploads/{{$book->audio}}" type="audio/mp3" />
+
+
+<source src="data:audio/mpeg;base64,{{base64_encode(file_get_contents($audiofile))}}"  />
+
                                 </audio>
                               @endif
                                 <section>
