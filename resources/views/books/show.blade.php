@@ -118,27 +118,10 @@ $(function(){
 //  audio.play();
 //alert(player);
   var loading;
-//const player = new Plyr('#player', {autoplay:true,clickToPlay: true,playsinline: true});
-//player.play();
-
-jdMusic.create([{
-               src: '{{env('APP_URL')}}/uploads/{{$book->audio}}',
-               isloop: false,
-               id: 'demo1',
-               class: 'demo1',
-               autoplay: true
-           }, {
-               src: 'https://jdch5.jd.com/yayoi/res/raw-assets/Sound/B.mp3',
-               isloop: false,
-               id: 'demo2',
-               class: 'demo2',
-               autoplay: true
-           }]);
-jdMusic.play(0)
-
+const player = new Plyr('#player', {autoplay:true,clickToPlay: true,playsinline: true});
+player.play();
 document.addEventListener("WeixinJSBridgeReady", function () {
-      //  player.play();
-      jdMusic.play(0)
+        player.play();
 }, false);
 
 
