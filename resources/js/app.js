@@ -25,9 +25,15 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 require('./components/SelectDistrict');
 require('./components/UserAddressesCreateAndEdit');
 
-import Aplayer from 'vue-aplayer'
+import Plyr from 'plyr';
 
-window.Aplayer = Aplayer
+//const player = new Plyr('#player', {debug:true});
+
+window.Plyr = Plyr;
+
+// Expose player so it can be used from the console
+//window.player = player;
+
 
 //const {Howl, Howler} = require('howler');
 
