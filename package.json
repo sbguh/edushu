@@ -30,6 +30,7 @@
         "jplayer": "^2.9.2",
         "plyr": "^3.5.10",
         "sweetalert": "^2.1.2",
-        "vue-aplayer": "^1.6.1"
+        "vue-aplayer": "^1.6.1",
+        "vue-audio-visual": "^2.0.0"
     }
 }

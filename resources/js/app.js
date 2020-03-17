@@ -25,6 +25,9 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 require('./components/SelectDistrict');
 require('./components/UserAddressesCreateAndEdit');
 
+import AudioVisual from 'vue-audio-visual'
+Vue.use(AudioVisual)
+
 import Plyr from 'plyr';
 
 //const player = new Plyr('#player', {debug:true});
