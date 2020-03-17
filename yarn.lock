@@ -3807,6 +3807,11 @@ isobject@^3.0.0, isobject@^3.0.1:
   resolved "https://registry.npm.taobao.org/isobject/download/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
   integrity sha1-TkMekrEalzFjaqH5yNHMvP2reN8=
 
+jdf2e-audio@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npm.taobao.org/jdf2e-audio/download/jdf2e-audio-1.0.1.tgz#8fec9611a2f657cbe397d200dbca82d1f2404b69"
+  integrity sha1-j+yWEaL2V8vjl9IA28qC0fJAS2k=
+
 jest-worker@^25.1.0:
   version "25.1.0"
   resolved "https://registry.npm.taobao.org/jest-worker/download/jest-worker-25.1.0.tgz?cache=0&sync_timestamp=1579655017974&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fjest-worker%2Fdownload%2Fjest-worker-25.1.0.tgz#75d038bad6fdf58eba0d2ec1835856c497e3907a"

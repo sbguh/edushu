@@ -10455,6 +10455,187 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/jdf2e-audio/lib/audioCreate.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/jdf2e-audio/lib/audioCreate.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(function(root, factory) {
+        if ( true && exports) {
+            module.exports = factory(root); // CommonJS
+        } else {
+            if (true) {
+                !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)); // AMD
+            } else {}
+        }
+    }
+    (typeof window !== 'undefined' ? window : this, function(window) {
+        var jdMusic = {
+            soundRouter: {
+                'routerURL': 'router://JDExclusiveMediaModule/exclusiveMedia',
+                'routerParam': { 'state': '' }
+            },
+            visibleNeedPlay: false,
+            wvt: 'unknown'
+        }
+
+        function isApp(name, ua) {
+            ua = ua || navigator.userAgent;
+            if (name === 'wx') return /micromessenger/i.test(ua);
+            if (name === 'qq') return /qq\//i.test(ua);
+            if (name === 'weibo') return /weibo/i.test(ua);
+            if (name === 'jd') return /^jdapp/i.test(ua);
+            return false;
+        }
+
+        function isIOS(ua) {
+            ua = ua || navigator.userAgent;
+            return /ip(hone|od)|ipad/i.test(ua);
+        }
+
+        function getIOSVersion(ua) {
+            ua = ua || navigator.userAgent;
+            var match = ua.match(/OS ((\d+_?){2,3})\s/i);
+            return match ? match[1].replace(/_/g, '.') : 'unknown';
+        }
+
+        function chkWebviewType() {
+            if (isApp('jd')) {
+                if (!isIOS()) {
+                    return 'andriod'
+                } else {
+                    // 是ios，如果是ios8的话则不做任何操作
+                    var tempIosVer = getIOSVersion();
+                    if (tempIosVer == 'unknown') {
+                        return 'unknown'
+                    } else if (tempIosVer >= 8 && tempIosVer < 9) {
+                        return 'ios8'
+                    } else {
+                        var iswk = (-1 != navigator.userAgent.indexOf("supportJDSHWK/1")) || (window._is_jdsh_wkwebview == 1);
+                        return iswk ? 'wk' : 'ui'
+                    }
+                }
+            }
+            return 'notJdApp'
+        }
+
+        function toOriginalChk(wvt, soundRouter) {
+            // 判断环境
+            if (wvt == 'notJdApp') {
+                return;
+            } else if (wvt == 'wk') {
+                // 通知原生播放状态
+                window.webkit.messageHandlers.JDAppUnite.postMessage({
+                    'method': 'callRouterModuleWithParams',
+                    'params': JSON.stringify(soundRouter)
+                });
+            } else if (wvt == 'ui') {
+                window.JDAppUnite && window.JDAppUnite.callRouterModuleWithParams(JSON.stringify(soundRouter));
+            }
+        }
+        /* end:前置函数*/
+
+
+        // 动态创建audio (src, 'play', true)
+        jdMusic.create = function(audioArr) {
+            if (document.getElementsByClassName("audioClass").length) {
+                return;
+            }
+            window.audioArr = audioArr;
+            window.playIndex;
+            let autoplaySelf = 0;
+            if (this.wvt == 'unknown') {
+                this.wvt = chkWebviewType();
+            }
+            if (this.wvt == 'unknown' || this.wvt == 'ios8') return; // ios8 不做音频需求 
+
+            for (var y = 0; y < audioArr.length; y++) {
+                if (audioArr[y]["autoplay"]) {
+                    autoplaySelf++;
+                    if (autoplaySelf > 1) {
+                        audioArr[y]["autoplay"] = false;
+                    }
+                }
+            }
+
+            for (var i = 0; i < audioArr.length; i++) {
+                if (!audioArr[i]["src"]) {
+                    return
+                } else if (typeof audioArr[i]["isloop"] == "undefined") {
+                    audioArr[i]["isloop"] = false;
+                } else if (typeof audioArr[i]["autoplay"] == "undefined") {
+                    audioArr[i]["autoplay"] = "";
+                } else if (!audioArr[i]["id"]) {
+                    audioArr[i]["id"] = ("audioId" + i);
+                }
+            }
+            for (var q = 0; q < audioArr.length; q++) {
+                var temp = document.createElement('audio');
+                temp.setAttribute('id', audioArr[q]["id"]);
+                temp.setAttribute('class', ("audioClass" + " " +
+                    audioArr[q]["class"]));
+                temp.setAttribute('src', audioArr[q]["src"]);
+                if (audioArr[q]["isloop"]) {
+                    temp.setAttribute('loop', "loop")
+                }
+                document.querySelector('body').appendChild(temp);
+                if (audioArr[q]["autoplay"]) {
+                    this.play(q)
+                }
+            }
+
+            console.log(audioArr)
+
+        }
+
+        // 音频播放
+        jdMusic.play = function(index) {
+            if (this.wvt == 'unknown') {
+                this.wvt = chkWebviewType();
+            }
+            if (this.wvt == 'ios8') return; // ios8 不做音频需求 
+
+            audioDOM = document.querySelector("#" + audioArr[index]["id"]);
+            this.pause();
+            document.querySelector("#" + audioArr[index]["id"]).play();
+            playIndex = index;
+
+            // 先判断要通知给原生的state，保证站外也能用state判断
+            if (this.soundRouter.routerParam.state == 'play') return;
+            this.soundRouter.routerParam.state = 'play';
+
+            toOriginalChk(this.wvt, this.soundRouter)
+        }
+
+        // 音频暂停
+        jdMusic.pause = function() {
+            if (this.wvt == 'unknown') {
+                this.wvt = chkWebviewType();
+            }
+            if (this.wvt == 'ios8') return; // ios8 不做音频需求 
+
+            if (typeof playIndex != "undefined") {
+                audioDOM = document.querySelector("#" + audioArr[playIndex]["id"]).pause()
+            }
+
+            // 先判断要通知给原生的state，保证站外也能用state判断
+            if (this.soundRouter.routerParam.state == 'pause') return;
+            this.soundRouter.routerParam.state = 'pause';
+
+            toOriginalChk(this.wvt, this.soundRouter)
+        }
+
+        return jdMusic;
+    }));
+
+/***/ }),
+
 /***/ "./node_modules/jplayer/dist/jplayer/jquery.jplayer.js":
 /*!*************************************************************!*\
   !*** ./node_modules/jplayer/dist/jplayer/jquery.jplayer.js ***!
@@ -44816,1653 +44997,6 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
-/***/ "./node_modules/vue-audio-visual/src/components/AvBars.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/vue-audio-visual/src/components/AvBars.js ***!
-  \****************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _AvBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AvBase */ "./node_modules/vue-audio-visual/src/components/AvBase.js");
-
-/**
- * Component props Object
- */
-const props = {
-  /**
-   * prop: 'bar-width'
-   * Width of the bar in pixels.
-   * Default: 5
-   */
-  barWidth: {
-    type: Number,
-    default: 5
-  },
-  /**
-   * prop: 'bar-space'
-   * Space between bars.
-   * Default: 1
-   */
-  barSpace: {
-    type: Number,
-    default: 1
-  },
-  /**
-   * prop: 'bar-color'
-   * Bar fill color. Can be string RGB color or canvas gradients array.
-   */
-  barColor: {
-    type: [String, Array],
-    default: '#0A0AFF'
-  },
-  /**
-   * prop: 'caps-height'
-   * Create caps on bars with given height in pixels.
-   * If zero caps then skip creating bars.
-   * Default: 0
-   */
-  capsHeight: {
-    type: Number,
-    default: 0
-  },
-  /**
-   * prop: 'caps-drop-speed'
-   * Caps drop down animation speed.
-   * Default: 0.9
-   */
-  capsDropSpeed: {
-    type: Number,
-    default: 0.9
-  },
-  /**
-   * prop: 'caps-color'
-   * Caps rectangles RGB color.
-   */
-  capsColor: {
-    type: String,
-    default: '#A0A0FF'
-  },
-  /**
-   * prop: 'brick-height'
-   * Draw bar as bricks with set height.
-   */
-  brickHeight: {
-    type: Number,
-    default: 0
-  },
-  /**
-   * prop: 'brick-space'
-   * Space between bricks.
-   */
-  brickSpace: {
-    type: Number,
-    default: 1
-  },
-  /**
-   * prop: 'symmetric'
-   * Draw bars symmetric to canvas vertical center
-   * Default: false
-   */
-  symmetric: {
-    type: Boolean,
-    default: false
-  },
-  /**
-   * prop: 'fft-size'
-   * Represents the window size in samples that is used when performing
-   * a Fast Fourier Transform (FFT) to get frequency domain data.
-   * Must be power of 2 between 2^5 and 2^15
-   * Default: 1024
-   */
-  fftSize: {
-    type: Number,
-    default: 1024
-  }
-}
-
-/**
- * Component AvBars
- */
-const AvBars = {
-  name: 'av-bars',
-  mixins: [ _AvBase__WEBPACK_IMPORTED_MODULE_0__["default"] ],
-  props,
-  data () {
-    return {
-      animId: null,
-      audio: null,
-      analyser: null,
-      ctx: null,
-      audioCtx: null,
-      caps: Array.apply(null, Array(this.fftSize / 2)).map(() => 0)
-    }
-  },
-  methods: {
-    /**
-     * Main loop. Draws visualization.
-     */
-    mainLoop: function () {
-      const frqBits = this.analyser.frequencyBinCount
-      const data = new Uint8Array(frqBits)
-      const barWidth = this.barWidth >= this.canvWidth ? this.canvWidth : this.barWidth
-      const step = Math.round((barWidth + this.barSpace) / frqBits * this.canvWidth)
-      const barFill = Array.isArray(this.barColor)
-        ? this.fillGradient(this.barColor)
-        : this.barColor
-      let x = 0
-
-      this.analyser.getByteFrequencyData(data)
-      this._fillCanvasBG()
-
-      data.forEach((_, index) => {
-        if (index % step) return
-        const bits = Math.round(data.slice(index, index + step)
-          .reduce((v, t) => t + v, 0) / step)
-        const barHeight = bits / 255 * this.canvHeight
-        if (this.capsHeight) {
-          this._drawCap(index, barWidth, x, bits)
-        }
-        this.ctx.fillStyle = barFill
-        this._drawBar(barWidth, barHeight, x)
-        x += barWidth + this.barSpace
-      })
-      this.animId = requestAnimationFrame(this.mainLoop)
-    },
-    /**
-     * Canvas background fill
-     * @private
-     */
-    _fillCanvasBG: function () {
-      const w = this.canvWidth
-      const h = this.canvHeight
-      this.ctx.clearRect(0, 0, w, h)
-      if (this.canvFillColor) {
-        this.ctx.fillStyle = Array.isArray(this.canvFillColor)
-          ? this.fillGradient(this.canvFillColor)
-          : this.canvFillColor
-        this.ctx.fillRect(0, 0, w, h)
-      }
-    },
-    /**
-     * Draw bar. Solid bar or brick bar.
-     * @private
-     */
-    _drawBar: function (barWidth, barHeight, barX) {
-      if (this.brickHeight) {
-        this._drawBrickBar(barWidth, barHeight, barX)
-      } else {
-        this.ctx.fillRect(
-          barX, this.canvHeight - barHeight - this._symAlign(barHeight),
-          barWidth, barHeight
-        )
-      }
-    },
-    /**
-     * Draw bricks bar.
-     * @private
-     */
-    _drawBrickBar: function (barWidth, barHeight, barX) {
-      for (let b = 0; b < barHeight; b += this.brickHeight + this.brickSpace) {
-        this.ctx.fillRect(
-          barX, this.canvHeight - barHeight + b - this._symAlign(barHeight),
-          barWidth, this.brickHeight
-        )
-      }
-    },
-    /**
-     * Draw cap for each bar and animate caps falling down.
-     * @private
-     */
-    _drawCap: function (index, barwidth, barX, barY) {
-      const cap = this.caps[index] <= barY
-        ? barY
-        : this.caps[index] - this.capsDropSpeed
-      const y = (cap / 255.0 * this.canvHeight)
-      const capY = this.canvHeight - y - this.capsHeight - this._symAlign(y)
-      this.ctx.fillStyle = this.capsColor
-      this.ctx.fillRect(barX, capY, barwidth, this.capsHeight)
-      if (this.symmetric) {
-        this.ctx.fillRect(
-          barX, this.canvHeight - capY - this.capsHeight,
-          barwidth, this.capsHeight)
-      }
-      this.caps[index] = cap
-    },
-    /**
-     * Shift for symmetric alignment
-     * @private
-     */
-    _symAlign: function (barHeight) {
-      return this.symmetric ? ((this.canvHeight - barHeight) / 2) : 0
-    }
-  }
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (AvBars);
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-audio-visual/src/components/AvBase.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/vue-audio-visual/src/components/AvBase.js ***!
-  \****************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/**
- * Mixin component with base and common properties and functions.
- */
-
-/**
- * Base properties common for the audio-visual components
- */
-const props = {
-  /**
-   * prop: 'audio-src'
-   * Audio element src attribute. When provided creates audio element
-   */
-  audioSrc: {
-    type: String,
-    default: null
-  },
-  /**
-   * prop: 'ref-link'
-   * Refrence to Audio element. When provided, then local audio element
-   * is not created and use refrence to the element. Component will
-   * search only for its parent refs.
-   */
-  refLink: {
-    type: String,
-    default: null
-  },
-  /**
-   * prop: 'audio-controls'
-   * Audio element controls attribute. When provided should
-   * display audio element with controls
-   */
-  audioControls: {
-    type: Boolean,
-    default: true
-  },
-  /**
-   * prop: 'cors-anonym'
-   * CORS requests for this element will not have the credentials flag set.
-   * Set crossOrigin property of audio element to 'anonymous'.
-   * Default: null
-   */
-  corsAnonym: {
-    type: Boolean,
-    default: false
-  },
-  /**
-   * prop: 'audio-class'
-   * Audio element css class name.
-   */
-  audioClass: {
-    type: String,
-    default: null
-  },
-  /**
-   * prop: 'canv-width'
-   * Canvas element width. Default 300
-   */
-  canvWidth: {
-    type: Number,
-    default: 300
-  },
-  /**
-   * prop: 'canv-height'
-   * Canvas element height. Default 80
-   */
-  canvHeight: {
-    type: Number,
-    default: 80
-  },
-  /**
-   * prop: 'canv-class'
-   * Canvas element css class name.
-   */
-  canvClass: {
-    type: String,
-    default: null
-  },
-  /**
-   * prop: 'canv-top'
-   * Canvas element position on top relatively to audio element.
-   * Default: false
-   */
-  canvTop: {
-    type: Boolean,
-    default: false
-  },
-  /**
-   * prop: 'canv-fill-color'
-   * Canvas fill background color. Can be string RGB color or canvas gradients array.
-   * Default is transperent.
-   */
-  canvFillColor: {
-    type: [String, Array],
-    default: null
-  }
-}
-
-const methods = {
-  /**
-   * Create audio and canvas elements and insert in the HTML template.
-   * Using document.createElement to avoid Vue virtual DOM re-rendering
-   * which can lead to infinit loops.
-   */
-  createHTMLElements: function () {
-    const canv = document.createElement('canvas')
-    const canvDiv = document.createElement('div')
-    let audioDiv = null
-    let audio = null
-
-    if (this.refLink) {
-      audio = this.$parent.$refs[this.refLink]
-    } else {
-      audio = document.createElement('audio')
-      audioDiv = document.createElement('div')
-      audio.setAttribute('src', this.audioSrc)
-      if (this.audioControls) audio.setAttribute('controls', true)
-      if (this.audioClass) audio.setAttribute('class', this.audioClass)
-      if (this.corsAnonym) audio.crossOrigin = 'anonymous'
-      audioDiv.appendChild(audio)
-      this.$el.appendChild(audioDiv)
-    }
-
-    if (this.canvClass) canv.setAttribute('class', this.canvClass)
-    if (this.canvWidth) canv.setAttribute('width', this.canvWidth)
-    if (this.canvHeight) canv.setAttribute('height', this.canvHeight)
-    canvDiv.appendChild(canv)
-
-    if (this.canvTop) {
-      this.$el.insertBefore(canvDiv, audioDiv)
-    } else {
-      this.$el.appendChild(canvDiv)
-    }
-    this.ctxWrapper = canv
-    this.ctx = canv.getContext('2d')
-
-    this.audio = audio
-    this.audio.load()
-  },
-
-  /**
-   * Set audio context analyser.
-   */
-  setAnalyser: function () {
-    this.audioCtx = new AudioContext()
-    this.analyser = this.audioCtx.createAnalyser()
-    const src = this.audioCtx.createMediaElementSource(this.audio)
-
-    src.connect(this.analyser)
-    this.analyser.fftSize = this.fftSize
-    this.analyser.connect(this.audioCtx.destination)
-  },
-
-  /**
-   * Canvas gradient. Vertical, from top down
-   */
-  fillGradient: function (colorsArray) {
-    const w = this.canvWidth
-    const h = this.canvHeight
-    const gradient = this.ctx.createLinearGradient(w / 2, 0, w / 2, h)
-    let offset = 0
-    colorsArray.forEach(color => {
-      gradient.addColorStop(offset, color)
-      offset += (1 / colorsArray.length)
-    })
-    return gradient
-  }
-}
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props,
-  render: h => h('div'),
-  mounted () {
-    this.createHTMLElements()
-
-    this.audio.onplay = () => {
-      if (!this.audioCtx) this.setAnalyser()
-      this.mainLoop()
-      if (this.audioCtx) { // not defined for waveform
-        this.audioCtx.resume()
-      }
-    }
-
-    this.audio.onpause = () => {
-      if (this.audioCtx) {
-        this.audioCtx.suspend()
-        cancelAnimationFrame(this.animId)
-      }
-    }
-  },
-
-  beforeDestroy () {
-    if (this.audioCtx) {
-      this.audioCtx.suspend()
-    }
-    cancelAnimationFrame(this.animId)
-  },
-  methods
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-audio-visual/src/components/AvCircle.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/vue-audio-visual/src/components/AvCircle.js ***!
-  \******************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _AvBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AvBase */ "./node_modules/vue-audio-visual/src/components/AvBase.js");
-
-
-/**
- * Component props
- */
-const props = {
-  /**
-   * prop: 'fft-size'
-   * Represents the window size in samples that is used when performing
-   * a Fast Fourier Transform (FFT) to get frequency domain data.
-   * Must be power of 2 between 2^5 and 2^15
-   * Default: 1024
-   */
-  fftSize: {
-    type: Number,
-    default: 1024
-  },
-  /**
-   * prop: 'canv-width'
-   * Canvas element width. Default 100
-   */
-  canvWidth: {
-    type: Number,
-    default: 100
-  },
-  /**
-   * prop: 'canv-height'
-   * Canvas element height. Default 100
-   */
-  canvHeight: {
-    type: Number,
-    default: 100
-  },
-  /**
-   * prop: 'radius'
-   * Set cercle radius. If zero will be calculated from canvas
-   * width: (canv-width / 2) * 0.7
-   * Default: 0
-   */
-  radius: {
-    type: Number,
-    default: 0
-  },
-  /**
-   * prop: 'line-width'
-   * Frequency bit line width to draw.
-   */
-  lineWidth: {
-    type: Number,
-    default: 1
-  },
-  /**
-   * prop: 'line-space'
-   * Space between lines to draw.
-   */
-  lineSpace: {
-    type: Number,
-    default: 1
-  },
-  /**
-   * prop: 'outline-color'
-   * Outline (contour) style RGB color.
-   * Default: #00f
-   */
-  outlineColor: {
-    type: String,
-    default: '#0000FF'
-  },
-  /**
-   * prop: 'outline-width'
-   * Outline (contour) line width. Float value.
-   * Default: 0.3
-   */
-  outlineWidth: {
-    type: Number,
-    default: 0.3
-  },
-  /**
-   * prop: 'bar-width'
-   * Frequency graph bar width.
-   */
-  barWidth: {
-    type: Number,
-    default: 1
-  },
-  /**
-   * prop: 'bar-length'
-   * Frequency graph bar length.
-   * Default is a difference between radius and canvas width.
-   */
-  barLength: {
-    type: Number,
-    default: 0
-  },
-  /**
-   * prop: 'bar-color'
-   * Bar style RGB color or radient gradient when array.
-   * Default: [ #FFFFFF, #0000FF ]
-   */
-  barColor: {
-    type: [String, Array],
-    default: () => [ '#FFFFFF', '#0000FF' ]
-  },
-  /**
-   * prop: 'progress'
-   * Draw play progress meter.
-   * Default: false
-   */
-  progress: {
-    type: Boolean,
-    default: true
-  },
-  /**
-   * prop: 'progress-width'
-   * Progress meter width.
-   * Default: 1
-   */
-  progressWidth: {
-    type: Number,
-    default: 1
-  },
-  /**
-   * prop: 'progress-color'
-   * Progress meter color.
-   * Default: 1
-   */
-  progressColor: {
-    type: String,
-    default: '#0000FF'
-  },
-  /**
-   * prop: 'progress-clockwise'
-   * Progress meter arc draw direction. Default clockwise
-   * Default: true
-   */
-  progressClockwise: {
-    type: Boolean,
-    default: false
-  },
-  /**
-   * prop: 'outline-meter-space'
-   * Space between outline and progress meter.
-   * Default: 2
-   */
-  outlineMeterSpace: {
-    type: Number,
-    default: 3
-  },
-  /**
-   * prop: 'playtime'
-   * Draw playtime text in the center of the circle.
-   * Default: false
-   */
-  playtime: {
-    type: Boolean,
-    default: false
-  },
-  /**
-   * prop: 'playtime-font'
-   * Played time print font.
-   * Default: '14px Monaco'
-   */
-  playtimeFont: {
-    type: String,
-    default: '14px Monaco'
-  },
-  /**
-  * prop: 'playtime-color'
-  * Played time font color.
-  * Default: '#00f'
-  */
-  playtimeColor: {
-    type: String,
-    default: '#00f'
-  },
-  /**
-   * prop: 'rotate-graph'
-   * Rotate graph clockwise enable.
-   * Default: false
-   */
-  rotateGraph: {
-    type: Boolean,
-    default: false
-  },
-  /**
-   * prop: 'rotate-speed'
-   * Rotate graph speed.
-   * Default: 0.001
-   */
-  rotateSpeed: {
-    type: Number,
-    default: 0.001
-  }
-}
-
-/**
- * Component AvCircle
- */
-const AvCircle = {
-  name: 'av-circle',
-  mixins: [ _AvBase__WEBPACK_IMPORTED_MODULE_0__["default"] ],
-  props,
-  data () {
-    return {
-      animId: null,
-      rotate: 1.5,
-      audio: null,
-      analyser: null,
-      ctx: null,
-      audioCtx: null
-    }
-  },
-  methods: {
-    /**
-     * Main loop. Draws visualization.
-     */
-    mainLoop: function () {
-      const cx = this.canvWidth / 2 // center X
-      const cy = this.canvHeight / 2 // center Y
-      const r = this.radius ? this.radius : Math.round(this.canvWidth / 2 * 0.7)
-      const lineWidth = this.lineWidth
-      const lineSpace = this.lineSpace
-      const arcStep = Math.ceil(lineWidth + lineSpace)
-      const frqBits = this.analyser.frequencyBinCount
-      const data = new Uint8Array(frqBits)
-      const step = ((lineWidth + lineSpace) / data.length) * (2 * Math.PI)
-      const barLen = this.barLength > 0
-        ? this.barLength
-        : (this.canvWidth / 2) - r
-      let angle = Math.PI * this._rotate() // start from top
-
-      this._setCanvas()
-      this.analyser.getByteFrequencyData(data)
-
-      // contour outline
-      if (this.outlineWidth > 0) {
-        this._drawOutline(r, cx, cy)
-      }
-
-      // draw play progress meter
-      if (this.progress) {
-        this._drawProgress(r, cx, cy)
-      }
-
-      // draw played time
-      if (this.playtime) {
-        this._drawPlaytime(cx, cy)
-      }
-
-      // circle bar lines
-      this.ctx.lineWidth = this.barWidth
-      this.ctx.strokeStyle = this._setBarColor(cx, cy)
-
-      data.forEach((_, index) => {
-        angle += step
-        if (index % arcStep) {
-          return
-        }
-        const bits = Math.round(data.slice(index, index + arcStep)
-          .reduce((v, t) => t + v, 0) / arcStep)
-
-        const blen = r + (bits / 255.0 * barLen)
-        this.ctx.beginPath()
-        this.ctx.moveTo(r * Math.cos(angle) + cx, r * Math.sin(angle) + cy)
-        this.ctx.lineTo(blen * Math.cos(angle) + cx, blen * Math.sin(angle) + cy)
-        this.ctx.stroke()
-      })
-
-      this.animId = requestAnimationFrame(this.mainLoop)
-    },
-    /**
-     * Canvas clear background fill
-     * @private
-     */
-    _setCanvas: function () {
-      this.ctx.clearRect(0, 0, this.canvWidth, this.canvHeight)
-
-      if (!this.canvFillColor) return
-
-      this.ctx.fillStyle = Array.isArray(this.canvFillColor)
-        ? this.fillGradient(this.canvFillColor)
-        : this.canvFillColor
-      this.ctx.fillRect(0, 0, this.canvWidth, this.canvHeight)
-    },
-    /**
-     * Draw play progress meter
-     */
-    _drawProgress: function (r, cx, cy) {
-      const elapsed = this.audio.currentTime / this.audio.duration * 2 * Math.PI
-      const angleEnd = Math.PI * 1.5 + elapsed
-
-      if (!elapsed) return
-
-      this.ctx.lineWidth = this.progressWidth
-      this.ctx.strokeStyle = this.progressColor
-
-      this.ctx.beginPath()
-      this.ctx.arc(cx, cy, r - this.outlineWidth - this.outlineMeterSpace,
-        1.5 * Math.PI, angleEnd, this.progressClockwise)
-      this.ctx.stroke()
-    },
-    /**
-     * Draw outline circle
-     */
-    _drawOutline: function (r, cx, cy) {
-      this.ctx.beginPath()
-      this.ctx.strokeStyle = this.outlineColor
-      this.ctx.lineWidth = this.outlineWidth
-      this.ctx.arc(cx, cy, r, 0, 2 * Math.PI)
-      this.ctx.stroke()
-    },
-    /**
-     * Draw played time
-     */
-    _drawPlaytime: function (cx, cy) {
-      const m = Math.floor(this.audio.currentTime / 60)
-      const sec = Math.floor(this.audio.currentTime) % 60
-      const s = sec < 10 ? `0${sec}` : `${sec}`
-      const text = `${m}:${s}`
-      const tsizew = Math.ceil(this.ctx.measureText(text).width)
-
-      this.ctx.font = this.playtimeFont
-      this.ctx.fillStyle = this.playtimeColor
-      this.ctx.fillText(text, cx - Math.round(tsizew / 2), cy + 0.25 * parseInt(this.playtimeFont))
-    },
-    /**
-     * If rotate is enabled will return rotated angle
-     */
-    _rotate: function () {
-      if (this.rotateGraph) {
-        this.rotate = this.rotate === 3.5 ? 1.5 : this.rotate + this.rotateSpeed
-      } else {
-        this.rotate = 1.5
-      }
-      return this.rotate
-    },
-    /**
-     * Set bars color.
-     */
-    _setBarColor: function (cx, cy) {
-      if (!Array.isArray(this.barColor)) {
-        return this.barColor
-      }
-      const gradient = this.ctx.createRadialGradient(cx, cy, this.canvWidth / 2, cx, cy, 0)
-      let offset = 0
-
-      this.barColor.forEach(color => {
-        gradient.addColorStop(offset, color)
-        offset += (1 / this.barColor.length)
-      })
-      return gradient
-    }
-  }
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (AvCircle);
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-audio-visual/src/components/AvLine.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/vue-audio-visual/src/components/AvLine.js ***!
-  \****************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _AvBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AvBase */ "./node_modules/vue-audio-visual/src/components/AvBase.js");
-
-
-/**
- * Component props
- */
-const props = {
-  /**
-   * prop: 'line-width'
-   * Draw line width in px
-   */
-  lineWidth: {
-    type: Number,
-    default: 2
-  },
-  /**
-   * prop: 'line-color'
-   * Draw line color or gradient array
-   */
-  lineColor: {
-    type: [String, Array],
-    default: '#9F9'
-  },
-  /**
-   * prop: 'fft-size'
-   * Represents the window size in samples that is used when performing
-   * a Fast Fourier Transform (FFT) to get frequency domain data.
-   * Must be power of 2 between 2^5 and 2^15
-   * Default: 128
-   */
-  fftSize: {
-    type: Number,
-    default: 128
-  }
-}
-
-/**
- * Component AvLine
- */
-const AvLine = {
-  name: 'av-line',
-  mixins: [ _AvBase__WEBPACK_IMPORTED_MODULE_0__["default"] ],
-  props,
-  data () {
-    return {
-      animId: null,
-      audio: null,
-      analyser: null,
-      ctx: null,
-      audioCtx: null
-    }
-  },
-  methods: {
-    /**
-     * Main loop. Draws visualization.
-     */
-    mainLoop: function () {
-      const frqBits = this.analyser.frequencyBinCount
-      const step = (this.canvWidth / 2.0) / frqBits
-      const data = new Uint8Array(frqBits)
-      let x = 0
-
-      this._setCanvas()
-      this.analyser.getByteFrequencyData(data)
-
-      this.ctx.lineWidth = this.lineWidth
-      this.ctx.strokeStyle = Array.isArray(this.lineColor)
-        ? this.fillGradient(this.lineColor)
-        : this.lineColor
-      this.ctx.beginPath()
-
-      data.reverse()
-      this.ctx.moveTo(x, this.canvHeight / 2)
-      x = this._drawLine(data, x, step)
-      data.reverse()
-      x = this._drawLine(data, x, step)
-      this.ctx.lineTo(this.canvWidth, this.canvHeight / 2)
-      this.ctx.stroke()
-
-      this.animId = requestAnimationFrame(this.mainLoop)
-    },
-    /**
-     * Canvas clear background fill
-     * @private
-     */
-    _setCanvas: function () {
-      const w = this.canvWidth
-      const h = this.canvHeight
-      const canvColor = this.canvFillColor
-      const gradient = this.ctx.createLinearGradient(w / 2, 0, w / 2, h)
-      let offset = 0
-      this.ctx.clearRect(0, 0, w, h)
-
-      if (!canvColor) return
-
-      if (Array.isArray(canvColor)) {
-        canvColor.forEach(color => {
-          gradient.addColorStop(offset, color)
-          offset += (1 / canvColor.length)
-        })
-        this.ctx.fillStyle = gradient
-      } else {
-        this.ctx.fillStyle = canvColor
-      }
-      this.ctx.fillRect(0, 0, w, h)
-    },
-    /**
-     * Draw line and return last X
-     * @private
-     */
-    _drawLine: function (data, x, step) {
-      const h = this.canvHeight
-      let y = 0
-      data.forEach((v, i) => {
-        // (h / 2) - v / 255 * (h / 2)
-        y = h * (255 - v) / 510
-        if (i % 2) y = h - y
-        this.ctx.lineTo(x, y)
-        x += step
-      })
-      return x
-    }
-  }
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (AvLine);
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-audio-visual/src/components/AvMedia.js":
-/*!*****************************************************************!*\
-  !*** ./node_modules/vue-audio-visual/src/components/AvMedia.js ***!
-  \*****************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/**
- * Component props
- */
-const props = {
-  /**
-   * prop: 'media'
-   * MediaStream object for visualisation. Can be delivered by
-   * Web Audio API functions like getUserMedia or RTCPeerConnection
-   */
-  media: {
-    type: MediaStream,
-    required: false,
-    default: null
-  },
-
-  /**
-   * prop: 'canv-width'
-   * Canvas element width. Default 300
-   */
-  canvWidth: {
-    type: Number,
-    default: 300
-  },
-
-  /**
-   * prop: 'canv-class'
-   * Canvas element css class name.
-   */
-  canvClass: {
-    type: String,
-    default: null
-  },
-
-  /**
-   * prop: 'canv-height'
-   * Canvas element height. Default 80
-   */
-  canvHeight: {
-    type: Number,
-    default: 80
-  },
-
-  /**
-   * prop: 'canv-fill-color'
-   * Canvas fill background RGB color.
-   * Default is transperent.
-   */
-  canvFillColor: {
-    type: String,
-    default: null
-  },
-
-  /**
-   * prop: 'fft-size'
-   * Represents the window size in samples that is used when performing
-   * a Fast Fourier Transform (FFT) to get frequency domain data.
-   * Must be power of 2 between 2^5 and 2^15
-   * Default: 8192 for 'wform' 1024 for 'freq'
-   */
-  fftSize: {
-    type: Number,
-    default: null // 1024 // 8192
-  },
-
-  /**
-   * prop: 'type'
-   * Type of visualisation.
-   * wform - using byte time domaine data
-   * frequ - using byte frequency data
-   * wform when not recognized.
-   * Default: wform
-   */
-  type: {
-    type: String,
-    default: 'wform'
-  },
-
-  /**
-   * prop: 'frequ-lnum'
-   * Vertical lines number for frequ type.
-   * Default: 60
-   */
-  frequLnum: {
-    type: Number,
-    default: 60
-  },
-
-  /**
-   * prop: 'frequ-line-cap'
-   * Draw line with rounded end caps.
-   * Default: false
-   */
-  frequLineCap: {
-    type: Boolean,
-    default: false
-  },
-
-  /**
-   * prop: 'line-color'
-   * Line color.
-   * Default: lime
-   */
-  lineColor: {
-    type: String,
-    default: 'lime'
-  },
-
-  /**
-   * prop: 'line-width'
-   * Line width.
-   * Default: 0.5 for wform and 3 for frequ
-   */
-  lineWidth: {
-    type: Number,
-    default: null
-  }
-}
-
-/**
- * Component AvMedia
- */
-const AvMedia = {
-  name: 'av-media',
-  data () {
-    return {
-      ctx: null,
-      audioCtx: null,
-      analyser: null
-    }
-  },
-  props,
-  render: h => h('div'),
-  mounted () {
-    this.createCanvas()
-  },
-  watch: {
-    media: function (newVal, oldVal) {
-      if (newVal) this.setAnalyser()
-      this.draw()
-    }
-  },
-  methods: {
-    /**
-     * Create Canvas inside div
-     */
-    createCanvas: function () {
-      const canv = document.createElement('canvas')
-      canv.width = this.canvWidth
-      canv.height = this.canvHeight
-      if (this.canvClass) canv.setAttribute('class', this.canvClass)
-      this.ctx = canv.getContext('2d')
-      this.$el.appendChild(canv)
-    },
-
-    /**
-     * Set analyser
-     */
-    setAnalyser: function () {
-      this.audioCtx = new AudioContext()
-      this.analyser = this.audioCtx.createAnalyser()
-      const src = this.audioCtx.createMediaStreamSource(this.media)
-
-      src.connect(this.analyser)
-      if (this.fftSize) {
-        this.analyser.fftSize = this.fftSize
-      } else {
-        this.analyser.fftSize = this.type === 'frequ' ? 1024 : 8192
-      }
-      this.analyser.connect(this.audioCtx.destination)
-    },
-
-    draw: function () {
-      const data = new Uint8Array(this.analyser.fftSize)
-
-      if (this.canvFillColor) this.ctx.fillStyle = this.canvFillColor
-      this.ctx.clearRect(0, 0, this.canvWidth, this.canvHeight)
-      this.ctx.beginPath()
-      this.ctx.strokeStyle = this.lineColor
-
-      if (this.type === 'frequ') {
-        this.analyser.getByteFrequencyData(data)
-        this.frequ(data)
-      } else {
-        this.analyser.getByteTimeDomainData(data)
-        this.wform(data)
-      }
-
-      requestAnimationFrame(this.draw)
-    },
-
-    wform: function (data) {
-      const h = this.canvHeight
-      const step = this.canvWidth / this.analyser.fftSize
-      let x = 0
-      this.ctx.lineWidth = this.lineWidth || 0.5
-      data.forEach(v => {
-        const y = (v / 255.0) * h
-        this.ctx.lineTo(x, y)
-        x += step
-      })
-      this.ctx.stroke()
-    },
-
-    frequ: function (data) {
-      const c = this.frequLnum
-      const step = this.canvWidth / c
-      const h = this.canvHeight
-      const lw = this.lineWidth || 2
-      for (let i = 0; i < c; i++) {
-        const x = i * step + lw
-        const v = data.slice(x, x + step).reduce((sum, v) => sum + (v / 255.0 * h), 0) / step
-        const space = (h - v) / 2 + 2 // + 2 is space for caps
-        this.ctx.lineWidth = lw
-        this.ctx.lineCap = this.frequLineCap ? 'round' : 'butt'
-        this.ctx.moveTo(x, space)
-        this.ctx.lineTo(x, h - space)
-        this.ctx.stroke()
-      }
-    }
-  }
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (AvMedia);
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-audio-visual/src/components/AvWaveform.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/vue-audio-visual/src/components/AvWaveform.js ***!
-  \********************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AvBase__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AvBase */ "./node_modules/vue-audio-visual/src/components/AvBase.js");
-
-
-
-/**
- * Component props
- */
-const props = {
-  /**
-   * prop: 'canv-width'
-   * Canvas element width. Default 500
-   */
-  canvWidth: {
-    type: Number,
-    default: 500
-  },
-  /**
-   * prop: 'canv-height'
-   * Canvas element height. Default 80
-   */
-  canvHeight: {
-    type: Number,
-    default: 80
-  },
-  /**
-   * prop: 'played-line-width'
-   * Waveform line width for played segment of audio
-   * Default: 0.5
-   */
-  playedLineWidth: {
-    type: Number,
-    default: 0.5
-  },
-  /**
-   * prop: 'played-line-color'
-   * Waveform line color for played segment of audio
-   * Default: navy
-   */
-  playedLineColor: {
-    type: String,
-    default: 'navy'
-  },
-  /**
-   * prop: 'noplayed-line-width'
-   * Waveform line width for not yet played segment of audio
-   * Default: 0.5
-   */
-  noplayedLineWidth: {
-    type: Number,
-    default: 0.5
-  },
-  /**
-   * prop: 'noplayed-line-color'
-   * Waveform line color for not yet played segment of audio
-   * Default: lime
-   */
-  noplayedLineColor: {
-    type: String,
-    default: 'lime'
-  },
-  /**
-   * prop: 'playtime'
-   * Display played time next to progress slider.
-   * Default: true
-   */
-  playtime: {
-    type: Boolean,
-    default: true
-  },
-  /**
-   * prop: 'playtime-with-ms'
-   * Display milliseconds in played when true.
-   * For example: 02:55.054
-   * Default: true
-   */
-  playtimeWithMs: {
-    type: Boolean,
-    default: true
-  },
-  /**
-   * prop: 'playtime-font-size'
-   * Played time print font size in pixels.
-   * Default: 12
-   */
-  playtimeFontSize: {
-    type: Number,
-    default: 12
-  },
-  /**
-   * prop: 'playtime-font-family'
-   * Played time print font family.
-   * Default: monospace
-   */
-  playtimeFontFamily: {
-    type: String,
-    default: 'monospace'
-  },
-  /**
-   * prop: 'playtime-font-color'
-   * Played time print font RGB color string.
-   * Default: grey
-   */
-  playtimeFontColor: {
-    type: String,
-    default: 'grey'
-  },
-  /**
-   * prop: 'playtime-text-bottom'
-   * Position playtime text bottom.
-   * Default on top.
-   * Default: false
-   */
-  playtimeTextBottom: {
-    type: Boolean,
-    default: false
-  },
-  /**
-   * prop: 'playtime-slider'
-   * Draw played slider
-   * Default: true
-   */
-  playtimeSlider: {
-    type: Boolean,
-    default: true
-  },
-  /**
-   * prop: 'playtime-slider-color'
-   * Played slider color
-   * Default: red
-   */
-  playtimeSliderColor: {
-    type: String,
-    default: 'red'
-  },
-  /**
-   * prop: 'playtime-slider-width'
-   * Played slider width
-   * Default: 1
-   */
-  playtimeSliderWidth: {
-    type: Number,
-    default: 1
-  },
-  /**
-   * prop: 'playtime-clickable'
-   * Allow click on waveform to change playtime.
-   * Default: true
-   */
-  playtimeClickable: {
-    type: Boolean,
-    default: true
-  }
-}
-
-/**
- * Component AvLine
- */
-const AvWaveform = {
-  name: 'av-waveform',
-  mixins: [ _AvBase__WEBPACK_IMPORTED_MODULE_1__["default"] ],
-  props,
-  data () {
-    return {
-      animId: null,
-      ctxWrapper: null,
-      ctx: null,
-      audio: null,
-      duration: null,
-      peaks: []
-    }
-  },
-  mounted () {
-    const conf = {
-      responseType: 'arraybuffer',
-      onDownloadProgress: this.downloadProgress
-    }
-    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.audio.src, conf)
-      .then(response => this.decode(response))
-      .catch(err => {
-        console.error(`Failed to get file '${this.audio.src}'`)
-        console.log(err)
-      })
-    this.audio.onplay = () => {
-      this.animId = requestAnimationFrame(this.waveformAnim)
-    }
-    this.audio.onpause = () => {
-      cancelAnimationFrame(this.animId)
-      this.animId = null
-    }
-  },
-  methods: {
-    // Stub set analyser method from Mixin AvBase
-    // as there is no need of analyser in that component
-    // this method is called from mixin mounted()
-    setAnalyser: function () {
-      /* istanbul ignore next */
-      return null
-    },
-
-    // Stub mainLoop method from Mixin AvBase as
-    // here different init method will be used.
-    // This method is called from mixin mounted()
-    mainLoop: function () {
-      /* istanbul ignore next */
-      return null
-    },
-
-    /**
-     * Decode audio source response array buffer
-     */
-    decode: function (response) {
-      /* istanbul ignore next */
-      const ctx = new AudioContext()
-      /* istanbul ignore next */
-      ctx.decodeAudioData(response.data, (audioBuffer) => {
-        this.setPeaks(audioBuffer)
-      }, (err) => {
-        console.error('Failed to decode audio data.')
-        console.log(err)
-      })
-    },
-
-    /**
-     * Set peaks array for waveform.
-     * For now use only one channel
-     */
-    setPeaks: function (buffer) {
-      const peaks = []
-      let min = 0
-      let max = 0
-      let top = 0
-      let bottom = 0
-      const segSize = Math.ceil(buffer.length / this.canvWidth)
-      const width = this.canvWidth
-      const height = this.canvHeight
-      this.duration = buffer.duration // while we have buffer why we don't use it ?
-
-      for (let c = 0; c < buffer.numberOfChannels; c++) {
-        const data = buffer.getChannelData(c)
-        for (let s = 0; s < width; s++) {
-          const start = ~~(s * segSize)
-          const end = ~~(start + segSize)
-          min = 0
-          max = 0
-          for (let i = start; i < end; i++) {
-            min = data[i] < min ? data[i] : min
-            max = data[i] > max ? data[i] : max
-          }
-          // merge multi channel data
-          if (peaks[s]) {
-            peaks[s][0] = peaks[s][0] < max ? max : peaks[s][0]
-            peaks[s][1] = peaks[s][1] > min ? min : peaks[s][1]
-          }
-          peaks[s] = [max, min]
-        }
-      }
-      // set peaks relativelly to canvas dimensions
-      for (let i = 0; i < peaks.length; i++) {
-        max = peaks[i][0]
-        min = peaks[i][1]
-        top = ((height / 2) - (max * height / 2))
-        bottom = ((height / 2) - (min * height / 2))
-        peaks[i] = [top, bottom === top ? top + 1 : bottom]
-      }
-      this.peaks = peaks
-
-      if (this.playtimeClickable) {
-        this.ctxWrapper.addEventListener('click', (e) => this.updateTime(e))
-      }
-      this.waveform()
-    },
-
-    /**
-     * Draw wave form.
-     */
-    waveform: function () {
-      const peaks = this.peaks
-      const time = this.audio.currentTime
-      const playX = this.playX(time)
-      let x = 0
-      this.ctx.clearRect(0, 0, this.canvWidth, this.canvHeight)
-      x = this.draw(peaks.slice(0, playX), this.playedLineWidth, this.playedLineColor, x)
-      this.draw(peaks.slice(playX), this.noplayedLineWidth, this.noplayedLineColor, x)
-      this.drawSlider(time)
-      this.drawTime(time)
-    },
-
-    /**
-     * Waveform animation proxy
-     */
-    waveformAnim: function () {
-      this.waveform()
-      this.animId = requestAnimationFrame(this.waveformAnim)
-    },
-
-    /**
-     * Draw segment.
-     */
-    draw: function (data, lineWidth, color, x) {
-      this.ctx.lineWidth = lineWidth
-      this.ctx.strokeStyle = color
-      this.ctx.beginPath()
-      data.forEach(v => {
-        this.ctx.moveTo(x, v[0])
-        this.ctx.lineTo(x, v[1])
-        x++
-      })
-      this.ctx.stroke()
-      return x
-    },
-
-    /**
-     * Formatted string of current play time.
-     * @param {Number} Current play time
-     * @return {String}
-     */
-    timeFormat: function (timeSec) {
-      let frmStr = ''
-      const time = parseFloat(timeSec)
-      if (isNaN(time)) {
-        return frmStr
-      }
-
-      const min = ~~(time / 60)
-      const sec = ~~(time % 60)
-      const ms = ~~(time % 1 * 1000)
-
-      frmStr = (min < 10) ? `0${min}:` : `${min}:`
-      frmStr += `0${sec}`.substr(-2)
-      if (this.playtimeWithMs) {
-        frmStr += '.' + `00${ms}`.substr(-3)
-      }
-
-      return frmStr
-    },
-
-    /**
-     * Draw play time next to slider.
-     * @param {Number} Played time sec.millisec.
-     * @return {Void}
-     */
-    drawTime: function (time) {
-      const timeStr = this.timeFormat(time)
-      const offset = 3
-      const textWidth = ~~this.ctx.measureText(timeStr).width
-      const playX = this.playX(time)
-      const textX = playX > (this.canvWidth - textWidth - offset)
-        ? playX - textWidth - offset
-        : playX + offset
-      const textY = this.playtimeTextBottom
-        ? this.canvHeight - this.playtimeFontSize + offset
-        : this.playtimeFontSize + offset
-      this.ctx.fillStyle = this.playtimeFontColor
-      this.ctx.font = `${this.playtimeFontSize}px ${this.playtimeFontFamily}`
-      this.ctx.fillText(timeStr, textX, textY)
-    },
-
-    /**
-     * Draw played slider.
-     * @param {Number} Played time sec.millisec.
-     * @return {Void}
-     */
-    drawSlider: function (time) {
-      const playX = this.playX(time)
-      this.ctx.lineWidth = this.playtimeSliderWidth
-      this.ctx.strokeStyle = this.playtimeSliderColor
-      this.ctx.beginPath()
-      this.ctx.moveTo(playX, 0)
-      this.ctx.lineTo(playX, this.canvHeight)
-      this.ctx.stroke()
-    },
-
-    /**
-     * Get x coodrinate for play time.
-     * @param {Number}
-     * @return {Number}
-     */
-    playX: function (time) {
-      return ~~(time / this.duration * this.canvWidth)
-    },
-
-    /**
-     * Audio playback update time callback.
-     * @param event
-     */
-    updateTime: function (e) {
-      this.audio.currentTime = e.offsetX / this.canvWidth * this.duration
-      if (!this.animId) {
-        // re-draw if animation is not running
-        this.waveform()
-      }
-    },
-
-    /**
-     * Audio source download progress
-     */
-    downloadProgress: function (ev) {
-      const progressX = Math.round(ev.loaded / ev.total * this.canvWidth)
-      this.ctx.clearRect(0, 0, this.canvWidth, this.canvHeight)
-      this.ctx.beginPath()
-      this.ctx.strokeStyle = this.noplayedLineColor
-      this.ctx.moveTo(0, this.canvHeight / 2)
-      this.ctx.lineTo(progressX, this.canvHeight / 2)
-      this.ctx.stroke()
-    }
-  }
-}
-/* harmony default export */ __webpack_exports__["default"] = (AvWaveform);
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-audio-visual/src/plugin.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/vue-audio-visual/src/plugin.js ***!
-  \*****************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_AvBars__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/AvBars */ "./node_modules/vue-audio-visual/src/components/AvBars.js");
-/* harmony import */ var _components_AvLine__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/AvLine */ "./node_modules/vue-audio-visual/src/components/AvLine.js");
-/* harmony import */ var _components_AvCircle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/AvCircle */ "./node_modules/vue-audio-visual/src/components/AvCircle.js");
-/* harmony import */ var _components_AvWaveform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/AvWaveform */ "./node_modules/vue-audio-visual/src/components/AvWaveform.js");
-/* harmony import */ var _components_AvMedia__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/AvMedia */ "./node_modules/vue-audio-visual/src/components/AvMedia.js");
-
-
-
-
-
-
-const AVPlugin = {}
-
-AVPlugin.install = function (Vue) {
-  // browsers compatibility
-  window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext
-  window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame
-  // Components
-  Vue.component(_components_AvBars__WEBPACK_IMPORTED_MODULE_0__["default"].name, _components_AvBars__WEBPACK_IMPORTED_MODULE_0__["default"])
-  Vue.component(_components_AvLine__WEBPACK_IMPORTED_MODULE_1__["default"].name, _components_AvLine__WEBPACK_IMPORTED_MODULE_1__["default"])
-  Vue.component(_components_AvCircle__WEBPACK_IMPORTED_MODULE_2__["default"].name, _components_AvCircle__WEBPACK_IMPORTED_MODULE_2__["default"])
-  Vue.component(_components_AvWaveform__WEBPACK_IMPORTED_MODULE_3__["default"].name, _components_AvWaveform__WEBPACK_IMPORTED_MODULE_3__["default"])
-  Vue.component(_components_AvMedia__WEBPACK_IMPORTED_MODULE_4__["default"].name, _components_AvMedia__WEBPACK_IMPORTED_MODULE_4__["default"])
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (AVPlugin);
-
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&":
 /*!*******************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e& ***!
@@ -58676,9 +57210,10 @@ module.exports = function(module) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_audio_visual__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-audio-visual */ "./node_modules/vue-audio-visual/src/plugin.js");
-/* harmony import */ var plyr__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! plyr */ "./node_modules/plyr/dist/plyr.min.js");
-/* harmony import */ var plyr__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(plyr__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var plyr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! plyr */ "./node_modules/plyr/dist/plyr.min.js");
+/* harmony import */ var plyr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(plyr__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var jdf2e_audio__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jdf2e-audio */ "./node_modules/jdf2e-audio/lib/audioCreate.js");
+/* harmony import */ var jdf2e_audio__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jdf2e_audio__WEBPACK_IMPORTED_MODULE_1__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -58704,10 +57239,10 @@ __webpack_require__(/*! ./components/SelectDistrict */ "./resources/js/component
 __webpack_require__(/*! ./components/UserAddressesCreateAndEdit */ "./resources/js/components/UserAddressesCreateAndEdit.js");
 
 
-Vue.use(vue_audio_visual__WEBPACK_IMPORTED_MODULE_0__["default"]);
- //const player = new Plyr('#player', {debug:true});
 
-window.Plyr = plyr__WEBPACK_IMPORTED_MODULE_1___default.a;
+window.jdMusic = jdf2e_audio__WEBPACK_IMPORTED_MODULE_1___default.a; //const player = new Plyr('#player', {debug:true});
+
+window.Plyr = plyr__WEBPACK_IMPORTED_MODULE_0___default.a;
 
 __webpack_require__(/*! jplayer */ "./node_modules/jplayer/dist/jplayer/jquery.jplayer.js"); // Expose player so it can be used from the console
 //window.player = player;
