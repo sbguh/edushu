@@ -74,7 +74,7 @@
                             <section>
 
                                 @if($book->audio)
-                                <audio id="player" playsinline  controls>
+                                <audio id="player"  controls>
 
 
 <source src="data:audio/mpeg;base64,{{base64_encode(file_get_contents($audiofile))}}"  />
