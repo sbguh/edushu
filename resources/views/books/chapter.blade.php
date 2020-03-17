@@ -65,7 +65,10 @@
             <section>
                 <h2 class="title">{{$chapter->title}}</h2>
                 <p>@if($chapter->audio)
-                听书: <audio controls="controls" src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" controls="controls" autoplay preload="auto" id="weaudio" width="100%" style="width:100%"></audio>
+                <audio controls autoplay id="weaudio" preload="auto">
+                    <source src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" type="audio/mp3" />
+                </audio>
+
                 @endif</p>
                 <section>
 
@@ -126,17 +129,19 @@
 
 <script type="text/javascript" charset="utf-8">
 $(function(){
-
-
-
   var loading;
   var audio = document.getElementById("weaudio");
   audio.load();
   audio.play();
+
+
+  //const player = new Plyr('#player', {autoplay:true,clickToPlay: true,playsinline: true, fullscreen:{enabled: true, fallback: true, iosNative: true}});
+  //player.play();
   document.addEventListener("WeixinJSBridgeReady", function () {
-          audio.load();
+          //player.play();
           audio.play();
   }, false);
+
 
 
 });

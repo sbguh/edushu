@@ -3815,7 +3815,14 @@ jest-worker@^25.1.0:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
-jquery@^3.2:
+jplayer@^2.9.2:
+  version "2.9.2"
+  resolved "https://registry.npm.taobao.org/jplayer/download/jplayer-2.9.2.tgz#5a4c752ef8ea68646a5d277c3ccbcef2df389d86"
+  integrity sha1-Wkx1LvjqaGRqXSd8PMvO8t84nYY=
+  dependencies:
+    jquery ">1.7.0"
+
+jquery@>1.7.0, jquery@^3.2:
   version "3.4.1"
   resolved "https://registry.npm.taobao.org/jquery/download/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha1-cU8fjZ3eS9+lV2S6N+8hRjDYDvI=
