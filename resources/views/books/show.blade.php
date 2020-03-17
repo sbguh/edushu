@@ -74,13 +74,9 @@
                             <section>
 
                                 @if($book->audio)
-
-                                <div class="audioPlay">
-                                  <button onClick="lowLag.play();">Play</button>
-                                  <button onClick="lowLag.pause();">Pause</button>
-                                  <button onClick="lowLag.stop();">Stop</button>
-                                  <button onClick="lowLag.switch(true);">Swtich</button>
-                                </div>
+                                <audio id="player" playsinline  controls>
+                                    <source src="{{env('APP_URL')}}/uploads/{{$book->audio}}" type="audio/mp3" />
+                                </audio>
                               @endif
                                 <section>
 
@@ -117,24 +113,15 @@
 
 $(function(){
 
-  lowLag.init();
-  lowLag.load(['{{env('APP_URL')}}/uploads/{{$book->audio}}'], 'audio1');
-  //lowLag.load(['https://coubsecure-s.akamaihd.net/get/b173/p/coub/simple/cw_looped_audio/0d5adfff2ee/80432a356484068bb0e15/med_1550254045_med.mp3'], 'audio2');
-  // starts with audio1
-  lowLag.switchSoundAudioContext();
-  lowLag.play()
-
-  var audio = document.getElementById("weaudio");
-  //audio.load();
-  //audio.play();
-  //var loading;
-//const player = new Plyr('#player', {autoplay:true,clickToPlay: true,playsinline: true});
-//player.play();
+//  var audio = document.getElementById("weaudio");
+//  audio.load();
+//  audio.play();
+//alert(player);
+  var loading;
+const player = new Plyr('#player', {autoplay:true,clickToPlay: true,playsinline: true});
+player.play();
 document.addEventListener("WeixinJSBridgeReady", function () {
-  lowLag.play()
-      //  player.play();
-        //audio.load();
-      //  audio.play();
+        player.play();
 }, false);
 
 
