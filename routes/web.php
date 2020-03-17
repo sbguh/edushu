@@ -58,7 +58,8 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
     });
 });
 
-
+Route::get('books/audio/{book}', 'BooksController@bookaudio')->name('books.audio');
+Route::get('chapter/audio/{chapter}', 'BooksController@chapteraudio')->name('chapter.audio');
 
 Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
     Route::get('wechat/auth', function () {
@@ -73,11 +74,10 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
   Route::get('read/{book}', 'BooksController@read')->name('book.read');
   Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
   Route::any('search/{keyword}', 'BooksController@search')->name('books.search');
-  
+
 Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 
-  Route::get('books/audio/{book}', 'BooksController@bookaudio')->name('books.audio');
-  Route::get('chapter/audio/{chapter}', 'BooksController@chapteraudio')->name('chapter.audio');
+
 
 
 

@@ -25,11 +25,15 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 require('./components/SelectDistrict');
 require('./components/UserAddressesCreateAndEdit');
 
-import Plyr from 'plyr';
+
+require('./lowLagpure');
+//window.lowLag = lowLag;
+
+//import Plyr from 'plyr';
 
 //const player = new Plyr('#player', {debug:true});
 
-window.Plyr = Plyr;
+//window.Plyr = Plyr;
 
 // Expose player so it can be used from the console
 //window.player = player;
