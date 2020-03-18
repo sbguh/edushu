@@ -41,7 +41,6 @@ Route::group(['middleware' => ['auth', 'wechat.oauth']], function() {
 
 
 Route::get('products', 'ProductsController@index')->name('products.index');
-Route::get('products', 'ProductsController@index')->name('products.index');
 Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 
 
@@ -76,11 +75,6 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
   Route::any('search/{keyword}', 'BooksController@search')->name('books.search');
 
 Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
-
-
-
-
-
 
   Route::get('category', 'CategoryController@index')->name('category.index');
   Route::get('category/{category}', 'CategoryController@show')->name('category.show');

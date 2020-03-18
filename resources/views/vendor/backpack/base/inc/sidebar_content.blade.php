@@ -39,3 +39,5 @@
 
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('cartitem') }}'><i class='nav-icon fa fa-question'></i> CartItems</a></li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('category') }}'><i class='nav-icon fa fa-question'></i> Categories</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('bookaudio') }}'><i class='nav-icon fa fa-question'></i> BookAudios</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('chapteraudio') }}'><i class='nav-icon fa fa-question'></i> ChapterAudios</a></li>

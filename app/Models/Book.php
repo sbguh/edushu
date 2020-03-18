@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+use App\Events\BookAudio;
+
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -24,6 +26,11 @@ class Book extends Model
         'extras' => 'object',
         'images'       => 'array',
     ];
+
+    protected $dispatchesEvents = [
+       'saved' => BookAudio::class,
+       'updated' => BookAudio::class,
+   ];
 
     protected $table = 'books';
     // protected $primaryKey = 'id';
@@ -137,6 +144,11 @@ class Book extends Model
     public function categories()
     {
         return $this->belongsToMany('App\Models\Category', 'book_category');
+    }
+
+    public function audios()
+    {
+        return $this->hasOne('App\Models\BookAudio','book_id');
     }
 
     /*

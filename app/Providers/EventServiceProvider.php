@@ -6,7 +6,8 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
-
+use App\Events\BookAudio as BookAudioEvent;
+use App\Listeners\BookAudio as BookAudioListern;
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -18,6 +19,11 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        BookAudioEvent::class => [
+            BookAudioListern::class,
+        ],
+
     ];
 
     /**

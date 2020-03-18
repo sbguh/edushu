@@ -15,12 +15,17 @@ class BookCrudController extends CrudController
 {
     use InstantFields;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     //use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\BulkCloneOperation;
+
+  //  use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+
+        // ...
+
 
 
     public function setup()
@@ -35,6 +40,12 @@ class BookCrudController extends CrudController
         $this->crud->setEntityNameStrings('book', 'books');
 
     }
+
+
+
+
+
+
 
     protected function setupListOperation()
     {

@@ -27,14 +27,14 @@ require('./components/UserAddressesCreateAndEdit');
 
 import Plyr from 'plyr';
 
-import jdMusic from 'jdf2e-audio';
+//import jdMusic from 'jdf2e-audio';
 
-window.jdMusic = jdMusic;
+//window.jdMusic = jdMusic;
 //const player = new Plyr('#player', {debug:true});
 
 window.Plyr = Plyr;
 
-require('jplayer');
+//require('jplayer');
 
 // Expose player so it can be used from the console
 //window.player = player;

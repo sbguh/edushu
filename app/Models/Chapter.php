@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Events\ChapterAudioEvent;
+
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,6 +25,12 @@ class Chapter extends Model
         'details'       => 'object',
         'extras' => 'object',
     ];
+
+    protected $dispatchesEvents = [
+       'saved' => ChapterAudioEvent::class,
+       'updated' => ChapterAudioEvent::class,
+   ];
+
 
     protected $fillable = ['title','url','content', 'book_id', 'extras','images','sort','state','read_count','word_count','word_count','audio','video'];
 
@@ -57,8 +65,11 @@ class Chapter extends Model
 
             // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
             }
-            
 
+     public function audios()
+         {
+             return $this->hasOne('App\Models\ChapterAudio','chapter_id');
+         }
 /*
     public function nextchapter()
     {
