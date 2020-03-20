@@ -10,7 +10,7 @@ wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','update
 
 wx.ready(function () {
     wx.updateAppMessageShareData({
-        title: "{{$chapter->title}} - {{$book->name}}", // 分享标题
+        title: "{{$chapter->title}} - {{$book->name}} 中小学生必读图书", // 分享标题
         desc: "精选好书,中小学生必读书目!{{$chapter->title}} - {{$book->name}}", // 分享描述
         link: "{{route('book.read.chapter',[$book->id,$chapter->id])}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
