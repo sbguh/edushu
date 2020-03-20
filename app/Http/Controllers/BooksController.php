@@ -8,6 +8,7 @@ use App\Models\Book;
 use App\Models\Chapter;
 use App\Models\Category;
 use Symfony\Component\HttpFoundation\Response;
+use Auth;
 
 class BooksController extends Controller
 {
@@ -32,8 +33,14 @@ class BooksController extends Controller
         $app = app('wechat.official_account');
         $user = $request->user();
 
-        if($book->check_subscribe&&$user->check_subscribe==false){
-          return redirect(route('wechat.subscribe'));
+        if($book->check_subscribe){
+          if(!Auth::check()) {
+              return Redirect::route('login');
+          }
+          if($user->check_subscribe==false){
+            return redirect(route('wechat.subscribe'));
+          }
+
         }
         $category= Category::where('name','适读年龄')->select('id')->first();
 
@@ -80,8 +87,16 @@ class BooksController extends Controller
         $app = app('wechat.official_account');
         $user = $request->user();
 
-        if($chapter->check_subscribe&&$user->check_subscribe==false){
-          return redirect(route('wechat.subscribe'));
+        if($chapter->check_subscribe){
+
+          if(!Auth::check()) {
+              return Redirect::route('login');
+          }
+          if($user->check_subscribe==false){
+            return redirect(route('wechat.subscribe'));
+          }
+
+          //return redirect(route('wechat.subscribe'));
         }
 
         $chapters = Chapter::where('book_id',$book->id)->get();
