@@ -32,7 +32,7 @@ class BooksController extends Controller
         $app = app('wechat.official_account');
         $user = $request->user();
 
-        if($book->check_subscribe&&$user->check_subscribe){
+        if($book->check_subscribe&&$user->check_subscribe==false){
           return redirect(route('wechat.subscribe'));
         }
         $category= Category::where('name','适读年龄')->select('id')->first();
@@ -80,7 +80,7 @@ class BooksController extends Controller
         $app = app('wechat.official_account');
         $user = $request->user();
 
-        if($chapter->check_subscribe&&$user->check_subscribe){
+        if($chapter->check_subscribe&&$user->check_subscribe==false){
           return redirect(route('wechat.subscribe'));
         }
 
