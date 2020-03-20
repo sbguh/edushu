@@ -90,7 +90,7 @@ class BooksController extends Controller
         if($chapter->check_subscribe){
 
           if(!Auth::check()) {
-              return Redirect::route('login');
+              return redirect(route('login'));
           }
           if($user->check_subscribe==false){
             return redirect(route('wechat.subscribe'));
