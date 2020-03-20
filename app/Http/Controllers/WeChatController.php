@@ -56,49 +56,59 @@ class WeChatController extends Controller
 
                  case 'event':
 
-                      if($message['EventKey']=="subscribe"){
+                 if($message['Event']=="unsubscribe"){
 
-                        if(User::where('openid',$message['FromUserName'])->count();){
+                   if(User::where('openid',$message['FromUserName'])->count()){
+                     $user = User::where('openid',$message['FromUserName'])->first();
+                     $user->check_subscribe =0;
+                     $user->save();
+                   }
+                 }
+
+
+
+                 if($message['Event']=="subscribe"){
+
+                        if(User::where('openid',$message['FromUserName'])->count()){
                           $user = User::where('openid',$message['FromUserName'])->first();
                           $user->check_subscribe =true;
                           $user->save();
-                        }else{
                           $user_wechat = $app->user->get($message['FromUserName']);
-                          $nickname = $user_wechat->nickname;
-                          $name = $user_wechat->name;
-                          $avatar = $user_wechat->avatar;
+                          $nickname = $user_wechat['nickname'];
+                          return $nickname."欢迎您再次回来！!";
+                          break;
+                        }else{
 
+                          $user_wechat = $app->user->get($message['FromUserName']);
+                          $nickname = $user_wechat['nickname'];
                           $email = $message['FromUserName']."@edushu.co";
 
                           $password = 'Edushuco2020!@';
 
                           $data =[
-                              'name' => $name,
+                              'name' => $nickname,
                               'email' => $email,
                               'openid' => $message['FromUserName'],
-                              'extras' => $user_wechat->toArray() ,
-
+                              'extras' => $user_wechat ,
+                              'check_subscribe' => 1,
                               'password' => bcrypt($password),
                           ];
 
                         //  dd($data);
-                          User::create($data);
+                        $user =  User::create($data);
+                        //$user->check_subscribe =true;
+                        //$user->save();
+
                         }
-                      }
-
-
-                      if($message['EventKey']=="unsubscribe"){
-
-                        if(User::where('openid',$message['FromUserName'])->count();){
-                          $user = User::where('openid',$message['FromUserName'])->first();
-                          $user->check_subscribe =false;
-                          $user->save();
-                        }
+                        return $nickname."等你很久啦!";
+                        break;
                       }
 
 
 
-                     break;
+                      //return "11".$message['Event'];
+                      break;
+
                  case 'voice':
                      $ToUserName = $message['ToUserName'];
                      $FromUserName = $message['FromUserName'];

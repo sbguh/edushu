@@ -32,7 +32,7 @@ class Chapter extends Model
    ];
 
 
-    protected $fillable = ['title','url','content', 'book_id', 'extras','images','sort','state','read_count','word_count','word_count','audio','video'];
+    protected $fillable = ['title','url','check_subscribe','content', 'book_id', 'extras','images','sort','state','read_count','word_count','word_count','audio','video'];
 
 
     // protected $fillable = [];
