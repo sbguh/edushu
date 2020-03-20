@@ -273,6 +273,10 @@ class WeChatController extends Controller
             //dd($list);
           }
 
+    public function subscribe(){
+
+        return view('pages.subscribe');
+    }
 
           // web outh 微信登录验证后保存数据到本地服务器数据库中
     public function wechatoauth(){
@@ -323,7 +327,7 @@ $password = 'Edushuco2020!@';
             'email' => $email,
             'openid' => $openid,
             'extras' => $user->toArray() ,
-
+          //  'check_subscribe' => $user->subscribe,
             'password' => bcrypt($password),
         ];
 

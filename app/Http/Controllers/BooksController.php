@@ -28,14 +28,20 @@ class BooksController extends Controller
         if (!$book->state) {
             throw new \Exception('商品未上架');
         }
+
         $app = app('wechat.official_account');
+        $user = $request->user();
+
+        if($book->check_subscribe&&$user->check_subscribe){
+          return redirect(route('wechat.subscribe'));
+        }
         $category= Category::where('name','适读年龄')->select('id')->first();
 
         $categories = $book->categories()->where('parent_id',$category->id)->get();
         //$categories = $book->categories()->where('parent_id',)
 
         $tags = $book->tags()->get();
-        $user = session('wechat.oauth_user.default');
+
 
         $favored = false;
         // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
@@ -72,6 +78,11 @@ class BooksController extends Controller
 
         }
         $app = app('wechat.official_account');
+        $user = $request->user();
+
+        if($chapter->check_subscribe&&$user->check_subscribe){
+          return redirect(route('wechat.subscribe'));
+        }
 
         $chapters = Chapter::where('book_id',$book->id)->get();
 

@@ -14,7 +14,7 @@
 //Route::get('/', 'PagesController@root')->name('root');
 Route::redirect('/', '/books')->name('root');
 
-
+Route::any('/subscribe', 'WeChatController@subscribe')->name('wechat.subscribe');
 
 
 Auth::routes(['verify' => true]);
@@ -68,17 +68,21 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 
 
 
-  Route::get('books', 'BooksController@index')->name('books.index');
-  Route::get('books/{book}', 'BooksController@show')->name('books.show');
-  Route::get('read/{book}', 'BooksController@read')->name('book.read');
-  Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
-  Route::any('search/{keyword}', 'BooksController@search')->name('books.search');
+
 
 Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 
   Route::get('category', 'CategoryController@index')->name('category.index');
   Route::get('category/{category}', 'CategoryController@show')->name('category.show');
   Route::get('tags/{tag}', 'TagsController@show')->name('tags.show');
+
+
+  Route::get('books', 'BooksController@index')->name('books.index');
+  Route::get('books/{book}', 'BooksController@show')->name('books.show');
+  Route::get('read/{book}', 'BooksController@read')->name('book.read');
+  Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
+  Route::any('search/{keyword}', 'BooksController@search')->name('books.search');
+  
 
   Route::any('/jssdk', 'WeChatController@jssdk')->name('jssdk');
   Route::any('/wechatoauth', 'WeChatController@wechatoauth')->name('wechatoauth');
