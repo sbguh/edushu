@@ -207,19 +207,54 @@ document.addEventListener("WeixinJSBridgeReady", function () {
 
 
 @if($chapter->audio)
-<div class="col-xs-12">
-  <footer class="footer">
-<audio id="player" playsinline  >
-    @if($chapter->audios()->count())
-    <source src="data:audio/mp3;base64,{{$chapter->audios->audio}}" type="audio/mpeg" />
-    @else
-      <source src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" type="audio/mpeg" />
 
-    @endif
+<div class="container" >
+  <footer class="footer" >
+    <div class="row" >
 
-</audio>
+      <div class="col-xs-12 col-md-12 col-lg-12  navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-light bg-light navbar-static-bottom" >
+        <div class="row"  >
+          <div class="col-10" >
+            <audio id="player" playsinline autobuffer>
+                <source src="{{env('APP_URL')}}/uploads/{{$chapter->audio}}" />
+            </audio>
+          </div>
+          <div class="col-xs-12 col-md-12 col-lg-12">
+            <div class="dropup row">
+              <div class="col-6">
+                  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    目录
+                  </button>
+
+                  <ul class="dropdown-menu pre-scrollable ">
+
+                       @foreach($chapters as $chapterItem)
+                       @if($chapterItem->id==$chapter->id)
+                              <li class="list-group-item list-group-item-primary"><a href="{{route('book.read.chapter',[$book->id,$chapterItem->id])}}">{{$chapterItem->title}}</a></li>
+                       @else
+
+                               <li class="list-group-item "><a href="{{route('book.read.chapter',[$book->id,$chapterItem->id])}}">{{$chapterItem->title}}</a></li>
+                      @endif
+                       @endforeach
+                  </ul>
+              </div>
+              <div class="col-6">
+                @if($favored)
+                  <button class="btn btn-success btn-disfavor">已收藏</button>
+                  @else
+                  <button class="btn btn-success btn-favor">❤ 收藏</button>
+                  @endif
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    </div>
 </footer>
+
 </div>
+
+
 @else
 <div class="col-xs-12">
   <footer class="footer">
@@ -262,4 +297,4 @@ document.addEventListener("WeixinJSBridgeReady", function () {
   </footer>
 </div>
 @endif
-@show
+@endsection

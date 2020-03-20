@@ -12,6 +12,7 @@ use Google\Cloud\Speech\SpeechClient;
 use Illuminate\Http\Request;
 
 use App\User;
+
 use Redirect;
 use Auth;
 use Storage;
@@ -53,7 +54,51 @@ class WeChatController extends Controller
          }
            switch ($message['MsgType']) {
 
+                 case 'event':
 
+                      if($message['EventKey']=="subscribe"){
+
+                        if(User::where('openid',$message['FromUserName'])->count();){
+                          $user = User::where('openid',$message['FromUserName'])->first();
+                          $user->check_subscribe =true;
+                          $user->save();
+                        }else{
+                          $user_wechat = $app->user->get($message['FromUserName']);
+                          $nickname = $user_wechat->nickname;
+                          $name = $user_wechat->name;
+                          $avatar = $user_wechat->avatar;
+
+                          $email = $message['FromUserName']."@edushu.co";
+
+                          $password = 'Edushuco2020!@';
+
+                          $data =[
+                              'name' => $name,
+                              'email' => $email,
+                              'openid' => $message['FromUserName'],
+                              'extras' => $user_wechat->toArray() ,
+
+                              'password' => bcrypt($password),
+                          ];
+
+                        //  dd($data);
+                          User::create($data);
+                        }
+                      }
+
+
+                      if($message['EventKey']=="unsubscribe"){
+
+                        if(User::where('openid',$message['FromUserName'])->count();){
+                          $user = User::where('openid',$message['FromUserName'])->first();
+                          $user->check_subscribe =false;
+                          $user->save();
+                        }
+                      }
+
+
+
+                     break;
                  case 'voice':
                      $ToUserName = $message['ToUserName'];
                      $FromUserName = $message['FromUserName'];

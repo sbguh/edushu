@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "blob-util": "^2.0.2",
         "china-area-data": "^4.0.0",
         "hls.js": "^0.13.2",
         "howler": "^2.1.3",

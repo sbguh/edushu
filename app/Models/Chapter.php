@@ -27,8 +27,8 @@ class Chapter extends Model
     ];
 
     protected $dispatchesEvents = [
-       'saved' => ChapterAudioEvent::class,
-       'updated' => ChapterAudioEvent::class,
+       //'saved' => ChapterAudioEvent::class,
+       //'updated' => ChapterAudioEvent::class,
    ];
 
 

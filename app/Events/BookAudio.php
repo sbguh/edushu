@@ -45,7 +45,7 @@ class BookAudio
         {
           $bookaudiocount = BookAudioModel::where('book_id',$book->id)->count();
           if($book->id&&$bookaudiocount==0){
-            $audio = new BookAudioModel(['audio'=>base64_encode($str)]);
+            $audio = new BookAudioModel(['audio'=>$str]);
             $book->audios()->save($audio);
           }
 
@@ -55,7 +55,7 @@ class BookAudio
         {
         //  die("test");
             if($book->id){
-              $book->audios->update(['audio'=>base64_encode($str)]);
+              $book->audios->update(['audio'=>$str]);
             }
 
         }

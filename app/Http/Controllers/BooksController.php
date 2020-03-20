@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Chapter;
 use App\Models\Category;
+use Symfony\Component\HttpFoundation\Response;
 
 class BooksController extends Controller
 {
@@ -132,28 +133,48 @@ class BooksController extends Controller
 
      public function bookaudio(Book $book, Request $request)
      {
-       $audio = env('APP_URL')."/uploads/".$book->audio;
+       $audio = public_path()."/uploads/".$book->audio;
 
-      // dd($audio);
-       header('Content-Type: audio/mpeg');
-        header('Content-Disposition: inline; filename="'.$audio.'"');
-        header('X-Pad: avoid browser bug');
-        header('Cache-Control: no-cache');
-        readfile($audio);
+       $byteOffset = 0;
+      $byteLength = $fileSize = strlen($audio);
+       $byteRange = $byteLength - $byteOffset;
+
+        ob_start();
+       header("Content-Type: audio/mpeg");
+       header('X-Pad: avoid browser bug');
+       header('Content-length: ' . filesize($audio));
+       //header("Content-Transfer-Encoding: binary");
+       header('Content-Disposition: filename="' . $audio);
+       header('Accept-Ranges: bytes', true);
+       header(sprintf('Content-Range: bytes %d-%d/%d', $byteOffset, $byteLength, $fileSize));
+    //   header('Cache-Control: no-cache');
+       echo $book->audios->audio;
+       //header("Content-Disposition: attachment; filename='Death_Valley.mp3'");
+       echo ob_get_clean();
 
      }
 
      public function chapteraudio(Chapter $chapter, Request $request)
      {
 
-       $audio = env('APP_URL')."/uploads/".$chapter->audio;
+       $audio = public_path()."/uploads/".$chapter->audio;
 
-      //dd($audio);
-       header('Content-Type: audio/mpeg');
-        header('Content-Disposition: inline; filename="'.$audio.'"');
-        header('X-Pad: avoid browser bug');
-        header('Cache-Control: no-cache');
-        readfile($audio);
+       $byteOffset = 0;
+	     $byteLength = $fileSize = filesize($audio);
+       $byteRange = $byteLength - $byteOffset;
+
+        ob_start();
+       header("Content-Type: audio/mpeg");
+       header('X-Pad: avoid browser bug');
+       header('Content-length: ' . filesize($audio));
+       //header("Content-Transfer-Encoding: binary");
+       header('Content-Disposition: filename="' . $audio);
+       header('Accept-Ranges: bytes', true);
+       header(sprintf('Content-Range: bytes %d-%d/%d', $byteOffset, $byteLength, $fileSize));
+    //   header('Cache-Control: no-cache');
+       echo $chapter->audios->audio;
+       //header("Content-Disposition: attachment; filename='Death_Valley.mp3'");
+       echo ob_get_clean();
      }
 
 

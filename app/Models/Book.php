@@ -28,8 +28,8 @@ class Book extends Model
     ];
 
     protected $dispatchesEvents = [
-       'saved' => BookAudio::class,
-       'updated' => BookAudio::class,
+    //   'saved' => BookAudio::class,
+    //   'updated' => BookAudio::class,
    ];
 
     protected $table = 'books';

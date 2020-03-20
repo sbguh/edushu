@@ -47,7 +47,7 @@ class ChapterAudioEvent
         {
           $chapteraudiocount = ChapterAudio::where('chapter_id',$chapter->id)->count();
           if($chapter->id&&$chapteraudiocount==0){
-            $audio = new ChapterAudio(['audio'=>base64_encode($str)]);
+            $audio = new ChapterAudio(['audio'=>$str]);
             $chapter->audios()->save($audio);
           }
 
@@ -57,7 +57,7 @@ class ChapterAudioEvent
         {
         //  die("test");
             if($chapter->id){
-              $chapter->audios->update(['audio'=>base64_encode($str)]);
+              $chapter->audios->update(['audio'=>$str]);
             }
 
         }

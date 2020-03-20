@@ -27,6 +27,10 @@ require('./components/UserAddressesCreateAndEdit');
 
 import Plyr from 'plyr';
 
+
+import { dataURLToBlob }  from 'blob-util'
+
+window.dataURLToBlob = dataURLToBlob;
 //import jdMusic from 'jdf2e-audio';
 
 //window.jdMusic = jdMusic;
