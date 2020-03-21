@@ -2,7 +2,40 @@
 @section('title', $book->name)
 
 @section('jssdk')
+<script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
 
+<script type="text/javascript" charset="utf-8">
+wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','updateTimelineShareData'), false) !!});
+
+wx.ready(function () {
+    wx.updateAppMessageShareData({
+        title: "{{$book->name}} | 中小学生必读图书", // 分享标题
+        desc: "{{$book->extras->meta_description?$book->extras->meta_description:'精选好书'.$book->name.', 中小学生必读图书'}}", // 分享描述
+        link: "{{route('books.show',$book->id)}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
+        success: function () {
+          // 设置成功
+        }
+      })
+
+      wx.updateTimelineShareData({
+        title: "{{$book->name}}", // 分享标题
+        desc: "精选好书,中小学生必读图书: {{$book->name}}", // 分享描述
+        link: "{{route('books.show',$book->id)}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
+          success: function () {
+            // 设置成功
+          }
+        })
+
+        wx.error(function(res){
+
+});
+
+  });
+
+
+</script>
 @endsection
 
 
@@ -50,9 +83,9 @@
                    @endif
                    @if($book->chapters()->count())
                    @if($bookhistory)
-                   <a href="{{route('book.read',[$book->id,$bookhistory->chapter_id])}}"><button class="btn btn-primary btn-read-online">在线免费阅读</button></a>
+                   <a href="{{route('book.read.chapter',[$book->id,$bookhistory->chapter_id])}}"><button class="btn btn-primary btn-read-online">继续阅读</button></a>
                    @else
-                   <a href="{{route('book.read',$book->id)}}"><button class="btn btn-primary btn-read-online">在线免费阅读</button></a>
+                   <a href="{{route('book.read',$book->id)}}"><button class="btn btn-primary btn-read-online">在线阅读</button></a>
                    @endif
 
                    @endif

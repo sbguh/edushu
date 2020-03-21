@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 
 use App\User;
 
+use App\Models\UserLastUrl;
+
 use Redirect;
 use Auth;
 use Storage;
@@ -76,13 +78,15 @@ class WeChatController extends Controller
                           $user_wechat = $app->user->get($message['FromUserName']);
                           $nickname = $user_wechat['nickname'];
 
-
-                          if(session('return_wechat')){
-                            return $nickname."欢迎继续阅读 <a href='".session('return_wechat')['url']."'>".session('return_wechat')['name']."</a>";
+                          $lasturl =UserLastUrl::where('user_id',$user->id)->first();
+                          if($lasturl===false){
+                            return $nickname."欢迎您! 读经典好书.";
+                            break;
+                          }else{
+                            return $nickname."欢迎继续阅读 <a href='".$lasturl->url."'>".$lasturl->title."</a>";
                             break;
                           }
-                          return $nickname."欢迎您!";
-                          break;
+
                         }else{
 
                           $user_wechat = $app->user->get($message['FromUserName']);

@@ -68,16 +68,15 @@ class BooksController extends Controller
 
             $bookhistory = UserBookHistory::where('user_id',$user->id)->where('book_id',$book->id)->first();
 
-            if($user->lasturl){
+            if($user->lasturl=== null){
 
-              $audio = new UserLastUrl(['url'=>route("books.show",$book->id),'title'=>$chapter->title." - ".$book->name]);
-              $book->lasturl()->save($audio);
+              $lasturl = new UserLastUrl(['url'=>route("books.show",$book->id),'title'=>$book->name]);
+              $user->lasturl()->save($lasturl);
             }else{
-              $user->lasturl->update(['url'=>route("books.show",$book->id),'title'=>$chapter->title." - ".$book->name]);
+              $user->lasturl->update(['url'=>route("books.show",$book->id),'title'=>$book->name]);
             }
 
         }
-
         $audiofile =env('APP_URL')."/uploads/".$book->audio;
 
         return view('books.show', ['book' => $book,'app'=>$app,'favored' => $favored,'tags'=>$tags,'categories'=>$categories,'user'=>$user,'audiofile'=>$audiofile,'bookhistory'=>$bookhistory]);
@@ -122,12 +121,11 @@ class BooksController extends Controller
         if($user = $request->user()) {
             // 从当前用户已收藏的商品中搜索 id 为当前商品 id 的商品
             // boolval() 函数用于把值转为布尔值
-            $bookhistory = UserBookHistory::where('user_id',$user->id)->where('book_id',$book->id);
-            if($bookhistory){
-              $bookhistory->chapter_id = $chapter->id;
+            $bookhistory = UserBookHistory::where('user_id',$user->id)->where('book_id',$book->id)->first();
+            if($bookhistory=== null){
+              $bookhistory = new UserBookHistory(['user_id'=>$user->id,'book_id'=>$book->id,'chapter_id'=>$chapter->id]);
               $bookhistory->save();
             }else{
-              $bookhistory = new UserBookHistory;
               $bookhistory->user_id =$user->id;
               $bookhistory->book_id = $book->id;
               $bookhistory->chapter_id = $chapter->id;
@@ -135,9 +133,9 @@ class BooksController extends Controller
 
             }
 
-            if($user->lasturl){
-              $audio = new UserLastUrl(['url'=>route("book.read.chapter",[$book->id, $chapter->id]),'title'=>$chapter->title." - ".$book->name]);
-              $book->lasturl()->save($audio);
+            if($user->lasturl=== null){
+              $lasturl = new UserLastUrl(['url'=>route("book.read.chapter",[$book->id, $chapter->id]),'title'=>$chapter->title." - ".$book->name]);
+              $user->lasturl()->save($lasturl);
             }else{
               $user->lasturl->update(['url'=>route("book.read.chapter",[$book->id, $chapter->id]),'title'=>$chapter->title." - ".$book->name]);
             }
