@@ -1,43 +1,42 @@
-@extends('layouts.addtocart_app')
+@extends('layouts.wechat_book_app')
 @section('title', $book->name)
 
 @section('jssdk')
-    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
 
 <script type="text/javascript" charset="utf-8">
-    wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','updateTimelineShareData'), false) !!});
+wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','updateTimelineShareData'), false) !!});
 
-  wx.ready(function () {
-        wx.updateAppMessageShareData({
-            title: "{{session('wechat.oauth_user.default')->name}}推荐一本好书'{{$book->name}}'", // 分享标题
-            desc: "{{$book->extras->meta_description?$book->extras->meta_description:'精选好书<<'.$book->name.'>>, 最权威的中小学必读书城！'}}", // 分享描述
-            link: "{{route('books.show',$book->id)}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
-            success: function () {
-              // 设置成功
-            }
-          })
+wx.ready(function () {
+    wx.updateAppMessageShareData({
+        title: "{{$book->name}} | 中小学生必读图书", // 分享标题
+        desc: "{{$book->extras->meta_description?$book->extras->meta_description:'精选好书'.$book->name.', 中小学生必读图书'}}", // 分享描述
+        link: "{{route('books.show',$book->id)}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
+        success: function () {
+          // 设置成功
+        }
+      })
 
-          wx.updateTimelineShareData({
-            title: "{{$book->name}}", // 分享标题
-            desc: "免费借阅{{$book->name}}", // 分享描述
-            link: "{{route('books.show',$book->id)}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
-              success: function () {
-                // 设置成功
-              }
-            })
+      wx.updateTimelineShareData({
+        title: "{{$book->name}}", // 分享标题
+        desc: "精选好书,中小学生必读图书: {{$book->name}}", // 分享描述
+        link: "{{route('books.show',$book->id)}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
+          success: function () {
+            // 设置成功
+          }
+        })
 
-            wx.error(function(res){
+        wx.error(function(res){
 
 });
 
-      });
+  });
 
 
 </script>
 @endsection
-
 
 
 @section('content')
@@ -86,41 +85,34 @@
                    <a href="{{route('book.read',$book->id)}}"><button class="btn btn-primary btn-read-online">在线免费阅读</button></a>
                    @endif
      </p>
+     @if($book->categories()->count())
      <div class="tags">
-       @foreach($tags as $tag)
-          <p>{{$tag->name}}</p>
-       @endforeach
-       <div>@if($categories->count())
-         <span>适合:</span>
-         @endif
-         @foreach($categories as $category)
-            <p>{{$category->name}}</p>
+       <div class="clearfix">
+         <div class="float-left title">适合:</div>
+         @foreach($book->categories()->where('parent_id',1)->get() as $category)
+            <p><a href="{{route('category.show',$category->id)}}">{{$category->name}}</a></p>
+         @endforeach
+       </div>
+       <div class="clearfix">
+         <div class="float-left title">标签:</div>
+         @foreach($book->tags()->get() as $tag)
+            <p><a href="{{route('tags.show',$tag->id)}}">{{$tag->name}}</a></p>
          @endforeach
        </div>
      </div>
+     @endif
                     </div>
                     <div class="page__bd">
                         <article class="weui-article">
-                            <section>
-
-                                @if($book->audio)
-                              <h2 class="title"><audio src="{{env('APP_URL')}}/uploads/{{$book->audio}}" controls="controls" autoplay id="weaudio" width="100%" style="width:100%"></audio></h2>
-
-
-                              @endif
-                                <section>
-
-
-                                    {!! $book->description !!}
-                                </section>
-
-                            </section>
+                          <section>
+                              {!! $book->description !!}
+                          </section>
                         </article>
                     </div>
                 </div>
               </div>
               <div class="weui-tab__panel2" style="display:none">
-                  <p>由隆回共读书房为您提供服务.</p>
+                  <p>暂无.</p>
               </div>
               <div class="weui-tab__panel3" style="display:none">
                   暂无.
@@ -143,16 +135,19 @@
 
 $(function(){
 
-  var audio = document.getElementById("weaudio");
-  audio.load();
-  audio.play();
 
+//  alert(blob);
+
+//  var audio = document.getElementById("weaudio");
+//  audio.load();
+//  audio.play();
+//alert(player);
   var loading;
-
-  document.addEventListener("WeixinJSBridgeReady", function () {
-          audio.play();
-  }, false);
-
+const player = new Plyr('#player', {autoplay:true,clickToPlay: true,playsinline: true});
+player.play();
+document.addEventListener("WeixinJSBridgeReady", function () {
+        player.play();
+}, false);
 
 
     });
@@ -242,4 +237,105 @@ $(function(){
 
   });
 </script>
+@endsection
+
+
+
+
+@section('footerBar')
+<div class="col-xs-12">
+  <footer class="footer">
+    <nav>
+
+@if($book->audio)
+
+
+
+
+
+  <div class="container" >
+    <footer class="footer" >
+      <div class="row" >
+
+        <div class="col-xs-12 col-md-12 col-lg-12  navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-light bg-light navbar-static-bottom" >
+          <div class="row"  >
+            <div class="col-10" >
+              <audio id="player" playsinline autobuffer  src="{{env('APP_URL')}}/uploads/{{$book->audio}}">
+                </audio>
+
+            </div>
+            <div class="col-xs-12 col-md-12 col-lg-12">
+              <div class="dropup row">
+                @if($book->chapters()->count())
+                <div class="col-6">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      目录
+                    </button>
+
+                    <ul class="dropdown-menu pre-scrollable ">
+
+                         @foreach($book->chapters()->get() as $chapterItem)
+                          <li class="list-group-item "><a href="{{route('book.read.chapter',[$book->id,$chapterItem->id])}}">{{$chapterItem->title}}</a></li>
+                         @endforeach
+                    </ul>
+                </div>
+                @endif
+                <div class="col-6">
+                  @if($favored)
+                    <button class="btn btn-success btn-disfavor">已收藏</button>
+                    @else
+                    <button class="btn btn-success btn-favor">❤ 收藏</button>
+                    @endif
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      </div>
+  </footer>
+
+  </div>
+
+
+@else
+
+      <div class="page" class="navbar navbar-default navbar-fixed-bottom">
+          <div class="page__bd" style="height: 100%;">
+              <div class="weui-tab">
+                  <div class="weui-tab__panel">
+
+                  </div>
+                  <div class="weui-tabbar">
+                      <div class="weui-tabbar__item weui-bar__item_on">
+                          <div style="display: inline-block; position: relative;">
+                              <a href="{{route('root')}}"><img src="{{env('APP_URL')}}/uploads/images/bar_menu01.png" alt="" class="weui-tabbar__icon"></a>
+                          </div>
+                          <p class="weui-tabbar__label"><a href="{{route('root')}}">首页</a></p>
+                      </div>
+                      <div class="weui-tabbar__item">
+                          <a href="{{route('books.favorites')}}"><img src="{{env('APP_URL')}}/uploads/images/bar_menu02.png" alt="" class="weui-tabbar__icon"></a>
+                          <p class="weui-tabbar__label"><a href="{{route('books.favorites')}}">收藏</a></p>
+                      </div>
+                      <div class="weui-tabbar__item">
+                          <div style="display: inline-block; position: relative;">
+                              <a href="{{route('category.index')}}"><img src="{{env('APP_URL')}}/uploads/images/bar_menu03.png" alt="" class="weui-tabbar__icon"></a>
+                              <span class="weui-badge weui-badge_dot" style="position: absolute; top: 0; right: -6px;"></span>
+                          </div>
+                          <p class="weui-tabbar__label"><a href="{{route('category.index')}}">分类筛选</a></p>
+                      </div>
+                      <div class="weui-tabbar__item">
+                          <a href="{{ route('wechatoauth') }}"><img src="{{env('APP_URL')}}/uploads/images/bar_menu04.png" alt="" class="weui-tabbar__icon"></a>
+                          <p class="weui-tabbar__label"><a href="{{ route('wechatoauth') }}">我的账号</a></p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
+@endif
+
+  </nav>
+  </footer>
+</div>
 @endsection

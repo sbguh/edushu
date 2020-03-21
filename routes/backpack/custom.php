@@ -28,4 +28,5 @@ Route::group([
     Route::crud('category', 'CategoryCrudController');
     Route::crud('bookaudio', 'BookAudioCrudController');
     Route::crud('chapteraudio', 'ChapterAudioCrudController');
+    Route::crud('userbookhistory', 'UserBookHistoryCrudController');
 }); // this should be the absolute last line of this file

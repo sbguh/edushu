@@ -64,6 +64,11 @@ class User extends Authenticatable implements MustVerifyEmail
             ->orderBy('user_favorite_book.created_at', 'desc');
     }
 
+    public function lasturl()
+    {
+        return $this->hasOne('App\Models\UserLastUrl','user_id');
+    }
+
 
     public function cartItems()
     {

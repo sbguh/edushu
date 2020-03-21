@@ -10,8 +10,8 @@
 
   wx.ready(function () {
         wx.updateAppMessageShareData({
-            title: "中小学生必读书目", // 分享标题
-            desc: "免费在线阅读中小学生必读书目, 免费借阅!", // 分享描述
+            title: "精选好书, 中小学生必读图书", // 分享标题
+            desc: "在线听书，在线阅读电子书，精选中小学生必读好书", // 分享描述
             link: "{{route('books.index')}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
             imgUrl: "https://book.edushu.co/uploads/images/logo1.png", // 分享图标
             success: function () {
@@ -20,8 +20,8 @@
 
 
           wx.updateTimelineShareData({
-              title: "中小学生必读书目", // 分享标题
-              desc: "免费在线阅读中小学生必读书目, 免费借阅!", // 分享描述
+              title: "精选好书, 中小学生必读图书", // 分享标题
+              desc: "在线听书，在线阅读电子书，精选中小学生必读好书", // 分享描述
               link: "{{route('books.index')}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               imgUrl: '', // 分享图标
               success: function () {
@@ -38,6 +38,7 @@
 
 </script>
 @endsection
+
 
 
 @section('content')
@@ -59,10 +60,27 @@
         <div class="placeholder ">
           <a href="{{route('books.show',$book->id)}}"><img src="{{ $book->image }}" alt="" width="110px"></a>
           <div class="title">{{ $book->name }}</div>
+          @if($book->categories()->count())
+          <div class="tags">
+            <div class="clearfix">
+              <div class="float-left title">适合:</div>
+              @foreach($book->categories()->where('parent_id',1)->take(2)->get() as $category)
+                 <p><a href="{{route('category.show',$category->id)}}">{{$category->name}}</a></p>
+              @endforeach
+            </div>
+            <div class="clearfix">
+              <div class="float-left title">标签:</div>
+              @foreach($book->tags()->take(2)->get() as $tag)
+                 <p><a href="{{route('tags.show',$tag->id)}}">{{$tag->name}}</a></p>
+              @endforeach
+            </div>
+          </div>
+          @endif
         </div>
       </div>
     </div>
     @endforeach
 </div>
+<div style="margin-bottom:10px;">{{ $books->render() }}</div>  <!-- 只需要添加这一行 -->
 </div>
 @endsection

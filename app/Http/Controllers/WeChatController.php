@@ -75,7 +75,13 @@ class WeChatController extends Controller
                           $user->save();
                           $user_wechat = $app->user->get($message['FromUserName']);
                           $nickname = $user_wechat['nickname'];
-                          return $nickname."欢迎您再次回来！!";
+
+
+                          if(session('return_wechat')){
+                            return $nickname."欢迎继续阅读 <a href='".session('return_wechat')['url']."'>".session('return_wechat')['name']."</a>";
+                            break;
+                          }
+                          return $nickname."欢迎您!";
                           break;
                         }else{
 
@@ -275,6 +281,8 @@ class WeChatController extends Controller
 
     public function subscribe(){
 
+      //var_dump(session('return_wechat'));
+
         return view('pages.subscribe');
     }
 
@@ -282,6 +290,8 @@ class WeChatController extends Controller
     public function wechatoauth(){
 
       $app = app('wechat.official_account');
+
+
 
       $user = session('wechat.oauth_user.default');
 
