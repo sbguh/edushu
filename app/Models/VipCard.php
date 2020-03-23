@@ -59,6 +59,7 @@ class VipCard extends Model
               }
             }
 
+            return $value;
 
             //die($value);
 
@@ -90,7 +91,7 @@ class VipCard extends Model
                 }
               }
 
-
+              return $value;
 
                 //die($value);
 
