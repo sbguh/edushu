@@ -92,7 +92,7 @@ class VipCardCrudController extends CrudController
           'name' => 'deposit',
           'label' => '押金',
           'type' => 'number',
-          'default' => 0,
+        //  'default' => 0,
           'tab'   => 'Texts',
         ]);
 
@@ -100,7 +100,7 @@ class VipCardCrudController extends CrudController
           'name' => 'balance',
           'label' => '余额',
           'type' => 'number',
-          'default' => 0,
+        //  'default' => 0,
           'tab'   => 'Texts',
         ]);
 

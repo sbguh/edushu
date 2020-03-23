@@ -39,6 +39,27 @@ class VipCard extends Model
         {
             $attribute_name = "phone_number";
 
+            $user =User::find($this->attributes['user_id']);
+            if($user->check_subscribe){
+              if($value<20){
+              //  dd("test");
+               $app = app('wechat.official_account');
+               $app->template_message->send([
+                    'touser' => $user->openid,
+                    'template_id' => 'AAK9uM9BkIG527QNQtU9H8UoS9ZO3BJMtjGHxpctpMA',
+                    'data' => [
+                        'first' => '您好，您的信息已绑定成功！',
+                        'keyword1' => $this->attributes['real_name'],
+                        'keyword3' => $this->attributes['phone_number'],
+                        'keyword4' => $this->attributes['created_at'],
+                        'remark'=> "感谢您的使用"
+                    ],
+                ]);
+
+              }
+            }
+
+
             //die($value);
 
         // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
