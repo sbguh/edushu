@@ -106,6 +106,7 @@ class BookCrudController extends CrudController
           'name'        => 'check_subscribe', // the name of the db column
            'label'       => '是否设置为关注公众号才可以观看', // the input label
            'type'        => 'radio',
+           'default' => 1,
            'options'     => [
                // the key will be stored in the db, the value will be shown as label;
                0 => "False",

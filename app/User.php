@@ -34,6 +34,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'password', 'remember_token',
     ];
 
+    protected $fakeColumns = [
+        'extras',
+    ];
+
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -73,6 +78,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function cartItems()
     {
         return $this->hasMany("App\Models\CartItem");
+    }
+
+
+    public function vipcard()
+    {
+        return $this->hasOne('App\Models\VipCard','user_id');
     }
 
 

@@ -29,4 +29,7 @@ Route::group([
     Route::crud('bookaudio', 'BookAudioCrudController');
     Route::crud('chapteraudio', 'ChapterAudioCrudController');
     Route::crud('userbookhistory', 'UserBookHistoryCrudController');
+
+    //Route::any('chapter/fetch/book', 'ChapterCrudController@fetchbook')->name('chapter.fetch.book');
+    Route::crud('vipcard', 'VipCardCrudController');
 }); // this should be the absolute last line of this file

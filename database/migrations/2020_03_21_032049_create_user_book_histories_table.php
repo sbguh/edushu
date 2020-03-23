@@ -16,7 +16,7 @@ class CreateUserBookHistoriesTable extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedInteger('book_id')->unique();
+            $table->unsignedInteger('book_id');
             $table->unsignedInteger('chapter_id')->nullable();
             $table->timestamps();
         });

@@ -283,9 +283,23 @@ class WeChatController extends Controller
             //dd($list);
           }
 
-    public function subscribe(){
+    public function subscribe(Request $request){
 
       //var_dump(session('return_wechat'));
+      $user = $request->user();
+      if(session('return_wechat')){
+
+
+        if($user->lasturl=== null){
+
+          $lasturl = new UserLastUrl(['url'=>session('return_wechat')['url'],'title'=> session('return_wechat')['name']]);
+          $user->lasturl()->save($lasturl);
+        }else{
+          $user->lasturl->update(['url'=>session('return_wechat')['url'],'title'=> session('return_wechat')['name']]);
+        }
+
+      }
+
 
         return view('pages.subscribe');
     }
@@ -310,6 +324,18 @@ if($email==false){
 $nickname = $user->nickname;
 $name = $user->name;
 $avatar = $user->avatar;
+$subscribe = 0;
+
+$user_wechat = $app->user->get($openid);
+
+$subscribe= $user_wechat['subscribe'];
+if($subscribe==false){
+  $subscribe = 0;
+}else{
+  $subscribe= 1;
+}
+
+
 
 $password = 'Edushuco2020!@';
 
@@ -317,6 +343,11 @@ $password = 'Edushuco2020!@';
 
         if ( Auth::attempt(['openid' => $openid,'password' => $password]) ){
           $user_info = User::where('openid',$openid)->first();
+          if($subscribe !=$user_info->check_subscribe){
+            $user_info->check_subscribe = $subscribe;
+            $user_info->save();
+          }
+
 
           if($user_info->name != $name){
             $user_info->name = $nickname;
@@ -329,8 +360,16 @@ $password = 'Edushuco2020!@';
           }
 
           session(['wechatuser' => $openid]);
+
+          $lasturl =UserLastUrl::where('user_id',$user_info->id)->first();
+          if($lasturl===false){
+            return redirect(route('books.index'));
+          }else{
+            return redirect($lasturl->url);
+          }
+
           //return redirect(route('books.index'));
-          return redirect(route('books.index'));
+
         //  return redirect(session("return_web_url"));
           //Redirect::back();
           //$oauth->redirect()->send();
@@ -340,8 +379,9 @@ $password = 'Edushuco2020!@';
             'name' => $name,
             'email' => $email,
             'openid' => $openid,
-            'extras' => $user->toArray() ,
-          //  'check_subscribe' => $user->subscribe,
+            'check_subscribe'=>$subscribe,
+          //  'extras' => $user->toArray() ,
+            'check_subscribe' => $subscribe,
             'password' => bcrypt($password),
         ];
 
@@ -353,10 +393,21 @@ $password = 'Edushuco2020!@';
           //return redirect(session("return_web_url"));
           //return redirect(route('books.index'));
           //Redirect::back();
-          return redirect(route('books.index'));
+          if(session('return_wechat')){
+            return redirect(session('return_wechat')['url']);
+          }else{
+            return redirect(route('books.index'));
+          }
+
         }
         //Redirect::back();
-        return redirect(route('books.index'));
+
+        if(session('return_wechat')){
+            return redirect(session('return_wechat')['url']);
+        }else{
+          return redirect(route('books.index'));
+        }
+
 //die("test2");
         //return redirect(route('books.index'));
       }

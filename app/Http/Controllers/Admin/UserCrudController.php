@@ -23,7 +23,14 @@ class UserCrudController extends CrudController
 
     public function setupListOperation()
     {
+
+
         $this->crud->setColumns([
+          [
+              'name'  => 'id',
+              'label' => trans('backpack::permissionmanager.id'),
+              'type'  => 'text',
+          ],
             [
                 'name'  => 'name',
                 'label' => trans('backpack::permissionmanager.name'),

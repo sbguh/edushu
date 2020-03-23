@@ -40,34 +40,30 @@ wx.ready(function () {
 
 @section('content')
 
-<div class="page">
-  <div class="weui-flex">
 
-    @if($prev)
-    <div class="weui-flex__item"><div class="placeholder">上一章: <a href="{{route('book.read.chapter',[$book->id,$prev->id])}}">{{$prev->title}}</a></div></div>
-    @endif
-    @if($next)
-
-    <div class="weui-flex__item"><div class="placeholder">下一章: <a href="{{route('book.read.chapter',[$book->id,$next->id])}}">{{$next->title}}</a></div></div>
-    @endif
-
-  </div>
-</div>
 <div class="row page">
 
-
-    <div class="page__hd">
-        <h1 class="page__title"></h1>
-        <p class="page__desc">{{$book->name}}</p>
-    </div>
     <div class="page__bd">
         <article class="weui-article">
             <section>
-                <h2 class="title">{{$chapter->title}}</h2>
-                <p>@if($chapter->audio)
+                <h3 class="title">
 
+                  <div class="page">
+                    <div class="weui-flex">
 
-                @endif</p>
+                      @if($prev)
+                      <div class="weui-flex__item"><div class="placeholder"> <a href="{{route('book.read.chapter',[$book->id,$prev->id])}}">上一章:{{$prev->title}}</a></div></div>
+                      @endif
+                      @if($next)
+
+                      <div class="weui-flex__item"><div class="placeholder"><a href="{{route('book.read.chapter',[$book->id,$next->id])}}">下一章: {{$next->title}}</a></div></div>
+                      @endif
+
+                    </div>
+                  </div>
+
+                </h3>
+
                 <section>
 
                     {!!$chapter->content!!}
@@ -77,17 +73,34 @@ wx.ready(function () {
         </article>
     </div>
 
-    <div class="weui-flex">
 
-      @if($prev)
-      <div class="weui-flex__item"><div class="placeholder">上一章: <a href="{{route('book.read.chapter',[$book->id,$prev->id])}}">{{$prev->title}}</a></div></div>
-      @endif
-      @if($next)
 
-      <div class="weui-flex__item"><div class="placeholder">下一章: <a href="{{route('book.read.chapter',[$book->id,$next->id])}}">{{$next->title}}</a></div></div>
-      @endif
 
-    </div>
+</div>
+
+<div class="page__bd">
+    <article class="weui-article">
+          <section>
+              <h3 class="title">
+
+                <div class="page">
+                  <div class="weui-flex">
+
+                    @if($prev)
+                    <div class="weui-flex__item"><div class="placeholder"> <a href="{{route('book.read.chapter',[$book->id,$prev->id])}}">上一章:{{$prev->title}}</a></div></div>
+                    @endif
+                    @if($next)
+
+                    <div class="weui-flex__item"><div class="placeholder"><a href="{{route('book.read.chapter',[$book->id,$next->id])}}">下一章: {{$next->title}}</a></div></div>
+                    @endif
+
+                  </div>
+                </div>
+
+              </h3>
+          </section>
+      </article>
+
 
 </div>
 
