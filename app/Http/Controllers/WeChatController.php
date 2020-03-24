@@ -36,6 +36,7 @@ class WeChatController extends Controller
          $app->server->push(function ($message) use ($app){
          $openId = $message['FromUserName'];
 
+
          if(isset($message['EventKey'])){
            if($message['EventKey']=="ContactUs"){
                        return "线下门店地址: 湖南省隆回县万和实验学校对面（共读书房），我们的官网https://edushu.co";
@@ -56,36 +57,28 @@ class WeChatController extends Controller
            }
          }
 
+
          if(isset($message['EventKey']))
          {
+
+           //$user = $request->user();
+           $eventkey= str_replace('qrscene_','',$message['EventKey']);
+
+
            if(User::where('openid',$message['FromUserName'])->count()){
              $user = User::where('openid',$message['FromUserName'])->first();
-             $user->check_subscribe =true;
-             $user->save();
-             $user_wechat = $app->user->get($message['FromUserName']);
-             $nickname = $user_wechat['nickname'];
 
-             if(isset($message['EventKey']))
-             {
-               $eventkey= str_replace('qrscene_','',$message['EventKey']);
+             $active_wechat = Activity::where('slug',$eventkey)->first();
+             if($user->activies()->where('slug',$eventkey)->count()){
+               return "您已经报名".$active_wechat->name."，感谢您的参与!";
+             }else{
 
-               $active_wechat = Activity::where('slug',$eventkey)->first();
                if($active_wechat){
                  $user->activies()->save($active_wechat);
                }
-
-
-               return $nickname."活动报名成功，感谢您的参与!";
+               return "活动报名成功'".$active_wechat->name."'，感谢您的参与!";
              }
 
-             $lasturl =UserLastUrl::where('user_id',$user->id)->first();
-             if($lasturl===false){
-               return $nickname."欢迎您! 读经典好书.";
-               break;
-             }else{
-               return $nickname."欢迎继续阅读 <a href='".$lasturl->url."'>".$lasturl->title."</a>";
-               break;
-             }
 
            }else{
 
@@ -106,26 +99,28 @@ class WeChatController extends Controller
 
            //  dd($data);
            $user =  User::create($data);
-           //$user->check_subscribe =true;
-           //$user->save();
+           $eventkey= str_replace('qrscene_','',$message['EventKey']);
 
-           }
+           $active_wechat = Activity::where('slug',$eventkey)->first();
+           if($user->activies()->where('slug',$eventkey)->count()){
+             return "您已经报名".$active_wechat->name."，感谢您的参与!";
+           }else{
 
-           if(isset($message['EventKey']))
-           {
-
-             $eventkey= str_replace('qrscene_','',$message['EventKey']);
-
-             $active_wechat = Activity::where('slug',$eventkey)->first();
              if($active_wechat){
                $user->activies()->save($active_wechat);
              }
-             return $nickname."活动报名成功，感谢您的参与!";
+             return "活动报名成功'".$active_wechat->name."'，感谢您的参与!";
            }
 
-           return $nickname."等你很久啦!";
-           break;
+
+           }
+
+
+
+            // return "11活动报名成功，感谢您的参与!";
+
          }
+
 
 
            switch ($message['MsgType']) {
@@ -157,10 +152,15 @@ class WeChatController extends Controller
                             $eventkey= str_replace('qrscene_','',$message['EventKey']);
 
                             $active_wechat = Activity::where('slug',$eventkey)->first();
-                            if($active_wechat){
-                              $user->activies()->save($active_wechat);
+                            if($user->activies()->where('slug',$eventkey)->count()){
+                              return "您已经报名".$active_wechat->name."，感谢您的参与!";
+                            }else{
+
+                              if($active_wechat){
+                                $user->activies()->save($active_wechat);
+                              }
+                              return "活动报名成功'".$active_wechat->name."'，感谢您的参与!";
                             }
-                            return $nickname."活动报名成功，感谢您的参与!";
                           }
 
                           $lasturl =UserLastUrl::where('user_id',$user->id)->first();
@@ -201,10 +201,15 @@ class WeChatController extends Controller
                           $eventkey= str_replace('qrscene_','',$message['EventKey']);
 
                           $active_wechat = Activity::where('slug',$eventkey)->first();
-                          if($active_wechat){
-                            $user->activies()->save($active_wechat);
+                          if($user->activies()->where('slug',$eventkey)->count()){
+                            return "您已经报名".$active_wechat->name."，感谢您的参与!";
+                          }else{
+
+                            if($active_wechat){
+                              $user->activies()->save($active_wechat);
+                            }
+                            return "活动报名成功'".$active_wechat->name."'，感谢您的参与!";
                           }
-                          return $nickname."活动报名成功，感谢您的参与!";
                         }
 
                         return $nickname."等你很久啦!";
@@ -302,6 +307,9 @@ class WeChatController extends Controller
                      return '你说的是：'.$test['result'][0];
                      break;
                default:
+
+
+
                    $media_list = $app->material->list('news', 0, 3);
                    $mediaId = $media_list['item'][0]['media_id'];
 
@@ -473,10 +481,11 @@ $password = 'Edushuco2020!@';
           session(['wechatuser' => $openid]);
 
           $lasturl =UserLastUrl::where('user_id',$user_info->id)->first();
-          if($lasturl===false){
-            return redirect(route('books.index'));
-          }else{
+          if(UserLastUrl::where('user_id',$user_info->id)->count()){
+            $lasturl =UserLastUrl::where('user_id',$user_info->id)->first();
             return redirect($lasturl->url);
+          }else{
+            return redirect(route('books.index'));            
           }
 
           //return redirect(route('books.index'));

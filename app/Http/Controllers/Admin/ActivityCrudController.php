@@ -64,6 +64,30 @@ class ActivityCrudController extends CrudController
       CRUD::addField([ // Text
           'name'  => 'description',
           'label' => 'description',
+          'type'  => 'wysiwyg',
+          'tab'   => 'Texts',
+      ]);
+
+
+
+      CRUD::addField([
+          'label' => "微信群二维码图片",
+          'name' => "image_group",
+          'type' => 'image',
+          'upload' => true,
+          'crop' => true, // set to true to allow cropping, false to disable
+          'aspect_ratio' => 1, // ommit or set to 0 to allow any aspect ratio
+            'tab' => 'Texts',
+          // 'disk' => 's3_bucket', // in case you need to show images from a different disk
+          // 'prefix' => 'uploads/images/profile_pictures/' // in case your db value is only the file name (no path), you can use this to prepend your path to the image src (in HTML), before it's shown to the user;
+      ]);
+
+
+
+
+      CRUD::addField([ // Text
+          'name'  => 'media_id',
+          'label' => '微信群二维码图片永久素材ID',
           'type'  => 'text',
           'tab'   => 'Texts',
       ]);
