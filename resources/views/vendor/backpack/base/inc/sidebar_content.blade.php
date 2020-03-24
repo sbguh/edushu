@@ -43,3 +43,5 @@
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('chapteraudio') }}'><i class='nav-icon fa fa-question'></i> ChapterAudios</a></li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('userbookhistory') }}'><i class='nav-icon fa fa-question'></i> UserBookHistories</a></li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('vipcard') }}'><i class='nav-icon fa fa-question'></i> VipCards</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('activity') }}'><i class='nav-icon fa fa-question'></i> Activities</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('activity') }}'><i class='nav-icon fa fa-question'></i> Activities</a></li>

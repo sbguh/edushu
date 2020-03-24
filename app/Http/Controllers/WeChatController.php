@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\User;
 
 use App\Models\UserLastUrl;
+use App\Models\Activity;
 
 use Redirect;
 use Auth;
@@ -54,6 +55,79 @@ class WeChatController extends Controller
                        return;
            }
          }
+
+         if(isset($message['EventKey']))
+         {
+           if(User::where('openid',$message['FromUserName'])->count()){
+             $user = User::where('openid',$message['FromUserName'])->first();
+             $user->check_subscribe =true;
+             $user->save();
+             $user_wechat = $app->user->get($message['FromUserName']);
+             $nickname = $user_wechat['nickname'];
+
+             if(isset($message['EventKey']))
+             {
+               $eventkey= str_replace('qrscene_','',$message['EventKey']);
+
+               $active_wechat = Activity::where('slug',$eventkey)->first();
+               if($active_wechat){
+                 $user->activies()->save($active_wechat);
+               }
+
+
+               return $nickname."活动报名成功，感谢您的参与!";
+             }
+
+             $lasturl =UserLastUrl::where('user_id',$user->id)->first();
+             if($lasturl===false){
+               return $nickname."欢迎您! 读经典好书.";
+               break;
+             }else{
+               return $nickname."欢迎继续阅读 <a href='".$lasturl->url."'>".$lasturl->title."</a>";
+               break;
+             }
+
+           }else{
+
+             $user_wechat = $app->user->get($message['FromUserName']);
+             $nickname = $user_wechat['nickname'];
+             $email = $message['FromUserName']."@edushu.co";
+
+             $password = 'Edushuco2020!@';
+
+             $data =[
+                 'name' => $nickname,
+                 'email' => $email,
+                 'openid' => $message['FromUserName'],
+                 'extras' => $user_wechat ,
+                 'check_subscribe' => 1,
+                 'password' => bcrypt($password),
+             ];
+
+           //  dd($data);
+           $user =  User::create($data);
+           //$user->check_subscribe =true;
+           //$user->save();
+
+           }
+
+           if(isset($message['EventKey']))
+           {
+
+             $eventkey= str_replace('qrscene_','',$message['EventKey']);
+
+             $active_wechat = Activity::where('slug',$eventkey)->first();
+             if($active_wechat){
+               $user->activies()->save($active_wechat);
+             }
+             return $nickname."活动报名成功，感谢您的参与!";
+           }
+
+           return $nickname."等你很久啦!";
+           break;
+         }
+
+
            switch ($message['MsgType']) {
 
                  case 'event':
@@ -77,6 +151,17 @@ class WeChatController extends Controller
                           $user->save();
                           $user_wechat = $app->user->get($message['FromUserName']);
                           $nickname = $user_wechat['nickname'];
+
+                          if(isset($message['EventKey']))
+                          {
+                            $eventkey= str_replace('qrscene_','',$message['EventKey']);
+
+                            $active_wechat = Activity::where('slug',$eventkey)->first();
+                            if($active_wechat){
+                              $user->activies()->save($active_wechat);
+                            }
+                            return $nickname."活动报名成功，感谢您的参与!";
+                          }
 
                           $lasturl =UserLastUrl::where('user_id',$user->id)->first();
                           if($lasturl===false){
@@ -110,9 +195,23 @@ class WeChatController extends Controller
                         //$user->save();
 
                         }
+
+                        if(isset($message['EventKey']))
+                        {
+                          $eventkey= str_replace('qrscene_','',$message['EventKey']);
+
+                          $active_wechat = Activity::where('slug',$eventkey)->first();
+                          if($active_wechat){
+                            $user->activies()->save($active_wechat);
+                          }
+                          return $nickname."活动报名成功，感谢您的参与!";
+                        }
+
                         return $nickname."等你很久啦!";
                         break;
                       }
+
+
 
 
 
@@ -236,6 +335,18 @@ class WeChatController extends Controller
          });
 
          return $app->server->serve();
+     }
+
+     public function qrcode(){
+       $app = app('wechat.official_account');
+       $result = $app->qrcode->temporary('shufang', 6 * 24 * 3600);
+
+       $url = $app->qrcode->url($result['ticket']);
+
+$content = file_get_contents($url); // 得到二进制图片内容
+file_put_contents(base_path(). '/public/uploads/images/qrcode/'.$result['ticket'].'.jpg', $content);
+
+       echo "<img src='".env('APP_URL'). '/public/uploads/images/qrcode/'.$result['ticket'].'.jpg'."'>";
      }
 
      public function usermenu(){

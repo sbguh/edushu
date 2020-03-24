@@ -32,4 +32,6 @@ Route::group([
 
     //Route::any('chapter/fetch/book', 'ChapterCrudController@fetchbook')->name('chapter.fetch.book');
     Route::crud('vipcard', 'VipCardCrudController');
+    Route::crud('activity', 'ActivityCrudController');
+    Route::crud('activity', 'ActivityCrudController');
 }); // this should be the absolute last line of this file

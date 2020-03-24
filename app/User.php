@@ -81,6 +81,13 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
+    public function activies()
+    {
+        //return $this->hasMany("App\Models\Activity");
+        return $this->belongsToMany('App\Models\Activity', 'activity_user');
+    }
+
+
     public function vipcard()
     {
         return $this->hasOne('App\Models\VipCard','user_id');

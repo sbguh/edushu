@@ -38,28 +38,27 @@ class VipCard extends Model
     public function setPhoneNumberAttribute($value)
         {
             $attribute_name = "phone_number";
-
+            /*
             $user =User::find($this->attributes['user_id']);
             if($user->check_subscribe){
-              if($value<20){
-              //  dd("test");
-               $app = app('wechat.official_account');
-               $app->template_message->send([
-                    'touser' => $user->openid,
-                    'template_id' => 'AAK9uM9BkIG527QNQtU9H8UoS9ZO3BJMtjGHxpctpMA',
-                    'data' => [
-                        'first' => '您好，您的信息已绑定成功！',
-                        'keyword1' => $this->attributes['real_name'],
-                        'keyword3' => $this->attributes['phone_number'],
-                        'keyword4' => $this->attributes['created_at'],
-                        'remark'=> "感谢您的使用"
-                    ],
-                ]);
+              $app = app('wechat.official_account');
+              $app->template_message->send([
+                   'touser' => $user->openid,
+                   'template_id' => 'AAK9uM9BkIG527QNQtU9H8UoS9ZO3BJMtjGHxpctpMA',
+                   'data' => [
+                       'first' => '您好，您的信息已绑定成功！',
+                       'keyword1' => $this->attributes['real_name'],
+                       'keyword2' => $user->name,
+                       'keyword3' => $this->attributes['phone_number'],
+                       'keyword4' => $this->attributes['created_at'],
+                       'remark'=> "感谢您的使用"
+                   ],
+               ]);
 
-              }
             }
-
-            return $value;
+            */
+            $this->attributes['phone_number'] = $value;
+            //return $value;
 
             //die($value);
 
@@ -71,10 +70,10 @@ class VipCard extends Model
             {
                 $attribute_name = "balance";
               //  $app = app('wechat.official_account');
-
+              /*
               $user =User::find($this->attributes['user_id']);
               if($user->check_subscribe){
-                if($value<20){
+                if($value<5){
                 //  dd("test");
                  $app = app('wechat.official_account');
                  $app->template_message->send([
@@ -90,8 +89,10 @@ class VipCard extends Model
 
                 }
               }
+              */
+              $this->attributes['balance'] = $value;
 
-              return $value;
+              //return $value;
 
                 //die($value);
 
