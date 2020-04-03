@@ -16,6 +16,8 @@ class ProductCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\BulkCloneOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
 
     public function setup()
     {
@@ -75,6 +77,19 @@ class ProductCrudController extends CrudController
             //  ], // extra HTML attributes for the field wrapper - mostly for resizing fields
             'tab' => 'Texts',
         ]);
+
+        CRUD::addField([ // Text
+          'name'        => 'on_sale', // the name of the db column
+           'label'       => 'on sale', // the input label
+           'type'        => 'radio',
+           'options'     => [
+               // the key will be stored in the db, the value will be shown as label;
+               0 => "False",
+               1 => "True"
+           ],
+           'tab'   => 'Texts',
+        ]);
+
 
         CRUD::addField([   // Textarea
             'name'  => 'description',

@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+//use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class UserAddress extends Model
 {
-    use CrudTrait;
+  //  use CrudTrait;
 
     /*
     |--------------------------------------------------------------------------

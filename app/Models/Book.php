@@ -5,14 +5,14 @@ use App\Events\BookAudio;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+//use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Book extends Model
 {
-    use CrudTrait;
-    use Sluggable, SluggableScopeHelpers;
+    //use CrudTrait;
+  //  use Sluggable, SluggableScopeHelpers;
 
     /*
     |--------------------------------------------------------------------------
@@ -70,7 +70,7 @@ class Book extends Model
         $this->uploadMultipleFilesToDisk($value, $attribute_name, $disk, $destination_path);
     }
 
-
+/*
     public function setImageAttribute($value)
         {
             $attribute_name = "image";
@@ -102,6 +102,7 @@ class Book extends Model
                 $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
             }
         }
+
         public function setAudioAttribute($value)
             {
                 $attribute_name = "audio";
@@ -112,7 +113,7 @@ class Book extends Model
 
             // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
             }
-
+*/
        public function setVideoAttribute($value)
                 {
                     $attribute_name = "video";

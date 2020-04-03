@@ -14,16 +14,11 @@ Route::group([
     Route::crud('useraddress', 'UserAddressCrudController');
     Route::crud('icon', 'IconCrudController');
     Route::crud('product', 'ProductCrudController');
-    Route::crud('product_sku', 'Product_skuCrudController');
-    Route::crud('product', 'ProductCrudController');
-    Route::crud('product_sku', 'Product_skuCrudController');
     Route::crud('chapter', 'ChapterCrudController');
     Route::crud('book', 'BookCrudController');
     Route::crud('tag', 'TagCrudController');
 
-    Route::crud('product_sku', 'Product_skuCrudController');
-    Route::crud('productsku', 'ProductSkuCrudController');
-    Route::crud('cartitem', 'CartItemCrudController');
+    //Route::crud('productsku', 'Product_skuCrudController');
     Route::crud('cartitem', 'CartItemCrudController');
     Route::crud('category', 'CategoryCrudController');
     Route::crud('bookaudio', 'BookAudioCrudController');
@@ -33,5 +28,5 @@ Route::group([
     //Route::any('chapter/fetch/book', 'ChapterCrudController@fetchbook')->name('chapter.fetch.book');
     Route::crud('vipcard', 'VipCardCrudController');
     Route::crud('activity', 'ActivityCrudController');
-    Route::crud('activity', 'ActivityCrudController');
+    Route::crud('productsku', 'ProductSkuCrudController');
 }); // this should be the absolute last line of this file

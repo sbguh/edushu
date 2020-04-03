@@ -30,7 +30,7 @@ class BooksController extends Controller
     {
         // 判断商品是否已经上架，如果没有上架则抛出异常。
         if (!$book->state) {
-            throw new \Exception('商品未上架');
+          //  throw new \Exception('商品未上架');
         }
 
         $app = app('wechat.official_account');

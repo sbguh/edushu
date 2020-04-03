@@ -8,6 +8,10 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use App\Events\BookAudio as BookAudioEvent;
 use App\Listeners\BookAudio as BookAudioListern;
+
+use App\Events\NovelUserEvent;
+use App\Listeners\NovelOrderListen;
+
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -23,6 +27,11 @@ class EventServiceProvider extends ServiceProvider
         BookAudioEvent::class => [
             BookAudioListern::class,
         ],
+
+        NovelUserEvent::class => [
+            NovelOrderListen::class,
+        ],
+
 
     ];
 

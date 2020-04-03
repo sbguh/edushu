@@ -5,16 +5,16 @@ namespace App\Models;
 use Spatie\Translatable\HasTranslations;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+//use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Product extends Model
 {
-    use CrudTrait;
-    use Sluggable, SluggableScopeHelpers;
-    use HasTranslations;
+    //use CrudTrait;
+    //use Sluggable, SluggableScopeHelpers;
+    //use HasTranslations;
   //  use HasTranslations;
 
     /*
@@ -39,7 +39,7 @@ class Product extends Model
         'images'       => 'array',
     ];
 
-    public $translatable = ['name', 'description', 'details', 'features', 'extras'];
+    public $translatable = ['features', 'extras'];
 
     // protected $fillable = [];
     // protected $hidden = [];
@@ -59,6 +59,25 @@ class Product extends Model
             ],
         ];
     }
+
+    public function users()
+    {
+
+
+
+    }
+
+
+/*
+    public function getImageUrlAttribute()
+        {
+
+            // 如果 image 字段本身就已经是完整的 url 就直接返回
+            if (Str::startsWith($this->attributes['image'], ['http://', 'https://'])) {
+                return $this->attributes['image'];
+            }
+            return \Storage::disk('edushu')->url($this->attributes['image']);
+        }
 
 
     public function setImagesAttribute($value)
@@ -103,12 +122,22 @@ public function setImageAttribute($value)
         }
     }
 
+*/
 
 
-public function category()
+
+
+
+public function tags()
 {
-    return $this->belongsTo('Backpack\NewsCRUD\app\Models\Category', 'category_id');
+    return $this->belongsToMany('App\Models\Tag', 'product_tag');
 }
+
+public function categories()
+{
+    return $this->belongsToMany('App\Models\Category', 'category_product');
+}
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

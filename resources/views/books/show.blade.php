@@ -2,40 +2,7 @@
 @section('title', $book->name)
 
 @section('jssdk')
-<script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
 
-<script type="text/javascript" charset="utf-8">
-wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','updateTimelineShareData'), false) !!});
-
-wx.ready(function () {
-    wx.updateAppMessageShareData({
-        title: "{{$book->extras->meta_title?$book->extras->meta_title:$book->name.' | 中小学生必读图书'}}", // 分享标题
-        desc: "{{$book->extras->meta_description?$book->extras->meta_description:'精选好书'.$book->name.', 中小学生必读图书'}}", // 分享描述
-        link: "{{route('books.show',$book->id)}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
-        success: function () {
-          // 设置成功
-        }
-      })
-
-      wx.updateTimelineShareData({
-        title: "{{$book->name}}", // 分享标题
-        desc: "精选好书,中小学生必读图书: {{$book->name}}", // 分享描述
-        link: "{{route('books.show',$book->id)}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: "{{env('APP_URL')}}/{{ $book->image }}", // 分享图标
-          success: function () {
-            // 设置成功
-          }
-        })
-
-        wx.error(function(res){
-
-});
-
-  });
-
-
-</script>
 @endsection
 
 
@@ -61,7 +28,7 @@ wx.ready(function () {
                     <div class="page__bd page__bd_spacing">
 
                         <div class="weui-flex">
-                            <div class="weui-flex__item"><div class="placeholder"><img class="cover" src="{{env('APP_URL')}}/{{ $book->image }}" alt="" width="260px"></div></div>
+                            <div class="weui-flex__item"><div class="placeholder"><img class="cover" src="{{ Storage::disk('edushu')->url($book->image) }}" alt="" width="260px"></div></div>
                         </div>
 
 
@@ -265,7 +232,7 @@ document.addEventListener("WeixinJSBridgeReady", function () {
         <div class="col-xs-12 col-md-12 col-lg-12  navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-light bg-light navbar-static-bottom" >
           <div class="row"  >
             <div class="col-10" >
-              <audio id="player" playsinline autobuffer  src="{{env('APP_URL')}}/uploads/{{$book->audio}}">
+              <audio id="player" playsinline autobuffer  src="{{ Storage::disk('edushu')->url($book->audio) }}">
                 </audio>
 
             </div>

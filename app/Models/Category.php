@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+//use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
@@ -10,8 +10,8 @@ use Illuminate\Support\Str;
 
 class Category extends Model
 {
-    use CrudTrait;
-    use Sluggable, SluggableScopeHelpers;
+  //  use CrudTrait;
+  //  use Sluggable, SluggableScopeHelpers;
 
     /*
     |--------------------------------------------------------------------------
@@ -61,17 +61,12 @@ class Category extends Model
 
     public function parent()
     {
-        return $this->belongsTo('Backpack\NewsCRUD\app\Models\Category', 'parent_id');
+        return $this->belongsTo('App\Models\Category', 'parent_id');
     }
 
     public function children()
     {
-        return $this->hasMany('Backpack\NewsCRUD\app\Models\Category', 'parent_id');
-    }
-
-    public function articles()
-    {
-        return $this->hasMany('Backpack\NewsCRUD\app\Models\Article');
+        return $this->hasMany('App\Models\Category', 'parent_id');
     }
 
 
@@ -118,7 +113,7 @@ class Category extends Model
         return $this->name;
     }
 
-
+/*
     public function setImageAttribute($value)
         {
             $attribute_name = "image";
@@ -150,7 +145,7 @@ class Category extends Model
                 $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
             }
         }
-
+*/
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

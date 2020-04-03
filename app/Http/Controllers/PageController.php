@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Backpack\PageManager\app\Models\Page;
+//use Backpack\PageManager\app\Models\Page;
+
 use App\Http\Controllers\Controller;
 
 class PageController extends Controller

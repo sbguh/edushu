@@ -10,15 +10,19 @@ use EasyWeChat\Kernel\Messages\NewsItem;
 use Google\Cloud\Translate\TranslateClient;
 use Google\Cloud\Speech\SpeechClient;
 use Illuminate\Http\Request;
-
+use EasyWeChat\Kernel\Messages\Image;
 use App\User;
 
+use Overtrue\EasySms\EasySms;
+use Illuminate\Support\Str;
 use App\Models\UserLastUrl;
 use App\Models\Activity;
+use Illuminate\Auth\AuthenticationException;
 
 use Redirect;
 use Auth;
 use Storage;
+
 
 class WeChatController extends Controller
 {
@@ -70,12 +74,28 @@ class WeChatController extends Controller
 
              $active_wechat = Activity::where('slug',$eventkey)->first();
              if($user->activies()->where('slug',$eventkey)->count()){
+               if($active_wechat->media_id){
+
+                 $app->customer_service->message("活动报名成功！请扫描下图二维码加老师微信群互动，感谢您的参与!")->to($message['FromUserName'])->send();
+
+                 $image_wechat = new Image($active_wechat->media_id);
+                 return $image_wechat;
+               }
                return "您已经报名".$active_wechat->name."，感谢您的参与!";
              }else{
 
                if($active_wechat){
                  $user->activies()->save($active_wechat);
                }
+
+               if($active_wechat->media_id){
+
+                 $app->customer_service->message("活动报名成功！请扫描下图二维码加老师微信群互动，感谢您的参与!")->to($message['FromUserName'])->send();
+
+                 $image_wechat = new Image($active_wechat->media_id);
+                 return $image_wechat;
+               }
+
                return "活动报名成功'".$active_wechat->name."'，感谢您的参与!";
              }
 
@@ -103,11 +123,26 @@ class WeChatController extends Controller
 
            $active_wechat = Activity::where('slug',$eventkey)->first();
            if($user->activies()->where('slug',$eventkey)->count()){
+             if($active_wechat->media_id){
+
+               $app->customer_service->message("活动报名成功！请扫描下图二维码加老师微信群互动，感谢您的参与!")->to($message['FromUserName'])->send();
+
+               $image_wechat = new Image($active_wechat->media_id);
+               return $image_wechat;
+             }
              return "您已经报名".$active_wechat->name."，感谢您的参与!";
            }else{
 
              if($active_wechat){
                $user->activies()->save($active_wechat);
+             }
+
+             if($active_wechat->media_id){
+
+               $app->customer_service->message("活动报名成功！请扫描下图二维码加老师微信群互动，感谢您的参与!")->to($message['FromUserName'])->send();
+
+               $image_wechat = new Image($active_wechat->media_id);
+               return $image_wechat;
              }
              return "活动报名成功'".$active_wechat->name."'，感谢您的参与!";
            }
@@ -153,12 +188,28 @@ class WeChatController extends Controller
 
                             $active_wechat = Activity::where('slug',$eventkey)->first();
                             if($user->activies()->where('slug',$eventkey)->count()){
+                              if($active_wechat->media_id){
+
+                                $app->customer_service->message("活动报名成功！请扫描下图二维码加老师微信群互动，感谢您的参与!")->to($message['FromUserName'])->send();
+
+                                $image_wechat = new Image($active_wechat->media_id);
+                                return $image_wechat;
+                              }
                               return "您已经报名".$active_wechat->name."，感谢您的参与!";
                             }else{
 
                               if($active_wechat){
                                 $user->activies()->save($active_wechat);
                               }
+
+                              if($active_wechat->media_id){
+
+                                $app->customer_service->message("活动报名成功！请扫描下图二维码加老师微信群互动，感谢您的参与!")->to($message['FromUserName'])->send();
+
+                                $image_wechat = new Image($active_wechat->media_id);
+                                return $image_wechat;
+                              }
+
                               return "活动报名成功'".$active_wechat->name."'，感谢您的参与!";
                             }
                           }
@@ -202,11 +253,26 @@ class WeChatController extends Controller
 
                           $active_wechat = Activity::where('slug',$eventkey)->first();
                           if($user->activies()->where('slug',$eventkey)->count()){
+                            if($active_wechat->media_id){
+
+                              $app->customer_service->message("活动报名成功！请扫描下图二维码加老师微信群互动，感谢您的参与!")->to($message['FromUserName'])->send();
+
+                              $image_wechat = new Image($active_wechat->media_id);
+                              return $image_wechat;
+                            }
                             return "您已经报名".$active_wechat->name."，感谢您的参与!";
                           }else{
 
                             if($active_wechat){
                               $user->activies()->save($active_wechat);
+                            }
+
+                            if($active_wechat->media_id){
+
+                              $app->customer_service->message("活动报名成功！请扫描下图二维码加老师微信群互动，感谢您的参与!")->to($message['FromUserName'])->send();
+
+                              $image_wechat = new Image($active_wechat->media_id);
+                              return $image_wechat;
                             }
                             return "活动报名成功'".$active_wechat->name."'，感谢您的参与!";
                           }
@@ -402,6 +468,88 @@ file_put_contents(base_path(). '/public/uploads/images/qrcode/'.$result['ticket'
             //dd($list);
           }
 
+
+
+          public function add_phone(Request $request){
+
+            //var_dump(session('return_wechat'));
+            $user = $request->user();
+
+
+            return view('auth.phone',['user' => $user]);
+
+          }
+
+          public function save_phone(Request $request){
+
+            $validatedData = $request->validate([
+                  'phone_number' => 'required|unique:users|max:255',
+                  'verify_code' => 'required',
+              ]);
+
+
+            //var_dump(session('return_wechat'));save_phone
+            $user = $request->user();
+            $verifyData = \Cache::get($request->get('verification_key'));
+
+          if (!$verifyData) {
+              return view('auth.phone',['user' => $user])->withErrors('验证码已失效');
+              //abort(403, '验证码已失效');
+           }
+
+           if (!hash_equals($verifyData['code'],$request->get('verify_code'))) {
+               // 返回401
+                return view('auth.phone',['user' => $user])->withErrors('验证码错误'); 
+               //throw new AuthenticationException('验证码错误');
+           }
+           //dd($request->get('verify_code'));
+
+           //$user->real_name = $request->get('real_name');
+           $user->phone_number = $verifyData['phone'];
+           $user->save();
+
+
+           // 清除验证码缓存
+           \Cache::forget($request->verification_key);
+
+           return view('auth.phone',['user' => $user]);
+
+          }
+
+          public function send_sms($phone, Request $request,EasySms $easySms){
+            //$phone_number = $request->phone_number;
+          //  return $phone;
+            //var_dump(session('return_wechat'));save_phone
+            $phone = $phone;
+
+          // 生成4位随机数，左侧补0
+              $code = str_pad(random_int(1, 9999), 4, 0, STR_PAD_LEFT);
+
+              try {
+                  $result = $easySms->send($phone, [
+                      'template' => config('easysms.gateways.aliyun.templates.register'),
+                      'data' => [
+                          'code' => $code
+                      ],
+                  ]);
+              } catch (\Overtrue\EasySms\Exceptions\NoGatewayAvailableException $exception) {
+                  $message = $exception->getException('aliyun')->getMessage();
+                  abort(500, $message ?: '短信发送异常');
+              }
+
+              $key = 'verificationCode_'.Str::random(15);
+              $expiredAt = now()->addMinutes(5);
+              // 缓存验证码 5 分钟过期。
+              \Cache::put($key, ['phone' => $phone, 'code' => $code], $expiredAt);
+
+              return response()->json([
+                  'key' => $key,
+                  'expired_at' => $expiredAt->toDateTimeString(),
+              ])->setStatusCode(201);
+
+          }
+
+
     public function subscribe(Request $request){
 
       //var_dump(session('return_wechat'));
@@ -485,7 +633,7 @@ $password = 'Edushuco2020!@';
             $lasturl =UserLastUrl::where('user_id',$user_info->id)->first();
             return redirect($lasturl->url);
           }else{
-            return redirect(route('books.index'));            
+            return redirect(route('books.index'));
           }
 
           //return redirect(route('books.index'));

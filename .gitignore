@@ -2,6 +2,8 @@
 /public/hot
 /public/uploads
 /public/storage
+/public/fonts
+/nova
 /storage/*.key
 /vendor
 .env

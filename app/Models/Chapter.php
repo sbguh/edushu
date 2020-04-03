@@ -4,12 +4,12 @@ namespace App\Models;
 
 use App\Events\ChapterAudioEvent;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+//use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Chapter extends Model
 {
-    use CrudTrait;
+  //  use CrudTrait;
 
     /*
     |--------------------------------------------------------------------------
@@ -43,7 +43,7 @@ class Chapter extends Model
     {
         return $this->belongsTo('App\Models\Book', 'book_id');
     }
-
+/*
     public function setAudioAttribute($value)
         {
             $attribute_name = "audio";
@@ -70,7 +70,8 @@ class Chapter extends Model
          {
              return $this->hasOne('App\Models\ChapterAudio','chapter_id');
          }
-/*
+
+
     public function nextchapter()
     {
         return $this->belongsTo('App\Models\Book', 'book_id');

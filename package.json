@@ -7,7 +7,11 @@
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
-        "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+        "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "build-fieldsForNovelUser": "cd nova-components/FieldsForNovelUser && npm run dev",
+        "build-fieldsForNovelUser-prod": "cd nova-components/FieldsForNovelUser && npm run prod",
+        "build-color-picker": "cd nova-components/ColorPicker && npm run dev",
+        "build-color-picker-prod": "cd nova-components/ColorPicker && npm run prod"
     },
     "devDependencies": {
         "axios": "^0.19",
@@ -24,6 +28,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.13.0",
         "blob-util": "^2.0.2",
         "china-area-data": "^4.0.0",
         "hls.js": "^0.13.2",

@@ -20,7 +20,7 @@ Route::any('/subscribe', 'WeChatController@subscribe')->name('wechat.subscribe')
 Auth::routes(['verify' => true]);
 //Auth::routes();
 
-Route::group(['middleware' => ['auth', 'wechat.oauth']], function() {
+Route::group(['middleware' => ['auth']], function() {
     Route::get('user_addresses', 'UserAddressesController@index')->name('user_addresses.index');
     Route::get('user_addresses/create', 'UserAddressesController@create')->name('user_addresses.create');
     Route::post('user_addresses', 'UserAddressesController@store')->name('user_addresses.store');
@@ -37,7 +37,21 @@ Route::group(['middleware' => ['auth', 'wechat.oauth']], function() {
     Route::get('cart', 'CartController@index')->name('cart.index');
     Route::delete('cart/{book}', 'CartController@remove')->name('cart.remove');
 
+    Route::post('product_cart', 'ProductCartController@add')->name('product.cart.add');
+    Route::get('product_cart', 'ProductCartController@index')->name('product.cart.index');
+    Route::delete('product_cart/{sku}', 'ProductCartController@remove')->name('product.cart.remove');
+
+
+    Route::post('wechat/phone', 'WeChatController@save_phone')->name('wechat.save.phone');
+    Route::get('wechat/phone', 'WeChatController@add_phone')->name('wechat.add.phone');
+
+Route::post('orders', 'OrdersController@store')->name('orders.store');
+
+
+
 });
+
+    Route::post('wechat/send_sms/{phone}', 'WeChatController@send_sms')->name('wechat.send_sms');
 
 
 Route::get('products', 'ProductsController@index')->name('products.index');
@@ -77,21 +91,21 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
     });
 });
 
+Route::get('category', 'CategoryController@index')->name('category.index');
+Route::get('category/{category}', 'CategoryController@show')->name('category.show');
+Route::get('tags/{tag}', 'TagsController@show')->name('tags.show');
+
+Route::get('books', 'BooksController@index')->name('books.index');
+Route::get('books/{book}', 'BooksController@show')->name('books.show');
+Route::get('read/{book}', 'BooksController@read')->name('book.read');
+Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
+Route::any('search/{keyword}', 'BooksController@search')->name('books.search');
 
 
 
 
 Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 
-  Route::get('category', 'CategoryController@index')->name('category.index');
-  Route::get('category/{category}', 'CategoryController@show')->name('category.show');
-  Route::get('tags/{tag}', 'TagsController@show')->name('tags.show');
-
-  Route::get('books', 'BooksController@index')->name('books.index');
-  Route::get('books/{book}', 'BooksController@show')->name('books.show');
-  Route::get('read/{book}', 'BooksController@read')->name('book.read');
-  Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
-  Route::any('search/{keyword}', 'BooksController@search')->name('books.search');
 
 
 
@@ -107,5 +121,4 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 
 
 
-Route::get('{page}/{subs?}', ['uses' => '\App\Http\Controllers\PageController@index'])
-    ->where(['page' => '^(((?=(?!admin))(?=(?!\/)).))*$', 'subs' => '.*']);
+//Route::get('{page}/{subs?}', ['uses' => '\App\Http\Controllers\PageController@index'])->where(['page' => '^(((?=(?!admin))(?=(?!\/)).))*$', 'subs' => '.*']);

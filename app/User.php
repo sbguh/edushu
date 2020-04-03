@@ -5,16 +5,20 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Spatie\Permission\Traits\HasRoles;
+//use Backpack\CRUD\app\Models\Traits\CrudTrait;
+//use Spatie\Permission\Traits\HasRoles;
+//use Laravel\Nova\Actions\Actionable; // 用于显示活动日志 Action Log
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Events\NovelUserEvent;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable;
-    use CrudTrait;
-    use HasRoles;
-    use CrudTrait;
+    use  Notifiable;
+    use  SoftDeletes; //软删除
+  //  use CrudTrait;
+    //use HasRoles;
+  //  use CrudTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','extras','phonenumber','openid','check_subscribe',
+        'name', 'email', 'password','extras','phonenumber','openid','check_subscribe','phone_number','description','wechat_description','card_id','real_name','birthday','gender','deposit','balance',
     ];
 
     /**
@@ -47,7 +51,10 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'extras' => 'object',
+        'birthday' => 'datetime',
+
     ];
+
 
 
     public function addresses()
@@ -80,6 +87,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany("App\Models\CartItem");
     }
 
+    public function cartProducts()
+    {
+        return $this->hasMany("App\Models\CartProduct");
+    }
+
 
     public function activies()
     {
@@ -92,6 +104,39 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne('App\Models\VipCard','user_id');
     }
+
+
+    public function logs()
+    {
+        return $this->hasMany('App\Models\UserLog','user_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany("App\Models\Order");
+    }
+
+    public function order_items()
+    {
+
+        return $this->hasManyThrough(
+            'App\Models\OrderItem',
+            'App\Models\Order',
+
+        );
+    }
+
+    public function novels()
+    {
+        return $this->belongsToMany('App\Models\Novel','novel_user')->withTimestamps()->withPivot(['note','created_at','updated_at'])->using('App\Models\NovelUser');
+    }
+
+    public function history_novels()
+    {
+        return $this->belongsToMany('App\Models\Novel','novel_user_history','user_id','novel_id')->withTimestamps()->withPivot(['type','created_at','updated_at'])->using('App\Models\NovelUserHistory');
+    }
+
+
 
 
 }

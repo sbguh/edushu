@@ -2,15 +2,15 @@
 
 namespace Backpack\NewsCRUD\app\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+//use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    use CrudTrait;
-    use Sluggable, SluggableScopeHelpers;
+  //  use CrudTrait;
+  //  use Sluggable, SluggableScopeHelpers;
 
     /*
     |--------------------------------------------------------------------------

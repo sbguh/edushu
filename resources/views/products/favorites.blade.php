@@ -14,7 +14,7 @@
               <div class="top">
                 <div class="img">
                   <a href="{{ route('products.show', ['product' => $product->id]) }}">
-                    <img src="{{env('APP_URL')}}/{{ $product->image }}" alt="">
+                    <img src="{{env('APP_URL')}}/{{ $product->image }}" alt="" >
                   </a>
                 </div>
                 <div class="price"><b>￥</b>{{ $product->price }}</div>

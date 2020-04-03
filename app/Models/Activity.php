@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+//use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-
+use Laravel\Nova\Actions\Actionable;
+use Illuminate\Notifications\Notifiable;
 
 class Activity extends Model
 {
-    use CrudTrait;
-
+  //  use CrudTrait;
+    use Actionable, Notifiable;
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -29,6 +30,8 @@ class Activity extends Model
         'extras' => 'object',
     ];
 
+    public $mediaid="";
+
     protected $fillable = [
         'name',
         'slug',
@@ -46,6 +49,19 @@ class Activity extends Model
           return $this->belongsToMany('App\User', 'activity_user');
       }
 
+
+      public function setMediaIdAttribute($value)
+      {
+
+        $attribute_name = "media_id";
+
+        if($this->mediaid){
+          $this->attributes['media_id'] =$this->mediaid;
+        }else{
+          $this->attributes['media_id'] = $value;
+        }
+
+      }
 
       public function setImageGroupAttribute($value)
           {
@@ -81,7 +97,12 @@ class Activity extends Model
 
                   $app = app('wechat.official_account');
                   $material_result = $app->material->uploadImage(base_path(). '/public/'.$this->attributes[$attribute_name]);
+
                   $this->attributes['media_id'] =  $material_result['media_id'];
+
+                  //dd($this->attributes['media_id']);
+
+                  $this->mediaid =  $material_result['media_id'];
               }
           }
 
