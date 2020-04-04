@@ -31,6 +31,7 @@ class OrderItem extends Resource
      *
      * @var string
      */
+    public static $group = '订单'; 
     public static $model = 'App\Models\OrderItem';
 
     /**
@@ -55,6 +56,12 @@ class OrderItem extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
+
+     public static function label()
+     {
+         return "订单记录";
+     }
+
     public function fields(Request $request)
     {
         return [

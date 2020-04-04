@@ -28,6 +28,7 @@ class Product extends Resource
      *
      * @var string
      */
+    public static $group = 'product'; 
     public static $model = 'App\Models\Product';
 
     /**
@@ -45,7 +46,10 @@ class Product extends Resource
     public static $search = [
         'id','name'
     ];
-
+    public static function label()
+    {
+        return "产品";
+    }
     /**
      * Get the fields displayed by the resource.
      *

@@ -27,6 +27,7 @@ class AddSoftDeletesFromNovelsTable extends Migration
     {
         Schema::table('novels', function (Blueprint $table) {
             $table->dropColumn('deleted_at');
+            $table->dropColumn('rent_count');
         });
     }
 }

@@ -14,7 +14,7 @@ use App\Models\Novel;
 use App\Observers\NoveUserObserver;
 use App\Models\NovelUser;
 use App\Models\NovelUserHistory;
-
+use App\User;
 
 class NovelUserDeletedEvent
 {
@@ -45,6 +45,25 @@ class NovelUserDeletedEvent
           'type'=>"还书"
 
         ]);
+
+        $app = app('wechat.official_account');
+        $user = User::find($usernovel->user_id);
+        $openid = $user->openid;
+        if($openid&&env('WE_CHAT_DISPLAY', true)){
+              $app->template_message->send([
+                'touser' => $openid,
+                'template_id' => 'tDZ7alD3KSR6CD0QvzVxGZXrtMaZOW41QkGd72atu7A',
+                'url' => 'https://book.edushu.co',
+                'data' => [
+                    'first' => $user->name.'您好！您本次还书成功！',
+                    'keyword1' => $novel->title,
+                    'keyword2' => date('Y-m-d H:i:s'),
+                    'remark' => "隆回共读书房感谢您的使用。"
+
+                ],
+            ]);
+        }
+
 
         //$usernovel->note = 'liyuping';
         //$usernovel->save();

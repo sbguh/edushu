@@ -52,10 +52,14 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'extras' => 'object',
         'birthday' => 'datetime',
+        'enable'=>'boolean',
 
     ];
 
-
+    public function getRentCountAttribute()
+    {
+        return $this->novels()->count();
+    }
 
     public function addresses()
     {
@@ -114,6 +118,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function orders()
     {
         return $this->hasMany("App\Models\Order");
+    }
+
+    public function chargers()
+    {
+        return $this->hasMany("App\Models\Charge");
     }
 
     public function order_items()

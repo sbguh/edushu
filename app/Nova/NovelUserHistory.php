@@ -31,8 +31,9 @@ class NovelUserHistory extends Resource
      *
      * @var string
      */
+    public static $group = '借阅';
     public static $displayInNavigation = false;
-    public static $model = 'App\Models\Novel';
+    public static $model = 'App\Models\NovelHistory';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -56,6 +57,14 @@ class NovelUserHistory extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
+
+
+
+     public static function label()
+     {
+         return "借阅历史记录";
+     }
+
 
      public function title()
        {

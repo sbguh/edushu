@@ -33,7 +33,7 @@ class NovelUserCreatingEvent
         //
 
 
-        \Log::info("creating".$usernovel);
+        //\Log::info("creating".$usernovel);
         //$usernovel->note = 'liyuping';
         //$usernovel->save();
         $novel =Novel::find($usernovel->novel_id);

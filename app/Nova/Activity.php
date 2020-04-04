@@ -43,6 +43,13 @@ class Activity extends Resource
         'id','name'
     ];
 
+
+    public static function label()
+    {
+        return "活动";
+    }
+
+
     /**
      * Get the fields displayed by the resource.
      *

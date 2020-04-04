@@ -14,8 +14,8 @@ use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\BelongsToMany;
 use App\Nova\Fields\NovelUserFields;
 use App\Nova\Fields\NovelUserHistoryFields;
-
-
+use App\Rules\NovelUserRule;
+use Laravel\Nova\Fields\Boolean;
 class User extends Resource
 {
     /**
@@ -23,7 +23,7 @@ class User extends Resource
      *
      * @var string
      */
-
+    public static $group = 'user';
     public static $model = 'App\User';
     public static $perPageOptions = [50, 100, 150];
     /**
@@ -49,20 +49,30 @@ class User extends Resource
      * @return array
      */
 
-
+     public static function label()
+     {
+         return "用户列表";
+     }
     public function fields(Request $request)
     {
 
         return [
             ID::make()->sortable(),
 
-            Gravatar::make()->maxWidth(50),
+            //Gravatar::make()->maxWidth(50),
 
-            Text::make('Name')
+            Text::make('微信名','name')
                 ->sortable()
                 ->rules('required', 'max:255')->readonly(),
             Text::make('真实姓名','real_name'),
+            Text::make('备注','remark'),
+            //Text::make('手机号码','phone_number')->rules('required','unique:users'),
             Text::make('手机号码','phone_number'),
+            Text::make('已借书','rent_count')->onlyOnDetail(),
+            Text::make('最多可借','limit_count'),
+            Boolean::make('正常使用','enable'),
+            Text::make('押金','deposit')->exceptOnForms(),
+            Text::make('余额','balance')->exceptOnForms(),
             Date::make('生日','birthday')->pickerFormat('Y.m.d')->hideFromIndex(),
             Select::make('性别','gender')->options([
                 '0' => '女',
@@ -80,7 +90,7 @@ class User extends Resource
                 ->sortable()
                 ->rules('required', 'email', 'max:254')
                 ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
+                ->updateRules('unique:users,email,{{resourceId}}')->hideFromIndex(),
 
             Password::make('Password')
                 ->onlyOnForms()
@@ -90,7 +100,8 @@ class User extends Resource
             //HasMany::make('order_items'),
           //  HasMany::make('UserLog','logs'),
 
-            BelongsToMany::make('novels')->searchable()
+            BelongsToMany::make('图书','novels','App\Nova\Novel')->searchable()
+            ->creationRules('required',new NovelUserRule($request->route('resourceId')))
             ->fields(new NovelUserFields)
            ->actions(function () {
                 return [
@@ -98,8 +109,10 @@ class User extends Resource
                 ];
             }),
 
-            BelongsToMany::make('history_novels','history_novels', 'App\Nova\NovelUserHistory')->searchable()
+            BelongsToMany::make('历史记录','history_novels', 'App\Nova\NovelUserHistory')->searchable()
             ->fields(new NovelUserHistoryFields),
+
+            HasMany::make('充值记录','chargers','App\Nova\Charge'),
 
 
 

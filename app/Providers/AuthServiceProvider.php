@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+         //'App\Models\NovelHistory' => 'App\Policies\NovelHistoryPolicy',
     ];
 
     /**
@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
             // 例如传入 \App\Models\User 会返回 User
             return '\\App\\Policies\\'.class_basename($class).'Policy';
         });
-        
+
 
         //
     }

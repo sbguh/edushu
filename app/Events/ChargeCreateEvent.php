@@ -11,16 +11,12 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Observers\NoveUserObserver;
 
-use App\Models\Novel;
-use App\Models\NovelUser;
-use App\Models\NovelUserHistory;
+use App\Models\Charge;
 use App\User;
 
-class NovelUserCreatedEvent
+class ChargeCreateEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    protected $novelUser;
 
     /**
      * Create a new event instance.
@@ -28,46 +24,35 @@ class NovelUserCreatedEvent
      * @return void
      */
     public $usernovel;
-    public function __construct(NovelUser $usernovel)
+    public function __construct(Charge $charge)
     {
 
         //
-        $novel =Novel::find($usernovel->novel_id);
-        $novel->rent_count =$novel->rent_count + 1;
-        $novel->save();
+        $amount = $charge->amount;
+        $balance = $charge->user->balance;
 
-        \Log::info("create".$usernovel->novel_id);
-
-        NovelUserHistory::create([
-          'user_id'=>$usernovel->user_id,
-          'novel_id'=>$usernovel->novel_id,
-          'type'=>"借书"
-
-        ]);
+        \Log::info("充值 金额".$amount);
+        \Log::info("充值 余额".$balance);
 
         $app = app('wechat.official_account');
-        $user = User::find($usernovel->user_id);
+        $user = $charge->user;
         $openid = $user->openid;
         if($openid&&env('WE_CHAT_DISPLAY', true)){
               $app->template_message->send([
                 'touser' => $openid,
-                'template_id' => 'gM1Es9cIrduu1A_Lxhfz0LiplfLHlV5C5hQKVnOve60',
+                'template_id' => 'yj6GOxOq_UDvRkrJPpKizddW69XU3kxS2Xb4JcM4Pbw',
                 'url' => 'https://book.edushu.co',
                 'data' => [
-                    'first' => $user->name.'借书成功',
-                    'keyword1' => $novel->title,
-                    'keyword2' => date('Y-m-d H:i:s',strtotime('+7 day')),
-                    'keyword3' => "本书适合亲子阅读，让孩子认识世界，接受知识，养成良好的阅读习惯。",
-                    'remark' => "隆回共读书房感谢您的使用。祝阅读愉快。"
+                    'first' => $user->name.'您好！本次充值成功',
+                    'keyword1' => "现金充值",
+                    'keyword2' => $charge->charge_number,
+                    'keyword3' =>  $charge->amount,
+                    'keyword4' => $charge->created_at,
+                    'remark' => "隆回共读书房感谢您的使用。你账户余额为: ".$balance
 
                 ],
             ]);
         }
-
-
-        //$usernovel->note = 'liyuping';
-        //$usernovel->save();
-        $this->usernovel = $usernovel;
 
     }
 

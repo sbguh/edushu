@@ -56,4 +56,26 @@ class CartController extends Controller
             return [];
         }
 
+
+        public function wechatpay(Request $request)
+          {
+
+
+            $user   = $request->user();
+            $skuId  = $request->input('productsku_id');
+
+
+            $result = $app->order->unify([
+              'body' => '腾讯充值中心-QQ会员充值',
+              'out_trade_no' => '20150806125346',
+              'total_fee' => 1,
+              //'notify_url' => 'https://pay.weixin.qq.com/wxpay/pay.action', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+              'trade_type' => 'JSAPI', // 请对应换成你的支付方式对应的值类型
+              'openid' => $user->openid,
+            ]);
+
+
+              return view('cart.index', ['cartItems' => $cartItems]);
+          }
+
 }

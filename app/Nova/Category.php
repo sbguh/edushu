@@ -57,7 +57,10 @@ class Category extends Resource
         }
 
 
-
+        public static function label()
+        {
+            return "分类";
+        }
 
     public function fields(Request $request)
     {
@@ -66,7 +69,7 @@ class Category extends Resource
             Text::make('name')
                 ->sortable()
                 ->rules('required', 'max:255'),
-                
+
             Text::make('slug')
                 ->sortable()
                 ->rules('required', 'max:255'),

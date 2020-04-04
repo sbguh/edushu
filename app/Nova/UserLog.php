@@ -16,6 +16,7 @@ class UserLog extends Resource
      *
      * @var string
      */
+    public static $group = 'user';
     public static $model = 'App\Models\UserLog';
 
     /**
@@ -33,6 +34,12 @@ class UserLog extends Resource
     public static $search = [
         'id',
     ];
+
+
+    public static function label()
+    {
+        return "用户日志记录";
+    }
 
     /**
      * Get the fields displayed by the resource.

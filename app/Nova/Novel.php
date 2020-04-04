@@ -21,6 +21,7 @@ use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\Trix;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Date;
+use App\Rules\UserNovelRule;
 
 class Novel extends Resource
 {
@@ -29,6 +30,8 @@ class Novel extends Resource
      *
      * @var string
      */
+
+    public static $group = '借阅';
     public static $model = 'App\Models\Novel';
 
     /**
@@ -53,6 +56,15 @@ class Novel extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
+     public static function label()
+     {
+         return "书（借阅）";
+     }
+
+     public static function singularLabel()
+     {
+         return "书（借阅）";
+     }
 
      public function title()
        {
@@ -72,7 +84,9 @@ class Novel extends Resource
                 ],
             ]),
             Text::make('副标题','sub_title')->hideFromIndex(),
-            Text::make('条形码','barcode')->hideFromIndex(),
+            Text::make('条形码','barcode')
+            ->rules('required', 'max:255')
+            ->hideFromIndex(),
             Text::make('库存数（包括借出）','stock')
                 ->rules('required', 'max:255'),
             Text::make('已借出','rent_count')
@@ -111,7 +125,8 @@ class Novel extends Resource
                   ->actionText('添加') // Customize the "add row" button text
                   ->withMeta(['value'=>$this->extras ? $this->extras : ["meta_title"=>"", "meta_description"=>""]]),
 
-            BelongsToMany::make('users')->searchable()
+            BelongsToMany::make('用户','users','App\Nova\User')->searchable()
+                  ->creationRules('required',new UserNovelRule($request->route('resourceId')))
                   ->fields(new Fields\NovelUserFields),
 
         ];

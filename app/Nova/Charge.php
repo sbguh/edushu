@@ -3,12 +3,8 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-
-use Laravel\Nova\Http\Requests\NovaRequest;
-
-use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\Textarea;
@@ -19,24 +15,27 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\BelongsTo;
 
 
-class Book extends Resource
+class Charge extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-     public static $group = '电子书'; 
-    public static $model = 'App\Models\Book';
+    public static $group = 'user';
+    public static $model = 'App\Models\Charge';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'charge_number';
 
     /**
      * The columns that should be searched.
@@ -44,8 +43,20 @@ class Book extends Resource
      * @var array
      */
     public static $search = [
-        'name','author'
+        'id','charge_number'
     ];
+
+    public static function label()
+    {
+        return "充值";
+    }
+
+    public static function singularLabel()
+    {
+        return "充值";
+    }
+
+
 
     /**
      * Get the fields displayed by the resource.
@@ -53,43 +64,19 @@ class Book extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-
-     public static function label()
-     {
-         return "电子书";
-     }
-
     public function fields(Request $request)
     {
         return [
-          ID::make()->sortable(),
+            ID::make()->sortable(),
 
-        //  Gravatar::make('Avatar', 'name')->maxWidth(50),
-
-          Text::make('name')
-              ->sortable()
-              ->rules('required', 'max:255'),
-          Text::make('author'),
-
-          Currency::make('price')->nullable()->hideFromIndex(),
-          /*
-          Image::make('image')->disk('edushu')->nullable()->thumbnail(function ($value, $disk) {
-              return $value? Storage::disk($disk)->url($value): null;
-          }),
-          */
-          Image::make('image')->disk('edushu')->nullable(),
-          File::make('audio')->disk('edushu')->nullable(),
-          Boolean::make('state'),
-          Boolean::make('on_sale'),
-          Markdown::make('description')->nullable()->hideFromIndex(),
-
-          HasMany::make('chapters'),
-          BelongsToMany::make('tags'),
-
-          BelongsToMany::make('categories'), //禁止删除的选项
-
-      //  BelongsToMany::make('categories','categories', 'App\Nova\Category'),
-
+            BelongsTo::make('user','user','App\Nova\User')->searchable(),
+            Text::make('charge_number')->help(
+                '可以为空，会自动创建新订单'
+            )->exceptOnForms(),
+            Number::make('amount')->rules('required')->help(
+                '金额'
+            ),
+            Textarea::make('备注','remark'),
         ];
     }
 

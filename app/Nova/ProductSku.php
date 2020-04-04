@@ -18,6 +18,7 @@ class ProductSku extends Resource
      *
      * @var string
      */
+    public static $group = 'product';  
     public static $model = 'App\Models\ProductSku';
 
     /**
@@ -35,6 +36,11 @@ class ProductSku extends Resource
     public static $search = [
         'id','title'
     ];
+
+    public static function label()
+    {
+        return "产品SKU";
+    }
 
     /**
      * Get the fields displayed by the resource.
@@ -56,7 +62,7 @@ class ProductSku extends Resource
             Markdown::make('description')->nullable()->hideFromIndex(),
 
             BelongsTo::make('product')->searchable(), //禁止删除的选项
-            
+
 
         ];
     }

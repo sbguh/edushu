@@ -2,13 +2,14 @@
 
 namespace App\Policies;
 
-use App\Models\Novel;
+use App\Models\Charge;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class NovelPolicy
+class ChargePolicy
 {
     use HandlesAuthorization;
+
 
     public function viewAny(User $user)
     {
@@ -18,16 +19,16 @@ class NovelPolicy
     }
 
 
-    public function view(User $user, Novel $novel)
+    public function view(User $user, Charge $charge)
     {
         //
         return true;
     }
 
-    public function update(User $user, Novel $novel)
+    public function update(User $user, Charge $charge)
     {
         //return false;
-        return true;
+        return false;
     }
 
     public function create(User $user)
@@ -41,26 +42,26 @@ class NovelPolicy
     {
         //
         //return false;
-        return true;
+        return false;
     }
 
 
-    public function restore(User $user, Novel $novel)
-    {
-        //
-        return true;
-    }
-
-
-    public function forceDelete(User $user, Novel $novel)
+    public function restore(User $user, Charge $charge)
     {
         //
         return false;
     }
 
-    public function trashed(User $user, Novel $novel)
+
+    public function forceDelete(User $user, Charge $charge)
     {
         //
         return false;
+    }
+
+    public function trashed(User $user, Charge $charge)
+    {
+        //
+        return true;
     }
 }

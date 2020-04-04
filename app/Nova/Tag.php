@@ -33,6 +33,11 @@ class Tag extends Resource
         'id',
     ];
 
+    public static function label()
+    {
+        return "标签";
+    }
+
     /**
      * Get the fields displayed by the resource.
      *

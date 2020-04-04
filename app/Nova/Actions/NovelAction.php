@@ -20,6 +20,7 @@ class NovelAction extends Action
      * @param  \Illuminate\Support\Collection  $models
      * @return mixed
      */
+     public $name = "还书";
      public static $title = '还书';
      public function title()
        {

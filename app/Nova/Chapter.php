@@ -28,6 +28,7 @@ class Chapter extends Resource
      *
      * @var string
      */
+    public static $group = '电子书';  
     public static $model = 'App\Models\Chapter';
 
     /**
@@ -45,6 +46,13 @@ class Chapter extends Resource
     public static $search = [
         'id',
     ];
+
+
+    public static function label()
+    {
+        return "电子书章节";
+    }
+
 
     /**
      * Get the fields displayed by the resource.

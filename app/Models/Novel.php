@@ -21,9 +21,12 @@ class Novel extends BaseModel
         'extras' => 'object',
         'features'  => 'object',
     ];
-
-
-
+/*
+    public function getRentCountAttribute()
+    {
+        return $this->users()->count();
+    }
+*/
     public function users()
       {
           return $this->belongsToMany('App\User', 'novel_user')->withPivot(['note','created_at','updated_at'])->withTimestamps()->using('App\Models\NovelUser');
