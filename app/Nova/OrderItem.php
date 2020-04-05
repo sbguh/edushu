@@ -31,7 +31,7 @@ class OrderItem extends Resource
      *
      * @var string
      */
-    public static $group = '订单'; 
+    public static $group = '订单';
     public static $model = 'App\Models\OrderItem';
 
     /**
@@ -71,6 +71,7 @@ class OrderItem extends Resource
             Textarea::make('review'),
 
             BelongsTo::make('productSku')->searchable(),
+            BelongsTo::make('product'),
             BelongsTo::make('order'),
         ];
     }

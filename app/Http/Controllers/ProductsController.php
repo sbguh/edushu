@@ -73,25 +73,30 @@ class ProductsController extends Controller
 
     public function pay_notify(Request $request){
 
-      \Log::info("pay_notify".$request);
-    $result = file_get_contents('php://input');
+      // \Log::info("pay_notify".$request);
 
-      \Log::info("pay_notify".$result);
+    $data = file_get_contents('php://input');
+    $obj = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
+    $json = json_encode($obj);
+    $result = json_decode($json, true);
+
+      \Log::info("pay_notify: out_trade_no ".$result['out_trade_no']);
         $order= Order::where('payment_no',$result['out_trade_no'])->first();
         if($order){
           if($order['sign']==$order->sign){
             $order->status="付款成功";
             $order->save();
-            $prepayId = $result['prepay_id']; //就是拿这个id 很重要
-            return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$order['total_fee']/100]);
+            //$prepayId = $result['prepay_id']; //就是拿这个id 很重要
+            //return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$order['total_fee']/100]);
           }else{
             $order->status="待付款";
             $order->save();
-            $prepayId = $result['prepay_id']; //就是拿这个id 很重要
-            return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$order['total_fee']/100]);
+            //$prepayId = $result['prepay_id']; //就是拿这个id 很重要
+            //return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$order['total_fee']/100]);
           }
         }
 
+      return [];
 
     }
 
@@ -114,7 +119,7 @@ class ProductsController extends Controller
         'total_amount'=> $productSku->price,
         'payment_method'=>'WeChat',
         'payment_no' => $no,
-        'status' =>"pending",
+        'status' =>"暂未付款",
         //'sign'=>$result['sign']
 
       ]);
