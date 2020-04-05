@@ -89,6 +89,7 @@ class ProductsController extends Controller
             $order->save();
 
             $charger_count = Charge::where('charge_number',$order->payment_no)->count();
+            $item= $order->items()->first();
             if($item->product->id==65&&$charger_count==0){
 
               $charge = new Charge([
