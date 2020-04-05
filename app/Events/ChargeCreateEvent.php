@@ -31,8 +31,8 @@ class ChargeCreateEvent
         $amount = $charge->amount;
         $balance = $charge->user->balance;
 
-        \Log::info("充值 金额".$amount);
-        \Log::info("充值 余额".$balance);
+      //  \Log::info("充值 金额".$amount);
+      //  \Log::info("充值 余额".$balance);
 
         $app = app('wechat.official_account');
         $user = $charge->user;

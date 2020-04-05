@@ -132,10 +132,10 @@ class ProductsController extends Controller
 
       $user   = $request->user();
       $skuId  = $request->input('skus');
-
+      $prefix = date('YmdHis');
 
       $productSku =ProductSku::find($skuId);
-      $no = 'wechatpay'.str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+      $no = 'wechat'.$prefix.str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
       $order = new Order([
         'total_amount'=> $productSku->price,
