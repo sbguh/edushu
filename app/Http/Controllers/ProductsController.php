@@ -81,7 +81,7 @@ class ProductsController extends Controller
     $json = json_encode($obj);
     $result = json_decode($json, true);
 
-      \Log::info("pay_notify: out_trade_no ".$result['out_trade_no']);
+    //  \Log::info("pay_notify: out_trade_no ".$result['out_trade_no']);
         $order= Order::where('payment_no',$result['out_trade_no'])->first();
         if($order){
           if($order['sign']==$order->sign){
@@ -90,7 +90,7 @@ class ProductsController extends Controller
 
             $orderitems = $order->items()->get();
             foreach($orderitems as $item){
-              if($item->product->name=="	会员账户充值 "){
+              if($item->product->id==65){
 
                 $charge = new Charge([
                   'amount'=>$order->total_amount,
@@ -102,7 +102,7 @@ class ProductsController extends Controller
 
                 $charge->user()->associate($order->user_id);
                 $charge->save();
-                
+
                 $order->ship_status="完成充值, 请查看余额";
                 $order->save();
               }
