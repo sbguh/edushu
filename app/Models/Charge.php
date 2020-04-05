@@ -36,10 +36,12 @@ class Charge extends Model
     {
 
       $this->attributes['amount'] = $value;
-      //\Log::info("this user:".$this->user);
+      \Log::info("this user balance:".$this->user);
       if($this->user){
         $this->user->balance +=$value;
         $this->user->save();
+
+        \Log::info("this user balance:".$this->user->balance);
 
       }
 
