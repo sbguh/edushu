@@ -49,6 +49,7 @@ class Order extends Model
         'ship_data',
         'extra',
         'sign',
+        'user_id'
     ];
 
     protected $casts = [

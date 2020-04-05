@@ -85,6 +85,11 @@ class ProductsController extends Controller
             $order->save();
             $prepayId = $result['prepay_id']; //就是拿这个id 很重要
             return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$order['total_fee']/100]);
+          }else{
+            $order->status="待付款";
+            $order->save();
+            $prepayId = $result['prepay_id']; //就是拿这个id 很重要
+            return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$order['total_fee']/100]);
           }
         }
       }
@@ -105,14 +110,12 @@ class ProductsController extends Controller
 
       $productSku =ProductSku::find($skuId);
       $no = 'wechatpay'.str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-
-      $order = Order::create([
-        'user_id'=>$user->id,
+      $user->order()->create([
         'total_amount'=> $productSku->price,
         'payment_method'=>'WeChat',
         'payment_no' => $no,
         'status' =>"pending",
-        'sign'=>$result['sign']
+        //'sign'=>$result['sign']
 
       ]);
 
