@@ -28,7 +28,7 @@ class Order extends Resource
      *
      * @var string
      */
-    public static $group = '订单';  
+    public static $group = '订单';
     public static $model = 'App\Models\Order';
 
     /**
@@ -73,10 +73,10 @@ class Order extends Resource
             Textarea::make('remark')->hideFromIndex(),
             Date::make('paid_at')->hideFromIndex(),
             Text::make('payment_method'),
-            Text::make('payment_no')->hideFromIndex(),
-            Text::make('refund_status'),
+            Text::make('payment_no'),
+            Text::make('refund_status')->hideFromIndex(),
             Text::make('refund_no')->hideFromIndex(),
-            Boolean::make('closed'),
+            Boolean::make('closed')->hideFromIndex(),
             Boolean::make('reviewed')->hideFromIndex(),
             Text::make('ship_status'),
             Text::make('status'),
