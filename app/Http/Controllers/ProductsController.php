@@ -94,7 +94,7 @@ class ProductsController extends Controller
 
               $charge = new Charge([
                 'charge_number'=>$order->payment_no,
-                'amount'=>$order->total_amount,
+                //'amount'=>$order->total_amount,
                 'remark'=>'自动入账',
                 'type' => "自动在线充值",
                 //'sign'=>$result['sign']
@@ -102,6 +102,7 @@ class ProductsController extends Controller
               ]);
 
               $charge->user()->associate($order->user_id);
+              $charge->amount = $order->total_amount;
               $charge->save();
 
               $order->ship_status="完成充值, 请查看余额";
