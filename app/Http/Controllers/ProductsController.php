@@ -74,10 +74,13 @@ class ProductsController extends Controller
     public function pay_notify(Request $request){
 
       $result = $request->getContent();
+      \Log::info("pay_notify".$result);
+      if(isset($result['return_code'])){
+        $order= Order::where('payment_no',$result['out_trade_no'])->first();
+        if($order['sign']==$order->sign){
+          $order->status="付款成功";
+        }
 
-      $order= Order::where('payment_no',$result['out_trade_no'])->first();
-      if($order['sign']=$order->sign){
-        $order->status="付款成功";
       }
 
 
