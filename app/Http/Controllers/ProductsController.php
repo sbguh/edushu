@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductSku;
 use App\Exceptions\InvalidRequestException;
-
-
+use App\Models\Order;
+use App\Models\OrderItem;
 class ProductsController extends Controller
 {
     //
@@ -71,7 +71,17 @@ class ProductsController extends Controller
         return view('products.show', ['product' => $product, 'favored' => $favored]);
     }
 
+    public function pay_notify(Request $request){
 
+      $result = $request->getContent();
+
+      $order= Order::where('payment_no',$result['out_trade_no'])->first();
+      if($order['sign']=$order->sign){
+        $order->status="付款成功";
+      }
+
+
+    }
     public function wechatpay(Request $request)
     {
 
@@ -83,6 +93,7 @@ class ProductsController extends Controller
       $user   = $request->user();
       $skuId  = $request->input('skus');
 
+
       $productSku =ProductSku::find($skuId);
       $no = 'wechatpay'.str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $app = app('wechat.payment');
@@ -90,16 +101,34 @@ class ProductsController extends Controller
         $result = $app->order->unify([
           'body' => $productSku->product->name,
           'out_trade_no' => $no,
-          'total_fee' => $productSku->price,
+          'total_fee' => $productSku->price *100,
           //'spbill_create_ip' => '123.12.12.123', // 可选，如不传该参数，SDK 将会自动获取相应 IP 地址
           //'notify_url' => 'https://pay.weixin.qq.com/wxpay/pay.action', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
           'trade_type' => 'JSAPI', // 请对应换成你的支付方式对应的值类型
           'openid' => $user->openid,
       ]);
 
-      if($result->return_code=="SUCCESS"){
-          $prepayId = $result->prepay_id; //就是拿这个id 很重要
-          return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId]);
+      if($result['return_code']=="SUCCESS"){
+
+        $order = Order::create([
+          'user_id'=>$user->id,
+          'total_amount'=> $productSku->price,
+          'payment_method'=>'WeChat',
+          'payment_no' => $no,
+          'status' =>"pending",
+          'sign'=>$result['sign']
+
+        ]);
+
+        $order_item =OrderItem::create([
+          'order_id'=> $order->id,
+          'product_id' =>  $productSku->product->id,
+          'product_sku_id'=> $productSku->id,
+          'amount' => 1,
+          'price'=>$productSku->price
+        ]);
+          $prepayId = $result['prepay_id']; //就是拿这个id 很重要
+          return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$productSku->price]);
 
       }
 
