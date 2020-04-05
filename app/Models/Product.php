@@ -25,7 +25,7 @@ class Product extends Model
 
     protected $fillable = [
                     'name', 'description', 'image', 'on_sale',
-                    'rating', 'sold_count', 'review_count', 'price','details','features','images','image','category_id','extras'
+                    'rating', 'sold_count', 'review_count', 'price','details','features','images','image','category_id','extras','virtual'
     ];
 
     protected $table = 'products';
@@ -37,6 +37,7 @@ class Product extends Model
         'features'       => 'object',
         'extra_features' => 'object',
         'images'       => 'array',
+        'virtual' => 'boolean', 
     ];
 
     public $translatable = ['features', 'extras'];

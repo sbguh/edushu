@@ -28,7 +28,7 @@ class Product extends Resource
      *
      * @var string
      */
-    public static $group = 'product'; 
+    public static $group = 'product';
     public static $model = 'App\Models\Product';
 
     /**
@@ -81,7 +81,8 @@ class Product extends Resource
                     */
                     Image::make('图片','image')->disk('edushu')->nullable(),
                     Boolean::make('是否销售','on_sale'),
-                    Heading::make('详细信息'),
+                    Boolean::make('虚拟物品','virtual')->hideFromIndex(),
+                    Heading::make('详细信息')->hideFromIndex(),
                     Trix::make('详细描述','description')->alwaysShow()->nullable()->hideFromIndex()->withFiles('edushu'),
 
 

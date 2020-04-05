@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth']], function() {
 Route::post('orders', 'OrdersController@store')->name('orders.store');
 
 
+Route::post('checkout/wechatpay', 'ProductsController@wechatpay')->name('checkout.wechatpay');
 
 });
 

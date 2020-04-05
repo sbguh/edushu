@@ -48,7 +48,7 @@ class ChargeCreateEvent
                     'keyword2' => $charge->charge_number,
                     'keyword3' =>  $charge->amount,
                     'keyword4' => $charge->created_at,
-                    'remark' => "隆回共读书房感谢您的使用。你账户余额为: ".$balance
+                    'remark' => "隆回共读书房感谢您的使用，您当前账户余额为: ".$balance
 
                 ],
             ]);

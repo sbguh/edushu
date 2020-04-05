@@ -18,6 +18,10 @@
           <div class="review_count">累计评价 <span class="count">{{ $product->review_count }}</span></div>
           <div class="rating" title="评分 {{ $product->rating }}">评分 <span class="count">{{ str_repeat('★', floor($product->rating)) }}{{ str_repeat('☆', 5 - floor($product->rating)) }}</span></div>
         </div>
+        @if($product->virtual)
+          <form class="form-horizontal" role="form" action="{{ route('checkout.wechatpay') }}" method="post">
+            {{ csrf_field() }}
+        @endif
         <div class="skus">
           <label>选择</label>
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -33,16 +37,40 @@
               </label>
             @endforeach
           </div>
+
+          @if (count($errors) > 0)
+            <div class="alert alert-danger">
+              <ul>
+                  @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                  @endforeach
+              </ul>
+            </div>
+            @endif
+
+
         </div>
+        @if($product->virtual==false)
         <div class="cart_amount"><label>数量</label><input type="text" class="form-control form-control-sm" value="1"><span>件</span><span class="stock"></span></div>
+        @endif
+
         <div class="buttons">
           @if($favored)
             <button class="btn btn-danger btn-disfavor">取消收藏</button>
           @else
             <button class="btn btn-success btn-favor">❤ 收藏</button>
           @endif
-          <button class="btn btn-primary btn-add-to-cart">加入购物车</button>
+          @if($product->virtual)
+              <button class="btn btn-primary btn-add-to-cart">立即付款</button>
+          @else
+            <button class="btn btn-primary btn-add-to-cart">加入购物车</button>
+          @endif
         </div>
+
+        @if($product->virtual)
+        </form>
+        @endif
+
 
       </div>
     </div>
