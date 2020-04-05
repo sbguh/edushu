@@ -77,12 +77,34 @@ class ProductsController extends Controller
       \Log::info("pay_notify".$result);
       if(isset($result['return_code'])){
         $order= Order::where('payment_no',$result['out_trade_no'])->first();
-        if($order['sign']==$order->sign){
-          $order->status="付款成功";
+        if($order){
+          if($order['sign']==$order->sign){
+            $order->status="付款成功";
+          }
+        }else{
+
+          $order = Order::create([
+            'user_id'=>$user->id,
+            'total_amount'=> $productSku->price,
+            'payment_method'=>'WeChat',
+            'payment_no' => $no,
+            'status' =>"pending",
+            'sign'=>$result['sign']
+
+          ]);
+
+          $order_item =OrderItem::create([
+            'order_id'=> $order->id,
+            'product_id' =>  $productSku->product->id,
+            'product_sku_id'=> $productSku->id,
+            'amount' => 1,
+            'price'=>$productSku->price
+          ]);
+            $prepayId = $result['prepay_id']; //就是拿这个id 很重要
+            return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$productSku->price]);
+
         }
-
       }
-
 
     }
     public function wechatpay(Request $request)
@@ -111,29 +133,6 @@ class ProductsController extends Controller
           'openid' => $user->openid,
       ]);
 
-      if($result['return_code']=="SUCCESS"){
-
-        $order = Order::create([
-          'user_id'=>$user->id,
-          'total_amount'=> $productSku->price,
-          'payment_method'=>'WeChat',
-          'payment_no' => $no,
-          'status' =>"pending",
-          'sign'=>$result['sign']
-
-        ]);
-
-        $order_item =OrderItem::create([
-          'order_id'=> $order->id,
-          'product_id' =>  $productSku->product->id,
-          'product_sku_id'=> $productSku->id,
-          'amount' => 1,
-          'price'=>$productSku->price
-        ]);
-          $prepayId = $result['prepay_id']; //就是拿这个id 很重要
-          return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$productSku->price]);
-
-      }
 
 
         return [];
