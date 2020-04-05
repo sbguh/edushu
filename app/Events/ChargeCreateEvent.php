@@ -37,6 +37,12 @@ class ChargeCreateEvent
         $app = app('wechat.official_account');
         $user = $charge->user;
         $openid = $user->openid;
+        if(strpos("wechat",$charge->charge_number)===false){
+          $title_send = "人工充值"
+        }else{
+          $title_send =  "微信在线自动充值"
+        }
+
         if($openid&&env('WE_CHAT_DISPLAY', true)){
               $app->template_message->send([
                 'touser' => $openid,
@@ -44,11 +50,11 @@ class ChargeCreateEvent
                 'url' => 'https://book.edushu.co',
                 'data' => [
                     'first' => $user->name.'您好！本次充值成功',
-                    'keyword1' => "现金充值",
+                    'keyword1' => $title_send,
                     'keyword2' => $charge->charge_number,
                     'keyword3' =>  $charge->amount,
                     'keyword4' => $charge->created_at,
-                    'remark' => "隆回共读书房感谢您的使用，您当前账户余额为: ".$balance
+                    'remark' => "隆回共读书房感谢您的使用，您当前账户余额: ".$balance
 
                 ],
             ]);
