@@ -73,11 +73,10 @@ class ProductsController extends Controller
 
     public function pay_notify(Request $request){
 
-      $result = file_get_contents('php://input');
-    //  $user   = $request->user();
+      \Log::info("pay_notify".$request);
+    $result = file_get_contents('php://input');
 
       \Log::info("pay_notify".$result);
-      if(isset($result['return_code'])){
         $order= Order::where('payment_no',$result['out_trade_no'])->first();
         if($order){
           if($order['sign']==$order->sign){
@@ -92,7 +91,7 @@ class ProductsController extends Controller
             return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$order['total_fee']/100]);
           }
         }
-      }
+
 
     }
 
@@ -110,7 +109,8 @@ class ProductsController extends Controller
 
       $productSku =ProductSku::find($skuId);
       $no = 'wechatpay'.str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-      $user->order()->create([
+
+      $order = new Order([
         'total_amount'=> $productSku->price,
         'payment_method'=>'WeChat',
         'payment_no' => $no,
@@ -119,13 +119,17 @@ class ProductsController extends Controller
 
       ]);
 
-      $order_item =OrderItem::create([
-        'order_id'=> $order->id,
-        'product_id' =>  $productSku->product->id,
-        'product_sku_id'=> $productSku->id,
-        'amount' => 1,
-        'price'=>$productSku->price
-      ]);
+      $order->user()->associate($user);
+      $order->save();
+
+       $item = $order->items()->make([
+         'amount' => 1,
+         'price'=>$productSku->price
+       ]);
+
+      $item->product()->associate($productSku->product_id);
+      $item->productSku()->associate($productSku);
+      $item->save();
 
         $app = app('wechat.payment');
 
@@ -140,14 +144,14 @@ class ProductsController extends Controller
       ]);
 
       if($result['return_code']=="SUCCESS"){
-
+        \Log::info("log sign".$result['sign']);
+          $order->sign =  $result['sign'];
+          $order->save();
           $prepayId = $result['prepay_id']; //就是拿这个id 很重要
           return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$productSku->price]);
 
       }
 
-
-        return [];
     }
 
 
