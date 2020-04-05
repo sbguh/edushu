@@ -8,6 +8,7 @@ use App\Models\ProductSku;
 use App\Exceptions\InvalidRequestException;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Charge;
 class ProductsController extends Controller
 {
     //
@@ -86,6 +87,26 @@ class ProductsController extends Controller
           if($order['sign']==$order->sign){
             $order->status="付款成功";
             $order->save();
+
+            $orderitems = $order->items()->get();
+            foreach($orderitems as $item){
+              if($item->product->name=="	会员账户充值 "){
+
+                $charge = new Charge([
+                  'amount'=>$order->total_amount,
+                  'remark'=>'自动入账',
+                  'type' => "自动在线充值",
+                  //'sign'=>$result['sign']
+
+                ]);
+
+                $charge->user()->associate($order->user_id);
+                $charge->save();
+                
+                $order->ship_status="完成充值, 请查看余额";
+                $order->save();
+              }
+            }
             //$prepayId = $result['prepay_id']; //就是拿这个id 很重要
             //return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$order['total_fee']/100]);
           }else{
