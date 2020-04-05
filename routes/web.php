@@ -13,7 +13,7 @@
 
 //Route::get('/', 'PagesController@root')->name('root');
 Route::redirect('/', '/books')->name('root');
-Route::any('payments/wechat-notify', 'ProductsController@pay_notify')->name('checkout.notify');
+
 Route::any('/subscribe', 'WeChatController@subscribe')->name('wechat.subscribe');
 
 
@@ -69,7 +69,7 @@ Route::get('products/{product}', 'ProductsController@show')->name('products.show
 Route::group(['middleware' => ['web']], function () {
 
 Route::any('/wechat', 'WeChatController@serve');
-
+Route::any('payments/wechat-notify', 'ProductsController@pay_notify')->name('checkout.notify');
 });
 
 
