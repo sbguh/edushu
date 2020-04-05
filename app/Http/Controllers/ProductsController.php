@@ -73,7 +73,7 @@ class ProductsController extends Controller
 
     public function pay_notify(Request $request){
 
-      $result = $request->getContent();
+      $result = file_get_contents('php://input');
       \Log::info("pay_notify".$result);
       if(isset($result['return_code'])){
         $order= Order::where('payment_no',$result['out_trade_no'])->first();
@@ -107,6 +107,7 @@ class ProductsController extends Controller
       }
 
     }
+
     public function wechatpay(Request $request)
     {
 
@@ -128,11 +129,34 @@ class ProductsController extends Controller
           'out_trade_no' => $no,
           'total_fee' => $productSku->price *100,
           //'spbill_create_ip' => '123.12.12.123', // 可选，如不传该参数，SDK 将会自动获取相应 IP 地址
-          //'notify_url' => 'https://pay.weixin.qq.com/wxpay/pay.action', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+          'notify_url' => route('checkout.notify'), // 支付结果通知网址，如果不设置则会使用配置里的默认地址
           'trade_type' => 'JSAPI', // 请对应换成你的支付方式对应的值类型
           'openid' => $user->openid,
       ]);
 
+      if($result['return_code']=="SUCCESS"){
+
+        $order = Order::create([
+          'user_id'=>$user->id,
+          'total_amount'=> $productSku->price,
+          'payment_method'=>'WeChat',
+          'payment_no' => $no,
+          'status' =>"pending",
+          'sign'=>$result['sign']
+
+        ]);
+
+        $order_item =OrderItem::create([
+          'order_id'=> $order->id,
+          'product_id' =>  $productSku->product->id,
+          'product_sku_id'=> $productSku->id,
+          'amount' => 1,
+          'price'=>$productSku->price
+        ]);
+          $prepayId = $result['prepay_id']; //就是拿这个id 很重要
+          return view('products.wechatpay', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$productSku->price]);
+
+      }
 
 
         return [];

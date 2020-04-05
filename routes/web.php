@@ -53,7 +53,7 @@ Route::post('checkout/wechatpay', 'ProductsController@wechatpay')->name('checkou
 
 });
 
-Route::any('payments/wechat-notify', 'ProductsController@pay_notify')->name('checkout.wechatpay');
+Route::any('payments/wechat-notify', 'ProductsController@pay_notify')->name('checkout.notify');
 
     Route::post('wechat/send_sms/{phone}', 'WeChatController@send_sms')->name('wechat.send_sms');
 
