@@ -58,6 +58,11 @@ class Order extends Resource
          return "订单";
      }
 
+     public static function indexQuery(NovaRequest $request, $query)
+     {
+         return $query->where('status', 'paid');
+     }
+
     public function fields(Request $request)
     {
         return [

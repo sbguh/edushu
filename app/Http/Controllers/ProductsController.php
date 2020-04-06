@@ -74,6 +74,8 @@ class ProductsController extends Controller
 
     public function pay_notify(Request $request){
 
+      \Log::info("pay_notify begin");
+      $app = app('wechat.payment');
 
       $response = $app->handlePaidNotify(function($message, $fail){
           // 使用通知里的 "微信支付订单号" 或者 "商户订单号" 去自己的数据库找到订单
@@ -88,7 +90,12 @@ class ProductsController extends Controller
 
           if ($message['return_code'] === 'SUCCESS') { // return_code 表示通信状态，不代表支付状态
               // 用户是否支付成功
-              if (array_get($message, 'result_code') === 'SUCCESS'&&$message['sign']==$order->sign) {
+
+              \Log::info("pay_notify SUCCESS");
+
+              if (array_get($message, 'result_code') === 'SUCCESS') {
+                \Log::info("pay_notify write data");
+
                   $order->paid_at = time(); // 更新支付时间为当前时间
                   $order->status = 'paid';
 

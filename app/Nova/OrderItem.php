@@ -62,6 +62,17 @@ class OrderItem extends Resource
          return "订单记录";
      }
 
+     public static function indexQuery(NovaRequest $request, $query)
+     {
+         return $query->where(function ($query) {
+                                $query->select('status')
+                                    ->from('orders')
+                                    ->whereColumn('order_id', 'orders.id')
+                                    ->limit(1);
+                            }, 'paid');
+     }
+
+
     public function fields(Request $request)
     {
         return [
