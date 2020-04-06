@@ -111,7 +111,7 @@ class Novel extends Resource
             Heading::make('详细信息'),
             Text::make('作者','author'),
             Text::make('出版社','press')->hideFromIndex(),
-            Trix::make('详细描述','description')->alwaysShow()->nullable()->hideFromIndex()->withFiles('edushu'),
+            Trix::make('详细描述','description')->alwaysShow()->nullable()->hideFromIndex()->withFiles('edushu'), //带附件
 
             KeyValue::make('额外书本信息','features')
                   ->keyLabel('属性') // Customize the key heading

@@ -20894,6 +20894,10 @@ a.plyr__control::before {
   display: none !important;
 }
 
+body {
+  background-color: white;
+}
+
 .footer {
   position: fixed;
   bottom: 0;
