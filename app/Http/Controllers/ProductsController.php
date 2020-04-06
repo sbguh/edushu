@@ -9,6 +9,8 @@ use App\Exceptions\InvalidRequestException;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Charge;
+use Auth;
+
 class ProductsController extends Controller
 {
     //
@@ -64,7 +66,7 @@ class ProductsController extends Controller
         if(!Auth::check()) {
             return redirect(route('wechatoauth'));
         }
-        
+
 
         $favored = false;
         // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
