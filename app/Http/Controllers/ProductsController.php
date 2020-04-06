@@ -60,6 +60,11 @@ class ProductsController extends Controller
         }
 
 
+        session(['return_wechat' =>['url'=>route('products.show',$product->id),'name'=> $product->name] ]);
+        if(!Auth::check()) {
+            return redirect(route('wechatoauth'));
+        }
+        
 
         $favored = false;
         // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
