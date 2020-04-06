@@ -499,7 +499,7 @@ file_put_contents(base_path(). '/public/uploads/images/qrcode/'.$result['ticket'
 
            if (!hash_equals($verifyData['code'],$request->get('verify_code'))) {
                // 返回401
-                return view('auth.phone',['user' => $user])->withErrors('验证码错误'); 
+                return view('auth.phone',['user' => $user])->withErrors('验证码错误');
                //throw new AuthenticationException('验证码错误');
            }
            //dd($request->get('verify_code'));
@@ -628,13 +628,23 @@ $password = 'Edushuco2020!@';
 
           session(['wechatuser' => $openid]);
 
-          $lasturl =UserLastUrl::where('user_id',$user_info->id)->first();
-          if(UserLastUrl::where('user_id',$user_info->id)->count()){
-            $lasturl =UserLastUrl::where('user_id',$user_info->id)->first();
-            return redirect($lasturl->url);
+          if(session('return_wechat')){
+              return redirect(session('return_wechat')['url']);
           }else{
-            return redirect(route('books.index'));
+            //return redirect(route('books.index'));
+
+            $lasturl =UserLastUrl::where('user_id',$user_info->id)->first();
+            if(UserLastUrl::where('user_id',$user_info->id)->count()){
+              $lasturl =UserLastUrl::where('user_id',$user_info->id)->first();
+              return redirect($lasturl->url);
+            }else{
+              return redirect(route('books.index'));
+            }
+            
           }
+
+
+
 
           //return redirect(route('books.index'));
 
