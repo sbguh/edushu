@@ -37,8 +37,8 @@ class ChargeCreateEvent
         $app = app('wechat.official_account');
         $user = $charge->user;
         $openid = $user->openid;
-        if(strpos("wechat",$charge->charge_number)==false){
-          $title_send = "人工充值";
+        if(strpos($charge->charge_number,"wechat")===false){
+          $title_send = "会员余额充值";
         }else{
           $title_send =  "微信在线自动充值";
         }

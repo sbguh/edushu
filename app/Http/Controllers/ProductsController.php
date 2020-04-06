@@ -74,8 +74,64 @@ class ProductsController extends Controller
 
     public function pay_notify(Request $request){
 
-      // \Log::info("pay_notify".$request);
 
+      $response = $app->handlePaidNotify(function($message, $fail){
+          // 使用通知里的 "微信支付订单号" 或者 "商户订单号" 去自己的数据库找到订单
+
+          $order= Order::where('payment_no',$message['out_trade_no'])->first();
+
+          if (!$order || $order->paid_at) { // 如果订单不存在 或者 订单已经支付过了
+              return true; // 告诉微信，我已经处理完了，订单没找到，别再通知我了
+          }
+
+          ///////////// <- 建议在这里调用微信的【订单查询】接口查一下该笔订单的情况，确认是已经支付 /////////////
+
+          if ($message['return_code'] === 'SUCCESS') { // return_code 表示通信状态，不代表支付状态
+              // 用户是否支付成功
+              if (array_get($message, 'result_code') === 'SUCCESS'&&$message['sign']==$order->sign) {
+                  $order->paid_at = time(); // 更新支付时间为当前时间
+                  $order->status = 'paid';
+
+                  $charger_count = Charge::where('charge_number',$order->payment_no)->count();
+
+                  $item= $order->items()->first();
+                  if($item->product->id==65&&$charger_count==0){
+
+                    $charge = new Charge([
+                      'charge_number'=>$order->payment_no,
+                      //'amount'=>$order->total_amount,
+                      'remark'=>'自动入账',
+                      'type' => "自动在线充值",
+                      //'sign'=>$result['sign']
+
+                    ]);
+
+                    $charge->user()->associate($order->user_id);
+                    $charge->amount = $order->total_amount;
+                    $charge->save();
+
+                    $order->ship_status="完成充值";
+                    $order->save();
+                  }
+
+
+              // 用户支付失败
+              } elseif (array_get($message, 'result_code') === 'FAIL') {
+                  $order->status = 'paid_fail';
+              }
+          } else {
+              return $fail('通信失败，请稍后再通知我');
+          }
+
+          $order->save(); // 保存订单
+
+          return true; // 返回处理完成
+      });
+
+      return $response;
+
+      // \Log::info("pay_notify".$request);
+/*
     $data = file_get_contents('php://input');
     $obj = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
     $json = json_encode($obj);
@@ -118,8 +174,8 @@ class ProductsController extends Controller
           }
         }
 
-      return [];
-
+      return true;
+*/
     }
 
     public function wechatpay(Request $request)
