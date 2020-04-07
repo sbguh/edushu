@@ -22,6 +22,7 @@ use Laravel\Nova\Fields\Date;
 use App\Rules\UserNovelRule;
 use Laravel\Nova\Fields\BelongsTo;
 
+
 class Report extends Resource
 {
     /**
@@ -29,6 +30,7 @@ class Report extends Resource
      *
      * @var string
      */
+
     public static $group = '学员管理';
     public static $model = 'App\Models\Report';
 
@@ -69,8 +71,20 @@ class Report extends Resource
     {
         return [
             ID::make()->sortable(),
-            BelongsTo::make('User')->searchable(),
-            BelongsTo::make('班级名称','classroom','App\Nova\ClassRoom'),
+
+
+
+            Text::make('学员报告','report_number')
+                ->sortable()
+                ->rules('required', 'max:255')
+                ->withMeta([
+                'extraAttributes' => [
+                    'placeholder' => '报告标题',
+                ],
+            ])->readonly(),
+
+            BelongsTo::make('学员','userclassroom','App\Nova\UserClassRoom')->hideWhenUpdating()->searchable(),
+
             Text::make('标题','title')
                 ->sortable()
                 ->rules('required', 'max:255')
@@ -80,9 +94,10 @@ class Report extends Resource
                 ],
             ]),
 
-            
+
 
             Text::make('上课时间','date_time')->rules('required', 'max:255'),
+            Text::make('上课老师','teacher')->rules('required', 'max:255'),
             Text::make('简要描述','detail')
                 ->sortable()
                 ->rules('required', 'max:255')

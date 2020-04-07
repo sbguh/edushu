@@ -20,6 +20,9 @@ use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\Trix;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\Number;
+use App\Nova\Fields\UserClassRoomFields;
+
 
 class ClassRoom extends Resource
 {
@@ -44,7 +47,7 @@ class ClassRoom extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id','name'
     ];
 
     public static function label()
@@ -86,6 +89,15 @@ class ClassRoom extends Resource
               ],
           ]),
 
+          Number::make('总课时','hours')
+              ->sortable()
+              ->rules('required', 'max:255')
+              ->withMeta([
+              'extraAttributes' => [
+                  'placeholder' => '总课时',
+              ],
+          ]),
+
           Text::make('上课时间','begain_time')
               ->sortable()
               ->rules('required', 'max:255')
@@ -93,7 +105,7 @@ class ClassRoom extends Resource
               'extraAttributes' => [
                   'placeholder' => '上课时间',
               ],
-          ]),
+          ])->hideFromIndex(),
           Text::make('开课时间','start_time')
               ->sortable()
               ->rules('required', 'max:255')
@@ -101,7 +113,7 @@ class ClassRoom extends Resource
               'extraAttributes' => [
                   'placeholder' => '开课时间',
               ],
-          ]),
+          ])->hideFromIndex(),
 
           Text::make('上课地点','address')
               ->sortable()
@@ -110,23 +122,23 @@ class ClassRoom extends Resource
               'extraAttributes' => [
                   'placeholder' => '上课地点',
               ],
-          ]),
-          Boolean::make("是否群发",'delivery'),
+          ])->hideFromIndex(),
+          Boolean::make("是否群发",'delivery')->onlyOnForms(),
           Textarea::make('群发内容','description')->alwaysShow()->nullable()->hideFromIndex()->help(
             '群发!!!!！如果不为空则群发，特别注意！需要修改上面信息且不群发需要清空这里'
-          ),
+          )->onlyOnForms(),
 
 
-          Text::make('image')->nullable()->hideFromIndex()->help(
+          Text::make('image')->nullable()->onlyOnForms()->help(
           '如果为空，会自动生成'
-          ),
+          )->onlyOnForms(),
                       Text::make('media_id')->nullable()->hideFromIndex()->help(
               'image_group 上传后，微信公众号生成的永久素材ID'
-          ),
+          )->onlyOnForms(),
                       Image::make('image_group')->disk('edushu')->nullable()->hideFromIndex()->help(
               '可以上传微信群二维码图片到微信公众号永久素材'
-          ),
-          BelongsToMany::make('users')->searchable(),
+          )->onlyOnForms(),
+          HasMany::make('users','users', 'App\Nova\User'),
 
         ];
 

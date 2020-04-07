@@ -18,6 +18,11 @@ class UserPolicy
          return true;
      }
 
+     public function attachClassRoom(User $user)
+      {
+          return false;
+      }
+
      public function attachUserHistory(User $user)
       {
           return false;

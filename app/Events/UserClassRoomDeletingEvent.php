@@ -15,7 +15,7 @@ use App\Models\UserClassRoom;
 
 use App\Models\ClassRoom;
 use App\User;
-class UserClassRoomCreatingEvent
+class UserClassRoomDeletingEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -31,9 +31,12 @@ class UserClassRoomCreatingEvent
     {
 
         //
+        \Log::info("UserClassRoomDeletingEvent hours".$userclassroom->hours);
+          if($userclassroom->hours > 0){
+          //  return false;
+          \Log::info("UserClassRoomDeletingEvent action");
+          }
 
-          $classroom =ClassRoom::find($userclassroom->classroom_id);
-          $userclassroom->hours = $classroom->hours;
         //  $userclassroom->save();
 
         //$usernovel->note = 'liyuping';

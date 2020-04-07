@@ -12,20 +12,18 @@ use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\MorphMany;
-use Laravel\Nova\Fields\MorphToMany;
 use App\Nova\Fields\NovelUserFields;
 use App\Nova\Fields\NovelUserHistoryFields;
 use App\Rules\NovelUserRule;
 use Laravel\Nova\Fields\Boolean;
-class User extends Resource
+class UserTwo extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
+    public static $displayInNavigation = false;
     public static $group = 'user';
     public static $model = 'App\User';
     public static $perPageOptions = [50, 100, 150];
@@ -71,54 +69,8 @@ class User extends Resource
             Text::make('备注','remark'),
             //Text::make('手机号码','phone_number')->rules('required','unique:users'),
             Text::make('手机号码','phone_number'),
-            Text::make('已借书','rent_count')->onlyOnDetail(),
-            Text::make('最多可借','limit_count'),
-            Boolean::make('正常使用','enable'),
-            Text::make('押金','deposit')->exceptOnForms(),
-            Text::make('余额','balance')->exceptOnForms(),
-            Date::make('生日','birthday')->pickerFormat('Y.m.d')->hideFromIndex(),
-            Select::make('性别','gender')->options([
-                '0' => '女',
-                '1' => '男',
-            ])->hideFromIndex(),
 
-            Textarea::make('编辑手机短信信息','description')->help(
-                '可发短信信息'
-            )->hideFromIndex(),
-            Textarea::make('编辑微信信息','wechat_description')->help(
-                '发微信公众号客服信息'
-            )->hideFromIndex(),
-
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}')->hideFromIndex(),
-
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', 'string', 'min:8')
-                ->updateRules('nullable', 'string', 'min:8'),
-            //HasMany::make('orders'),
-            //HasMany::make('order_items'),
-          //  HasMany::make('UserLog','logs'),
-
-            BelongsToMany::make('图书','novels','App\Nova\Novel')->searchable()
-            ->creationRules('required',new NovelUserRule($request->route('resourceId')))
-            ->fields(new NovelUserFields)
-           ->actions(function () {
-                return [
-                    new Actions\NovelAction,
-                ];
-            }),
-
-            BelongsToMany::make('历史记录','history_novels', 'App\Nova\NovelUserHistory')->searchable()
-            ->fields(new NovelUserHistoryFields),
-
-            HasMany::make('充值记录','chargers','App\Nova\Charge'),
-
-            BelongsToMany::make('课程','classrooms', 'App\Nova\ClassRoom')->searchable(),
-
+            BelongsToMany::make('课程','classrooms', 'App\Nova\ClassRoom')->searchable()->fields(new Fields\UserClassRoomFields),
 
 
 

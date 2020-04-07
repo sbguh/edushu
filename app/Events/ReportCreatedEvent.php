@@ -10,11 +10,11 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-use App\Models\UserClassRoom;
+use App\Models\Report;
 
 use App\Models\ClassRoom;
 use App\User;
-class UserClassRoomCreatedEvent
+class ReportCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -26,35 +26,35 @@ class UserClassRoomCreatedEvent
      * @return void
      */
   //  public $usernovel;
-    public function __construct(UserClassRoom $userclassroom)
+    public function __construct(Report $report)
     {
 
         //
-        $classroom =ClassRoom::find($userclassroom->classroom_id);
+        $classroom =$report->userclassroom->classroom;
+        $user =$report->userclassroom->user;
 
-
-
+        \Log::info("create ReportCreatedEvent user".$user->name);
+        \Log::info("create ReportCreatedEvent classroom".$classroom->name);
 
         $app = app('wechat.official_account');
-        $user = User::find($userclassroom->user_id);
+
         $openid = $user->openid;
 
-        //  \Log::info("create classroom".$user->name);
+          \Log::info("create classroom".$user->name);
 
         if($openid&&env('WE_CHAT_DISPLAY', true)){
               $app->template_message->send([
                 'touser' => $openid,
-                'template_id' => 'tylpwbzLdGnC7TG4BEGCFFnbNXlExy0NCA2PeGazMbA',
+                'template_id' => '5s88CJ8PJQMbgUjlIezPkFZuL2q-J2ceg92G2R9qASc',
                 'url' => 'https://book.edushu.co',
                 'data' => [
-                    'first' => $user->name.'报班办理已成功，详情如下',
+                    'first' => $user->name.'本周学习报告已生成',
                     'keyword1' => $user->real_name?$user->real_name:$user->name,
                     'keyword2' => $classroom->name ,
-                    'keyword3' => $classroom->begain_time,
-                    'keyword4' => $classroom->start_time,
-                    'keyword5' => $classroom->address,
-                    'remark' => "隆回共读书房感谢您!祝学员学习进步！。"
-
+                    'keyword3' => $report->teacher?$report->teacher:$classroom->teacher,
+                    'keyword4' => $report->date_time,
+                    'keyword5' => $report->title,
+                    'remark' => $report->detail
                 ],
             ]);
         }

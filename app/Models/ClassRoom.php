@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ClassRoom extends Model
 {
     //
+    use  SoftDeletes;
     protected $table = 'classrooms';
     protected $fillable = [
         'name',
@@ -19,6 +21,7 @@ class ClassRoom extends Model
         'begain_time',
         'start_time',
         'address',
+        'hours',
         'extras'
     ];
 
@@ -36,8 +39,9 @@ class ClassRoom extends Model
 
     public function users()
       {
-          return $this->belongsToMany('App\User', 'classroom_user','classroom_id','user_id')->using('App\Models\UserClassRoom');
+          return $this->belongsToMany('App\User', 'classroom_user','classroom_id','user_id');
       }
+
 
 
       public function setMediaIdAttribute($value)
