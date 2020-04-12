@@ -71,8 +71,11 @@ class User extends Resource
             Text::make('备注','remark'),
             //Text::make('手机号码','phone_number')->rules('required','unique:users'),
             Text::make('手机号码','phone_number'),
-            Text::make('已借书','rent_count')->onlyOnDetail(),
-            Text::make('最多可借','limit_count'),
+            //Text::make('已借书','rented_count')->onlyOnDetail(),
+            Text::make('最多可借','limit_count')->onlyOnDetail(),
+            Text::make('历史借阅','rent_count')->onlyOnDetail(),
+            Text::make('阅读文字','read_count')->onlyOnDetail(),
+            Text::make('阅读级别','level')->onlyOnDetail(),
             Boolean::make('正常使用','enable'),
             Text::make('押金','deposit')->exceptOnForms(),
             Text::make('余额','balance')->exceptOnForms(),
@@ -102,7 +105,7 @@ class User extends Resource
             //HasMany::make('orders'),
             //HasMany::make('order_items'),
           //  HasMany::make('UserLog','logs'),
-
+          /*
             BelongsToMany::make('图书','novels','App\Nova\Novel')->searchable()
             ->creationRules('required',new NovelUserRule($request->route('resourceId')))
             ->fields(new NovelUserFields)
@@ -114,10 +117,12 @@ class User extends Resource
 
             BelongsToMany::make('历史记录','history_novels', 'App\Nova\NovelUserHistory')->searchable()
             ->fields(new NovelUserHistoryFields),
+*/          HasMany::make('借阅','rents','App\Nova\Rent')
+            ->creationRules('required',new NovelUserRule($request->route('resourceId'))),
 
             HasMany::make('充值记录','chargers','App\Nova\Charge'),
 
-            BelongsToMany::make('课程','classrooms', 'App\Nova\ClassRoom')->searchable(),
+            HasMany::make('课程','classrooms', 'App\Nova\ClassRoom'),
 
 
 

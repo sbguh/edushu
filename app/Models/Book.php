@@ -39,7 +39,7 @@ class Book extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
 
-    protected $fillable = ['name','slug','check_subscribe','barcode','audio','video','sold_count','review_count','stock','on_sale','author','press','press_date','price', 'description', 'details', 'features', 'category_id', 'extras','images','image','sort','state','read_count','last_chapter','word_count'];
+    protected $fillable = ['name','sub_title','count','slug','check_subscribe','barcode','audio','video','sold_count','review_count','stock','on_sale','author','press','press_date','price', 'description', 'details', 'features', 'category_id', 'extras','images','image','sort','state','read_count','last_chapter','word_count'];
 
     // protected $fillable = [];
     // protected $hidden = [];
@@ -49,6 +49,8 @@ class Book extends Model
     {
         return $this->belongsTo('Backpack\NewsCRUD\app\Models\Category', 'category_id');
     }
+
+
 
     public function sluggable()
     {
@@ -131,15 +133,14 @@ class Book extends Model
     }
 
     public function comments()
-    {
-        return $this->hasMany('App\Models\Comment', 'book_id');
-    }
-
+      {
+          return $this->morphMany('App\Models\Comment', 'commentable');
+      }
 
 
     public function tags()
     {
-        return $this->belongsToMany('App\Models\Tag', 'book_tag');
+       return $this->morphToMany('App\Models\Tag', 'taggable');
     }
 
     public function categories()

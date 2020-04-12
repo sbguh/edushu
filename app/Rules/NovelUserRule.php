@@ -16,11 +16,9 @@ class NovelUserRule implements Rule
      */
      public $user_id;
      public $has_error = false;
-    public function __construct($user_id)
+    public function __construct()
     {
-        //
-      //   \Log::info($user_id);
-         $this->user_id = $user_id;
+
     }
 
     /**
@@ -37,26 +35,17 @@ class NovelUserRule implements Rule
       //  \Log::info("attribute:".$attribute);
       //  \Log::info("attribute value:".$value);
 
-      $user = User::find($this->user_id);
-
-      if(($user->rent_count +1) <= $user->limit_count ){
-        $this->has_error =true;
-
-      }else{
-        $this->has_error =false;
-        return $this->has_error;
-      }
-
+      \Log::info("NovelUserRule value:".$value);
         $novel =Novel::find($value);
-        $novel->rent_count =$novel->rent_count + 1;
-        if($novel->rent_count > $novel->stock){
-          $this->has_error =false;
-          //return false;
+        $novel->current_rent =$novel->current_rent + 1;
+        if($novel->current_rent >= $novel->stock){
+          //$this->has_error =false;
+          return false;
         }else{
-          //return true;
-          $this->has_error =true;
+          return true;
+        //  $this->has_error =true;
         }
-        return $this->has_error;
+        //return $this->has_error;
 
     }
 
@@ -67,6 +56,6 @@ class NovelUserRule implements Rule
      */
     public function message()
     {
-        return '您借书已经到达上限或者图书库存不足，无法借出图书!';
+        return '图书库存不足，无法借出图书!';
     }
 }

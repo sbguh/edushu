@@ -13,7 +13,7 @@ class UserClassRoom extends Model
 {
     //
     use  SoftDeletes; //软删除
-    protected $table = 'userclassroom';
+    protected $table = 'userclassrooms';
 
     protected $fillable = [
                     'classroom_id','user_id','hours','remark','deleted_at','created_at','updated_at'

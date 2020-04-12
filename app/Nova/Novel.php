@@ -22,6 +22,7 @@ use Laravel\Nova\Fields\Trix;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Date;
 use App\Rules\UserNovelRule;
+use Laravel\Nova\Fields\MorphToMany;
 
 class Novel extends Resource
 {
@@ -58,12 +59,12 @@ class Novel extends Resource
      */
      public static function label()
      {
-         return "书（借阅）";
+         return "书";
      }
 
      public static function singularLabel()
      {
-         return "书（借阅）";
+         return "书";
      }
 
      public function title()
@@ -83,13 +84,18 @@ class Novel extends Resource
                     'placeholder' => '输入产品名称',
                 ],
             ]),
-            Text::make('副标题','sub_title')->hideFromIndex(),
+            Text::make('副标题','sub_title')->hideFromIndex()
+            ->rules('required', 'max:255'),
             Text::make('条形码','barcode')
             ->rules('required', 'max:255')
             ->hideFromIndex(),
-            Text::make('库存数（包括借出）','stock')
+            Text::make('本书字数，必须为阿拉伯数字','words')
                 ->rules('required', 'max:255'),
-            Text::make('已借出','rent_count')
+            Text::make('总库存数','stock')
+                ->rules('required', 'max:255'),
+            Text::make('历史借出次数','rent_count')
+                    ->rules('required', 'max:255')->onlyOnIndex(),
+            Text::make('当前借出未还','current_rent')
                  ->rules('required', 'max:255')->onlyOnIndex(),
 
             Currency::make('价格','price')->nullable()->hideFromIndex(),
@@ -107,7 +113,7 @@ class Novel extends Resource
                             ? Storage::disk($disk)->url($value)
                             : null;
             })->hideFromIndex(),
-            Boolean::make('是否销售','on_sale'),
+            Boolean::make('是否销售','on_sale')->hideFromIndex(),
             Heading::make('详细信息'),
             Text::make('作者','author'),
             Text::make('出版社','press')->hideFromIndex(),
@@ -124,10 +130,19 @@ class Novel extends Resource
                   ->valueLabel('meta属性值') // Customize the value heading
                   ->actionText('添加') // Customize the "add row" button text
                   ->withMeta(['value'=>$this->extras ? $this->extras : ["meta_title"=>"", "meta_description"=>""]]),
+            HasMany::make('借阅','rents','App\Nova\Rent')
+              ->creationRules('required',new UserNovelRule($request->route('resourceId'))),
 
+              MorphToMany::make('Tags'),
+
+              BelongsToMany::make('categories'), //禁止删除的选项
+
+            HasMany::make('comments'),
+                /*
             BelongsToMany::make('用户','users','App\Nova\User')->searchable()
                   ->creationRules('required',new UserNovelRule($request->route('resourceId')))
                   ->fields(new Fields\NovelUserFields),
+                  */
 
         ];
     }

@@ -26,7 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','extras','phonenumber','openid','check_subscribe','phone_number','description','wechat_description','card_id','real_name','birthday','gender','deposit','balance',
+        'name', 'email', 'password','scores','rent_count','read_count','level','extras','phonenumber','openid','check_subscribe','phone_number','description','wechat_description','card_id','real_name','birthday','gender','deposit','balance',
     ];
 
     /**
@@ -55,12 +55,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'enable'=>'boolean',
 
     ];
-
+/*
     public function getRentCountAttribute()
     {
         return $this->novels()->count();
     }
-
+*/
     public function addresses()
     {
         return $this->hasMany("App\Models\UserAddress");
@@ -125,9 +125,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany("App\Models\Charge");
     }
 
+    public function rents()
+    {
+        return $this->hasMany("App\Models\Rent");
+    }
+
     public function classrooms()
     {
-        return $this->belongsToMany('App\Models\ClassRoom', 'classroom_user','user_id','classroom_id');
+        return $this->hasMany('App\Models\UserClassRoom');
 /*
         return $this->hasManyThrough(
             'App\Models\ClassRoom',
@@ -152,6 +157,7 @@ class User extends Authenticatable implements MustVerifyEmail
         );
     }
 
+/*
     public function novels()
     {
         return $this->belongsToMany('App\Models\Novel','novel_user')->withTimestamps()->withPivot(['note','created_at','updated_at'])->using('App\Models\NovelUser');
@@ -161,7 +167,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany('App\Models\Novel','novel_user_history','user_id','novel_id')->withTimestamps()->withPivot(['type','created_at','updated_at'])->using('App\Models\NovelUserHistory');
     }
-
+*/
 
 
 

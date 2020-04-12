@@ -84,6 +84,7 @@ class Activity extends Resource
             ),
 
             BelongsToMany::make('users'),
+            HasMany::make('comments'),
 
         ];
     }

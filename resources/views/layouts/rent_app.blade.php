@@ -17,29 +17,43 @@
 </head>
 <body >
 <div id="app">
-    @include('layouts._header')
+    @include('layouts.rent_header')
 
     @yield('content')
     <div style="clear:both;margin-bottom:100px"></div>
-    @include('layouts._footer')
+
+
+
+
+    @include('layouts.rent_footer')
 
 </div>
-    @yield('scriptsAfterJs')
+
 
     <script>
+
+$data ={
+  //message: 'Hello Vue!'
+  value:'',
+  inputVal:'',
+  result:[],
+  active: 0,
+  searchResult:false,
+  icon: {
+   active: 'https://img.yzcdn.cn/vant/user-active.png',
+   inactive: 'https://img.yzcdn.cn/vant/user-inactive.png'
+  },
+  list: [],
+  error: false,
+  loading: false,
+  finished: false
+
+};
 
     var app = new Vue({
         el: '#app',
         delimiters : ['[[', ']]'],
-        data: {
-          //message: 'Hello Vue!'
-          value:'',
-          inputVal:'',
-          result:[],
-          active: 0,
-          searchResult:false,
-
-        },
+        data: $data,
         methods: {
                   onSearch(val) {
                     this.value = val;
@@ -57,6 +71,11 @@
                   }
 
                   },
+                  onLoad() {
+this.loading = false;
+                  },
+
+
                   onCancel() {
                     Toast('取消');
                   },
@@ -66,15 +85,21 @@
                    },
                    onClickButton() {
                      Toast('点击按钮');
-                   }
+                   },
+
+                   onClickLeftNovel() {
+                     location.href = '{{ route('rent.index') }}';
+                    },
+                    onClickRight() {
+                      Toast('按钮');
+                    }
 
                 }
 
 
       })
-$(function(){
 
-  })
     </script>
+  @yield('scriptsAfterJs')  
 </body>
 </html>

@@ -640,7 +640,7 @@ $password = 'Edushuco2020!@';
             }else{
               return redirect(route('books.index'));
             }
-            
+
           }
 
 
@@ -658,7 +658,7 @@ $password = 'Edushuco2020!@';
             'email' => $email,
             'openid' => $openid,
             'check_subscribe'=>$subscribe,
-          //  'extras' => $user->toArray() ,
+            'extras' => $user->toArray() ,
             'check_subscribe' => $subscribe,
             'password' => bcrypt($password),
         ];

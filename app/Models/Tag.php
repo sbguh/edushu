@@ -28,9 +28,13 @@ class Tag extends Model
 
     public function books()
       {
-          return $this->belongsToMany('App\Models\Book', 'book_tag');
+          return $this->morphedByMany('App\Models\Book', 'taggable');
       }
 
+      public function novels()
+        {
+            return $this->morphedByMany('App\Models\Novel', 'taggable');
+        }
 
     /**
      * Return the sluggable configuration array for this model.

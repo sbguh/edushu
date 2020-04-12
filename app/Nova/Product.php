@@ -72,6 +72,8 @@ class Product extends Resource
                             'placeholder' => '输入产品名称',
                         ],
                     ]),
+                    Text::make('副标题','sub_title')->hideFromIndex()
+                    ->rules('required', 'max:255'),
 
                     Currency::make('价格','price')->nullable()->hideFromIndex(),
                     /*

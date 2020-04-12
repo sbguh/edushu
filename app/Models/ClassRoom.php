@@ -39,10 +39,13 @@ class ClassRoom extends Model
 
     public function users()
       {
-          return $this->belongsToMany('App\User', 'classroom_user','classroom_id','user_id');
+          return $this->hasMany('App\Models\UserClassRoom','classroom_id');
       }
 
-
+      public function comments()
+        {
+            return $this->morphMany('App\Models\Comment', 'commentable');
+        }
 
       public function setMediaIdAttribute($value)
       {

@@ -99,6 +99,10 @@ Route::get('category', 'CategoryController@index')->name('category.index');
 Route::get('category/{category}', 'CategoryController@show')->name('category.show');
 Route::get('tags/{tag}', 'TagsController@show')->name('tags.show');
 
+Route::get('tags/novel/{tag}', 'TagsController@novel')->name('tags.novel');
+
+Route::get('rent/{rent_number}', 'RentController@show')->name('rent.show');
+
 Route::get('books', 'BooksController@index')->name('books.index');
 Route::get('books/{book}', 'BooksController@show')->name('books.show');
 Route::get('read/{book}', 'BooksController@read')->name('book.read');
@@ -106,7 +110,8 @@ Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.
 Route::any('search/{keyword}', 'BooksController@search')->name('books.search');
 
 
-
+Route::get('rents', 'NovelsController@index')->name('rent.index');
+Route::get('rents/{novel}', 'NovelsController@show')->name('novel.show');
 
 Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 

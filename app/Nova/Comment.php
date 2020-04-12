@@ -5,40 +5,18 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Titasgailius\SearchRelations\SearchesRelations;
-use Laravel\Nova\Fields\HasMany;
-
-class UserClassRoom extends Resource
+use Laravel\Nova\Fields\Text;
+class Comment extends Resource
 {
-
-  use SearchesRelations;
-
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    use  SoftDeletes;
-    public static $group = '学员管理';
-    public static $model = 'App\Models\UserClassRoom';
-
-    public static $searchRelations = [
-          'user' => ['name', 'real_name','phone_number'],
-      ];
-
-    public static function label()
-    {
-        return "学员";
-    }
-
-    public static function singularLabel()
-    {
-        return "学员";
-    }
+    public static $model = 'App\Models\Comment';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -62,45 +40,13 @@ class UserClassRoom extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-
-
-     public function title()
-         {
-             //return $this->classroom->name;
-             return $this->classroom->name.'('.$this->User->name.")";
-         }
-
-
     public function fields(Request $request)
     {
         return [
-          ID::make()->sortable(),
-          /*
-          Text::make('name', function () {
-          return $this->classroom->name.''.$this->User->name;
-      }),
-      */
-          BelongsTo::make('User')->searchable(),
-          BelongsTo::make('classroom')->searchable(),
-          Number::make('剩余课时','hours')
-              ->sortable()
-              ->withMeta([
-              'extraAttributes' => [
-                  'placeholder' => '剩余课时',
-              ],
-          ]),
-
-          Text::make('备注','remark')
-              ->withMeta([
-              'extraAttributes' => [
-                  'placeholder' => '备注',
-              ],
-          ]),
-
-          HasMany::make('学习报告','reports','App\Nova\Report'),
-
-
-
+            ID::make()->sortable(),
+            BelongsTo::make('用户','user','App\Nova\User')->searchable(),
+            Text::make('content'),
+            Boolean::make('enable')
         ];
     }
 

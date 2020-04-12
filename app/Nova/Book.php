@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsToMany;
-
+use Laravel\Nova\Fields\MorphToMany;
 
 class Book extends Resource
 {
@@ -28,7 +28,7 @@ class Book extends Resource
      *
      * @var string
      */
-     public static $group = '电子书'; 
+     public static $group = '电子书';
     public static $model = 'App\Models\Book';
 
     /**
@@ -71,6 +71,9 @@ class Book extends Resource
               ->rules('required', 'max:255'),
           Text::make('author'),
 
+          Text::make('副标题','sub_title')->hideFromIndex()
+          ->rules('required', 'max:255'),
+
           Currency::make('price')->nullable()->hideFromIndex(),
           /*
           Image::make('image')->disk('edushu')->nullable()->thumbnail(function ($value, $disk) {
@@ -84,7 +87,7 @@ class Book extends Resource
           Markdown::make('description')->nullable()->hideFromIndex(),
 
           HasMany::make('chapters'),
-          BelongsToMany::make('tags'),
+          MorphToMany::make('Tags'),
 
           BelongsToMany::make('categories'), //禁止删除的选项
 

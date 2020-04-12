@@ -5,6 +5,7 @@ namespace App\Rules;
 use Illuminate\Contracts\Validation\Rule;
 use App\Models\Novel;
 use App\User;
+use App\Models\Rent;
 class UserNovelRule implements Rule
 {
     /**
@@ -14,10 +15,9 @@ class UserNovelRule implements Rule
      */
      public $novel_id;
      public $has_error = false;
-    public function __construct($novel_id)
+    public function __construct()
     {
-        //
-        $this->novel_id = $novel_id;
+
     }
 
     /**
@@ -27,28 +27,23 @@ class UserNovelRule implements Rule
      * @param  mixed  $value
      * @return bool
      */
+
     public function passes($attribute, $value)
     {
         //
+      //  \Log::info("ruls value".$value);
         $user = User::find($value);
+      //  \Log::info("ruls user".$user->limit_count );
 
-        if($user->rent_count +1 <= $user->limit_count ){
-          $this->has_error =true;
-        }else{
-          $this->has_error =false;
-          return $this->has_error;
-        }
+      \Log::info("UserNovelRule value:".$value);
 
-        $novel =Novel::find($this->novel_id);
-        $novel->rent_count =$novel->rent_count + 1;
-        if($novel->rent_count > $novel->stock){
-          $this->has_error =false;
-          //return false;
+      $rent_count = Rent::where('user_id',$value)->count();
+
+        if($rent_count +1 <= $user->limit_count ){
+           return true;
         }else{
-          //return true;
-          $this->has_error =true;
+          return false;
         }
-        return $this->has_error;
     }
 
     /**
@@ -58,6 +53,6 @@ class UserNovelRule implements Rule
      */
     public function message()
     {
-        return '您借书已经到达上限或者图书库存不足，无法借出图书!';
+        return '该用户借书已经到达上限无法借出图书!';
     }
 }

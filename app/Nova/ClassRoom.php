@@ -138,7 +138,10 @@ class ClassRoom extends Resource
                       Image::make('image_group')->disk('edushu')->nullable()->hideFromIndex()->help(
               '可以上传微信群二维码图片到微信公众号永久素材'
           )->onlyOnForms(),
-          HasMany::make('users','users', 'App\Nova\User'),
+          HasMany::make('学员','users', 'App\Nova\UserClassRoom'),
+
+          HasMany::make('comments'),
+
 
         ];
 

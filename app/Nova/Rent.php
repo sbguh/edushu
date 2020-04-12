@@ -5,41 +5,32 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
-
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Fields\Markdown;
-use Laravel\Nova\Fields\Image;
-use Laravel\Nova\Fields\File;
-use Illuminate\Support\Facades\Storage;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\Heading;
-use Laravel\Nova\Fields\Trix;
-use Laravel\Nova\Fields\KeyValue;
-use Laravel\Nova\Fields\Date;
-use App\Rules\UserNovelRule;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\Currency;
+use Laravel\Nova\Fields\Text;
+use Titasgailius\SearchRelations\SearchesRelations;
+use App\Rules\NovelUserRule;
+use App\Rules\UserNovelRule;
 
-
-class Report extends Resource
+class Rent extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
+    use SearchesRelations;
+    public static $group = '借阅';
 
-    public static $group = '学员管理';
-    public static $model = 'App\Models\Report';
+    public static $model = 'App\Models\Rent';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'title';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -52,14 +43,13 @@ class Report extends Resource
 
     public static function label()
     {
-        return "学员报告";
+        return "借阅记录";
     }
 
     public static function singularLabel()
     {
-        return "学员报告";
+        return "借阅记录";
     }
-
 
     /**
      * Get the fields displayed by the resource.
@@ -67,49 +57,38 @@ class Report extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
+
+     public static $searchRelations = [
+           'user' => ['name', 'real_name','phone_number'],
+           'novel' => ['title', 'author','press'],
+       ];
+
     public function fields(Request $request)
     {
         return [
             ID::make()->sortable(),
-
-
-
-            Text::make('学员报告','report_number')
+            Text::make('借书编号','rent_number')
                 ->sortable()
                 ->rules('required', 'max:255')
                 ->withMeta([
                 'extraAttributes' => [
-                    'placeholder' => '报告标题',
+                    'placeholder' => '借书编号',
                 ],
             ])->readonly(),
+            BelongsTo::make('用户','user','App\Nova\User')->searchable()->hideWhenUpdating()
+            ->creationRules('required',new UserNovelRule()),
 
-            BelongsTo::make('学员','userclassroom','App\Nova\UserClassRoom')->hideWhenUpdating()->searchable(),
+            BelongsTo::make('书籍','novel','App\Nova\Novel')->searchable()->hideWhenUpdating()
+              ->creationRules('required',new NovelUserRule()),
 
-            Text::make('标题','title')
-                ->sortable()
-                ->rules('required', 'max:255')
-                ->withMeta([
-                'extraAttributes' => [
-                    'placeholder' => '报告标题',
-                ],
-            ]),
+            Date::make(' 归还时间','return_time')
+            ->withMeta(['value'=>$this->return_time ? $this->return_time : date('Y-m-d', strtotime('7 days'))]),
+            Currency::make('费用','fee')->nullable()->withMeta(['value'=>$this->fee ? $this->fee : 0]),
+            Text::make('状态','state')->onlyOnIndex(),
+            Text::make('还书时间','return_at')->withMeta(['value'=>$this->return_at ? $this->return_at : "尚未归还"])->onlyOnIndex(),
+            Text::make('备注','note')->withMeta(['value'=>$this->note ? $this->note :" "]),
 
-
-
-            Text::make('上课时间','date_time')->rules('required', 'max:255'),
-            Text::make('上课老师','teacher')->rules('required', 'max:255'),
-            Text::make('简要描述','detail')
-                ->sortable()
-                ->rules('required', 'max:255')
-                ->withMeta([
-                'extraAttributes' => [
-                    'placeholder' => '简要描述 微信',
-                ],
-            ])->hideFromIndex(),
-
-            Trix::make('详细报告内容','description')->alwaysShow()->nullable()->hideFromIndex()->withFiles('edushu'), //这里的 withFiles('edushu') 附件内容
-            HasMany::make('comments'),
-          ];
+        ];
     }
 
     /**
