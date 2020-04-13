@@ -137,7 +137,10 @@ class Book extends Model
           return $this->morphMany('App\Models\Comment', 'commentable');
       }
 
-
+   public function favorites()
+      {
+         return $this->morphMany('App\Models\Favorite', 'favoriteable');
+      }
     public function tags()
     {
        return $this->morphToMany('App\Models\Tag', 'taggable');
@@ -145,7 +148,7 @@ class Book extends Model
 
     public function categories()
     {
-        return $this->belongsToMany('App\Models\Category', 'book_category');
+        return $this->morphToMany('App\Models\Category', 'categoryables');
     }
 
     public function audios()

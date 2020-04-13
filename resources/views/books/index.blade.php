@@ -15,9 +15,17 @@
 
 <van-card
   thumb= "{{ Storage::disk('edushu')->url($book->image) }}"
-
-  title={{ $book->name }}
+thumb-link="{{route('books.show',$book->id)}}"
 >
+<template #title>
+<a href="{{route('books.show',$book->id)}}">{{  $book->name }}</a>
+</template>
+
+
+<template #desc>
+<div>{!!$book->sub_title!!}</div>
+</template>
+
   <template #tags>
     @if($book->categories()->count())
 

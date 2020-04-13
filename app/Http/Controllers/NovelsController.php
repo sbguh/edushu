@@ -9,7 +9,7 @@ use App\Models\Tag;
 use App\Models\Category;
 use App\Models\Rent;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Favorite;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -20,8 +20,8 @@ class NovelsController extends Controller
     public function index(Request $request)
     {
 
-        $novels = Novel::orderBy('rent_count','DESC')->paginate(8);
-        $novelsLatest = Novel::orderBy('id','DESC')->paginate(8);
+        $novels = Novel::orderBy('rent_count','DESC')->paginate(12);
+        $novelsLatest = Novel::orderBy('id','DESC')->paginate(12);
 
         $app = app('wechat.official_account');
 
@@ -34,10 +34,16 @@ class NovelsController extends Controller
 
 
         $app = app('wechat.official_account');
-
+                $favored = false;
         $novel->count = $novel->count +1;
         $novel->save();
-        $user = $request->user();
+        if($user = $request->user()) {
+            // 从当前用户已收藏的商品中搜索 id 为当前商品 id 的商品
+            // boolval() 函数用于把值转为布尔值
+            $favored = boolval($user->favorites()->where('favoriteable_type','App\Models\Novel')->where('favoriteable_id',$novel->id)->first());
+
+        }
+
 
         $rent_book = $novel->rents()->where('state','借阅中')->orderBy('id','DESC')->paginate(50);
 
@@ -53,11 +59,13 @@ class NovelsController extends Controller
         $tags = $novel->tags()->get();
 
 
-        $favored = false;
+
+
+
         $bookhistory = "";
         // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
 
-        return view('novels.show', ['novel' => $novel,'app'=>$app,'tags'=>$tags,'categories'=>$categories,'user'=>$user,'rent_book'=>$rent_book,'return_book'=>$return_book]);
+        return view('novels.show', ['novel' => $novel,'favored'=>$favored,'app'=>$app,'tags'=>$tags,'categories'=>$categories,'user'=>$user,'rent_book'=>$rent_book,'return_book'=>$return_book]);
     }
 
     public function read(Book $book, Request $request)
@@ -142,23 +150,23 @@ class NovelsController extends Controller
 
 
 
-    public function favor(Book $book, Request $request)
+    public function favor(Novel $novel, Request $request)
     {
         $user = $request->user();
-        if ($user->favoriteBooks()->find($book->id)) {
-            return [];
-        }
+        $favorite = new Favorite(['user_id' => $user->id]);
 
-        $user->favoriteBooks()->attach($book);
+        $novel->favorites()->save($favorite);
+
 
         return [];
     }
 
 
-    public function disfavor(Book $book, Request $request)
+    public function disfavor(Novel $novel, Request $request)
      {
          $user = $request->user();
-         $user->favoriteBooks()->detach($book);
+
+         $user->favorites()->where('favoriteable_type','App\Models\Novel')->where('favoriteable_id',$novel->id)->first()->delete();
 
          return [];
      }

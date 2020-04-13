@@ -72,8 +72,16 @@ class Category extends Model
 
     public function books()
       {
-          return $this->belongsToMany('App\Models\Book', 'book_category');
+
+          return $this->morphedByMany('App\Models\Book', 'categoryables');
       }
+
+      public function novels()
+        {
+
+            return $this->morphedByMany('App\Models\Novel', 'categoryables');
+        }
+
 
     public function hasManyChildren(){
         return $this->hasMany('App\Models\Category', "parent_id");

@@ -30,7 +30,11 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('products/{product}/favorite', 'ProductsController@favor')->name('products.favor');
     Route::delete('products/{product}/favorite', 'ProductsController@disfavor')->name('products.disfavor');
     Route::get('products/favorites', 'ProductsController@favorites')->name('products.favorites');
+
     Route::post('books/{book}/favorite', 'BooksController@favor')->name('books.favor');
+    Route::post('novels/{novel}/favorite', 'NovelsController@favor')->name('novels.favor');
+    Route::delete('novels/{novel}/favorite', 'NovelsController@disfavor')->name('novels.disfavor');
+
     Route::delete('books/{book}/favorite', 'BooksController@disfavor')->name('books.disfavor');
     Route::get('books/favorites', 'BooksController@favorites')->name('books.favorites');
     Route::post('cart', 'CartController@add')->name('cart.add');
@@ -97,6 +101,8 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 
 Route::get('category', 'CategoryController@index')->name('category.index');
 Route::get('category/{category}', 'CategoryController@show')->name('category.show');
+Route::get('category/novel/{category}', 'CategoryController@novel')->name('category.novel');
+
 Route::get('tags/{tag}', 'TagsController@show')->name('tags.show');
 
 Route::get('tags/novel/{tag}', 'TagsController@novel')->name('tags.novel');

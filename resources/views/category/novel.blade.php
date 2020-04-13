@@ -13,7 +13,7 @@
 <div class="page">
 
   <div class="page__hd">
-      <p class="page__desc page_header_title">标签: {{$tag->name}}</p>
+      <p class="page__desc page_header_title">标签: {{$category->name}}</p>
   </div>
 
   <div class="row">

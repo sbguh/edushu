@@ -15,8 +15,8 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <script src="{{ mix('js/app.js') }}"></script>
 </head>
-<body >
-<div id="app">
+<body data-weui-theme="light">
+<div id="app" >
     @include('layouts._header')
 
     @yield('content')
@@ -37,6 +37,7 @@
           inputVal:'',
           result:[],
           active: 0,
+          show: false,
           searchResult:false,
 
         },
@@ -66,6 +67,9 @@
                    },
                    onClickButton() {
                      Toast('点击按钮');
+                   },
+                   showPopup() {
+                     this.show = true;
                    }
 
                 }

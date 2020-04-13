@@ -39,7 +39,8 @@ class RentCreatedEvent
         $app = app('wechat.official_account');
         $user = User::find($rent->user_id);
         $openid = $user->openid;
-        $read_count = $user->read_count?"累计阅读文字:".$user->read_count/10000."万字":"当前还没有累计阅读量";
+        $read_count = $user->read_count/10000;
+        $read_count = "当前累计阅读:".$read_count."万字";
         $level = $user->level?$user->level:0;
         $words = $novel->words?$novel->words/10000:0;
         if($openid&&env('WE_CHAT_DISPLAY', true)){
@@ -51,8 +52,8 @@ class RentCreatedEvent
                     'first' => $user->name.'此次线下借书成功',
                     'keyword1' => $novel->title,
                     'keyword2' => date('Y-m-d H:i:s',strtotime('+7 day')),
-                    'keyword3' => "您当前的阅读等级为".$level."级,  ".$read_count;
-                    'remark' => "本书共计".$words."个字, 参与读书打卡赢取更多积分奖励，更快提升您的阅读等级，详情请点击"
+                    'keyword3' => "您当前的阅读等级为".$level."级,  ".$read_count,
+                    'remark' => "本书共计".$words."万字, 参与读书打卡赢取更多积分奖励，更快提升您的阅读等级，详情请点击"
 
                 ],
             ]);

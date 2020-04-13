@@ -70984,6 +70984,8 @@ window.Plyr = plyr__WEBPACK_IMPORTED_MODULE_0___default.a;
 
 
 
+
+Vue.use(vant__WEBPACK_IMPORTED_MODULE_3__["Popup"]);
 Vue.use(vant__WEBPACK_IMPORTED_MODULE_3__["Cell"]);
 Vue.use(vant__WEBPACK_IMPORTED_MODULE_3__["CellGroup"]);
 Vue.use(vant__WEBPACK_IMPORTED_MODULE_3__["Pagination"]);

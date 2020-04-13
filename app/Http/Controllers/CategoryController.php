@@ -33,4 +33,15 @@ class CategoryController extends Controller
     }
 
 
+    public function novel(Category $category, Request $request)
+    {
+
+        $novels = $category->novels()->paginate(8);;
+        $app = app('wechat.official_account');
+
+        return view('category.novel', ['category' => $category,'app'=>$app,'novels'=>$novels]);
+    }
+
+
+
 }

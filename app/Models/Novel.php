@@ -52,6 +52,10 @@ public function getCurrentRentAttribute()
               return $this->morphMany('App\Models\Comment', 'commentable');
           }
 
+    public function favorites()
+        {
+             return $this->morphMany('App\Models\Favorite', 'favoriteable');
+        }
 
 
           public function tags()
@@ -61,7 +65,7 @@ public function getCurrentRentAttribute()
 
           public function categories()
           {
-              return $this->belongsToMany('App\Models\Category', 'category_novel');
+              return $this->morphToMany('App\Models\Category', 'categoryables');
           }
 
 

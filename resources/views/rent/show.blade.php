@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', $novel->name)
+@section('title', $novel->title)
 
 @section('jssdk')
 
@@ -97,6 +97,8 @@
 
 
 </div>
+
+
 @endsection
 
 

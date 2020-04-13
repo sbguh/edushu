@@ -20,6 +20,7 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\Trix;
+use Laravel\Nova\Fields\MorphToMany;
 
 class Product extends Resource
 {
@@ -92,10 +93,10 @@ class Product extends Resource
 
                     //HasMany::make('ProductSku','ProductSku','App\Models\ProductSku'),
                     HasMany::make('SKU','skus','App\Nova\ProductSku'),  // 第一个参数，显示的，第二个参数models里面定义的一对多，多对多关联的，第三个参数，定义的Nova模型
-                    BelongsToMany::make('tags'),
+                    MorphToMany::make('tags'),
 
 
-                    BelongsToMany::make('categories'), //禁止删除的选项
+                    MorphToMany::make('categories'), //禁止删除的选项
         ];
     }
 

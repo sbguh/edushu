@@ -136,9 +136,12 @@ public function tags()
 
 public function categories()
 {
-    return $this->belongsToMany('App\Models\Category', 'category_product');
+    return $this->morphToMany('App\Models\Category', 'categoryables');
 }
-
+public function favorites()
+   {
+      return $this->morphMany('App\Models\Favorite', 'favoriteable');
+   }
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

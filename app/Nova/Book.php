@@ -89,7 +89,7 @@ class Book extends Resource
           HasMany::make('chapters'),
           MorphToMany::make('Tags'),
 
-          BelongsToMany::make('categories'), //禁止删除的选项
+          MorphToMany::make('categories'), //禁止删除的选项
 
       //  BelongsToMany::make('categories','categories', 'App\Nova\Category'),
 

@@ -18,7 +18,7 @@
       thumb-link="{{route('novel.show',$book->id)}}"
     >
     <template #title>
-    <h3><a href="{{route('novel.show',$book->id)}}">{{  $book->title }}</a></h3>
+    <a href="{{route('novel.show',$book->id)}}">{{  $book->title }}</a>
     </template>
 
     <template #desc>
@@ -30,7 +30,7 @@
         @if($book->categories()->count())
 
           @foreach($book->categories()->where('parent_id',1)->take(2)->get() as $category)
-             <van-tag plain type="danger"><a href="{{route('category.show',$category->id)}}">{{$category->name}}</a></van-tag>
+             <van-tag plain type="danger"><a href="{{route('category.novel',$category->id)}}">{{$category->name}}</a></van-tag>
           @endforeach
 
         @endif
@@ -41,7 +41,7 @@
         @if($book->tags()->count())
 
           @foreach($book->tags()->take(2)->get() as $tag)
-             <van-tag plain type="danger"><a href="{{route('tags.show',$tag->id)}}">{{$tag->name}}</a></van-tag>
+             <van-tag plain type="danger"><a href="{{route('tags.novel',$tag->id)}}">{{$tag->name}}</a></van-tag>
           @endforeach
 
         @endif
@@ -74,7 +74,7 @@
         @if($book->categories()->count())
 
           @foreach($book->categories()->where('parent_id',1)->take(2)->get() as $category)
-             <van-tag plain type="danger"><a href="{{route('category.show',$category->id)}}">{{$category->name}}</a></van-tag>
+             <van-tag plain type="danger"><a href="{{route('category.novel',$category->id)}}">{{$category->name}}</a></van-tag>
           @endforeach
 
         @endif
@@ -85,7 +85,7 @@
         @if($book->tags()->count())
 
           @foreach($book->tags()->take(2)->get() as $tag)
-             <van-tag plain type="danger"><a href="{{route('tags.show',$tag->id)}}">{{$tag->name}}</a></van-tag>
+             <van-tag plain type="danger"><a href="{{route('tags.novel',$tag->id)}}">{{$tag->name}}</a></van-tag>
           @endforeach
 
         @endif
@@ -97,6 +97,15 @@
   </van-tab>
 
 </van-tabs>
+
+<div class="page">
+    <div class="page__bd" style="height: 100%;">
+        <div class="weui-tab">
+            <div>{{ $novels->render() }}</div>
+        </div>
+    </div>
+</div>
+
 
 
 @endsection

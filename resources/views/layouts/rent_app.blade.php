@@ -15,8 +15,8 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <script src="{{ mix('js/app.js') }}"></script>
 </head>
-<body >
-<div id="app">
+<body data-weui-theme="light">
+<div id="app" >
     @include('layouts.rent_header')
 
     @yield('content')
@@ -44,6 +44,7 @@ $data ={
    inactive: 'https://img.yzcdn.cn/vant/user-inactive.png'
   },
   list: [],
+  show: false,
   error: false,
   loading: false,
   finished: false
@@ -92,6 +93,9 @@ this.loading = false;
                     },
                     onClickRight() {
                       Toast('按钮');
+                    },
+                    showPopup() {
+                      this.show = true;
                     }
 
                 }
@@ -100,6 +104,6 @@ this.loading = false;
       })
 
     </script>
-  @yield('scriptsAfterJs')  
+  @yield('scriptsAfterJs')
 </body>
 </html>

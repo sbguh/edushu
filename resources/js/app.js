@@ -59,6 +59,9 @@ import { NavBar } from 'vant';
 import { SwipeCell } from 'vant';
 import { Pagination } from 'vant';
 import { Cell, CellGroup } from 'vant';
+import { Popup } from 'vant';
+
+Vue.use(Popup);
 
 Vue.use(Cell);
 Vue.use(CellGroup);
