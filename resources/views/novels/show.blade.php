@@ -24,7 +24,7 @@
       <div class="page__hd">
 
         <div class="weui-flex">
-            <div class="weui-flex__item"><div class="placeholder"><img src="{{ Storage::disk('edushu')->url($novel->image) }}" width="180px"></div></div>
+            <div class="weui-flex__item"><div class="placeholder" style="padding:5px;"><img src="{{ Storage::disk('edushu')->url($novel->image) }}" width="180px"></div></div>
             <div class="weui-flex__item">
               <div class="placeholder">
                 <h3>{{$novel->title}}</h3>

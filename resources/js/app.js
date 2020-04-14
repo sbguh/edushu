@@ -22,8 +22,8 @@ window.Vue = require('vue');
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
-//require('./components/SelectDistrict');
-//require('./components/UserAddressesCreateAndEdit');
+require('./components/SelectDistrict');
+require('./components/UserAddressesCreateAndEdit');
 
 import Plyr from 'plyr';
 
@@ -60,7 +60,10 @@ import { SwipeCell } from 'vant';
 import { Pagination } from 'vant';
 import { Cell, CellGroup } from 'vant';
 import { Popup } from 'vant';
+import { Collapse, CollapseItem } from 'vant';
 
+Vue.use(Collapse);
+Vue.use(CollapseItem);
 Vue.use(Popup);
 
 Vue.use(Cell);

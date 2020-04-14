@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ProductSku;
 use App\Exceptions\InvalidRequestException;
 use App\Models\Order;
+use App\Models\Novel;
 use App\Models\OrderItem;
 use App\Models\Charge;
 use Auth;
@@ -254,29 +255,34 @@ class ProductsController extends Controller
 
     public function favor(Product $product, Request $request)
     {
-        $user = $request->user();
-        if ($user->favoriteProducts()->find($product->id)) {
-            return [];
-        }
 
-        $user->favoriteProducts()->attach($product);
+      $user = $request->user();
+      $favorite = new Favorite(['user_id' => $user->id]);
+
+      $novel->favorites()->save($favorite);
 
         return [];
     }
 
     public function disfavor(Product $product, Request $request)
      {
-         $user = $request->user();
-         $user->favoriteProducts()->detach($product);
+       $user = $request->user();
+
+       $user->favorites()->where('favoriteable_type','App\Models\Product')->where('favoriteable_id',$product->id)->first()->delete();
 
          return [];
      }
 
      public function favorites(Request $request)
     {
-        $products = $request->user()->favoriteProducts()->paginate(16);
+      $user = $request->user();
 
-        return view('products.favorites', ['products' => $products]);
+        $products = Novel::whereIn('id',$user->favorites()->where('favoriteable_type','App\Models\Product')->pluck('favoriteable_id'))->get();
+        $novels = Novel::whereIn('id',$user->favorites()->where('favoriteable_type','App\Models\Novel')->pluck('favoriteable_id'))->get();
+        $books = Novel::whereIn('id',$user->favorites()->where('favoriteable_type','App\Models\Book')->pluck('favoriteable_id'))->get();
+
+
+        return view('products.favorites', ['products' => $products,'novels'=>$novels,'books'=>$books]);
     }
 
 

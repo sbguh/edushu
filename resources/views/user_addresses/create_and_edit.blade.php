@@ -39,19 +39,19 @@
             <div class="col-sm-3">
               <select class="form-control" v-model="provinceId">
                 <option value="">选择省</option>
-                <option v-for="(name, id) in provinces" :value="id">@{{ name }}</option>
+                <option v-for="(name, id) in provinces" :value="id">[[ name ]]</option>
               </select>
             </div>
             <div class="col-sm-3">
               <select class="form-control" v-model="cityId">
                 <option value="">选择市</option>
-                <option v-for="(name, id) in cities" :value="id">@{{ name }}</option>
+                <option v-for="(name, id) in cities" :value="id">[[ name ]]</option>
               </select>
             </div>
             <div class="col-sm-3">
               <select class="form-control" v-model="districtId">
                 <option value="">选择区</option>
-                <option v-for="(name, id) in districts" :value="id">@{{ name }}</option>
+                <option v-for="(name, id) in districts" :value="id">[[ name ]]</option>
               </select>
             </div>
           </div>

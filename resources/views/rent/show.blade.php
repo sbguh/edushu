@@ -38,12 +38,12 @@
                 </div>
                 @endif
               </div>
-              <div><label class="weui-form-preview__label">字数:</label> <span class="weui-form-preview__value">{{$novel->words/10000}}万字</span></div>
-              <div><label class="weui-form-preview__label">作者:</label> <span class="weui-form-preview__value">{{$novel->author}}</span></div>
-              <div><label class="weui-form-preview__label">当前状态:</label> <span class="weui-form-preview__value">{{$rent->state}}</span></div>
-              <div><label class="weui-form-preview__label">已阅读:</label> <span class="weui-form-preview__value">{{$rent->user->read_count?($rent->user->read_count/10000).'万字':0}}</span></div>
-              <div><label class="weui-form-preview__label">阅读等级:</label> <span class="weui-form-preview__value">{{$user->level}}级</span></div>
-              <div><label class="weui-form-preview__label">累计积分:</label> <span class="weui-form-preview__value">{{round($user->scores)}}分</span></div>
+              <div class="weui-form-preview__item"><label class="weui-form-preview__label">字数:</label> <span class="weui-form-preview__value">{{$novel->words/10000}}万字</span></div>
+              <div class="weui-form-preview__item"><label class="weui-form-preview__label">作者:</label> <span class="weui-form-preview__value">{{$novel->author}}</span></div>
+              <div class="weui-form-preview__item"><label class="weui-form-preview__label">当前状态:</label> <span class="weui-form-preview__value">{{$rent->state}}</span></div>
+              <div class="weui-form-preview__item"><label class="weui-form-preview__label">已阅读:</label> <span class="weui-form-preview__value">{{$rent->user->read_count?($rent->user->read_count/10000).'万字':0}}</span></div>
+              <div class="weui-form-preview__item"><label class="weui-form-preview__label">阅读等级:</label> <span class="weui-form-preview__value">{{$user->level}}级</span></div>
+              <div class="weui-form-preview__item"><label class="weui-form-preview__label">累计积分:</label> <span class="weui-form-preview__value">{{round($user->scores)}}分</span></div>
             </div>
 
         </div>
@@ -54,7 +54,15 @@
 
         <article class="weui-article">
           <van-divider>共读书房推荐</van-divider>
-          <p><span style="text-decoration:underline">{{$user->name}} </span>您好！本书目前的状态为：<b>{{$rent->state}}</b>，读完这本书您的阅读将会增加: <b>{{$novel->words/10000}}万字</b>,您当前的阅读等级为: <b>{{$user->level}}级</b></p>
+          <p><span style="text-decoration:underline">{{$user->name}} </span>您好！本书目前的状态为：<b>{{$rent->state}}, </b>
+            借阅开始日期: {{$rent->created_at}} ,
+            @if($rent->deleted_at)
+            还书日期: {{$rent->deleted_at}}
+            @else
+            还书截至日期: {{$rent->return_time}}
+            @endif
+
+          </p>
           <p>阅读等级的提升规则: 借书并按时还书 加10，每阅读一万字加1分，分享读后感加20分， 打卡做阅读笔记加 10分，朋友为你点赞 加5分，每增加100分提升一个阅读等级</p>
           <p>阅读等级: 等级越高享受的特权越多，可以增加借书数量，延长还书时间，享受VIP购书折扣，报名共读书房有折扣。</p>
           <p>积分: 可以用来兑换，参与活动。按时还书，打卡，写读后感，邀请朋友点赞你的打卡内容或者你的读后感，可以相应增加积分.</p>

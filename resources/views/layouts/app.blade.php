@@ -34,6 +34,7 @@
         data: {
           //message: 'Hello Vue!'
           value:'',
+          activeNames: ['1'],
           inputVal:'',
           result:[],
           active: 0,
@@ -69,7 +70,12 @@
                      Toast('点击按钮');
                    },
                    showPopup() {
-                     this.show = true;
+
+                     if(this.show){
+                       this.show=false;
+                     }else{
+                       this.show = true;
+                     }
                    }
 
                 }

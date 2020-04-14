@@ -1,14 +1,12 @@
-@extends('layouts.wechat_book_app')
+@extends('layouts.app')
 @section('title', $book->name)
 
-@section('jssdk')
 
-@endsection
 
 
 @section('content')
 
-<div class="page">
+<div class="page" style="padding:0px 15px;">
     <div class="page__bd" style="height: 100%;">
         <div class="weui-tab">
             <div class="weui-navbar">

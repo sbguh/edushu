@@ -9,6 +9,17 @@ use App\Models\Category;
 class RentController extends Controller
 {
     //
+
+    public function index(Request $request)
+    {
+      $user   = $request->user();
+      $rent_book = $user->rents()->where('state','借阅中')->orderBy('id','DESC')->paginate(50);
+      $return_book =$user->rents()->onlyTrashed()->where('state','已还书')->orderBy('id','DESC')->paginate(50);
+
+      return view('rent.index', ['user'=>$user,'rent_book'=>$rent_book,'return_book'=>$return_book]);
+
+
+    }
     public function show($rent_number, Request $request)
     {
 

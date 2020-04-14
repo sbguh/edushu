@@ -28,6 +28,7 @@
             //message: 'Hello Vue!'
             value:'',
             inputVal:'',
+            this.show=false;
             result:[],
           },
 
@@ -52,7 +53,26 @@
 
 
 
-                }
+              },
+              onCancel() {
+                Toast('取消');
+              },
+
+              onClickIcon() {
+                 Toast('点击图标');
+               },
+               onClickButton() {
+                 Toast('点击按钮');
+               },
+               showPopup() {
+
+                 if(this.show){
+                   this.show=false;
+                 }else{
+                   this.show = true;
+                 }
+               }
+               
               }
 
         })

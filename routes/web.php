@@ -108,6 +108,9 @@ Route::get('tags/{tag}', 'TagsController@show')->name('tags.show');
 Route::get('tags/novel/{tag}', 'TagsController@novel')->name('tags.novel');
 
 Route::get('rent/{rent_number}', 'RentController@show')->name('rent.show');
+Route::get('userrent', 'RentController@index')->name('user.rent.index');
+Route::get('reports/{report_number}', 'ReportsController@show')->name('reports.show');
+Route::get('reports/', 'ReportsController@index')->name('reports.index');
 
 Route::get('books', 'BooksController@index')->name('books.index');
 Route::get('books/{book}', 'BooksController@show')->name('books.show');

@@ -38,6 +38,7 @@ $data ={
   inputVal:'',
   result:[],
   active: 0,
+  activeNames: ['1'],
   searchResult:false,
   icon: {
    active: 'https://img.yzcdn.cn/vant/user-active.png',
@@ -95,8 +96,14 @@ this.loading = false;
                       Toast('按钮');
                     },
                     showPopup() {
-                      this.show = true;
+
+                      if(this.show){
+                        this.show=false;
+                      }else{
+                        this.show = true;
+                      }
                     }
+
 
                 }
 

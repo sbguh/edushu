@@ -32,22 +32,22 @@ closeable
                   </div>
               </div>
 
-             <div class="weui-cell weui-cell_active weui-cell_access">
-                <div class="weui-cell__bd">
-                    <span style="vertical-align: middle;">学习报告</span>
+              <div class="weui-cell weui-cell_active weui-cell_access">
+                 <div class="weui-cell__bd">
+                     <span style="vertical-align: middle;"><a href="{{route('reports.index')}}">学习报告</a></span>
 
-                </div>
-                <div class="weui-cell__ft"><a href="{{route('root')}}">查看</a></div>
-            </div>
+                 </div>
+                 <div class="weui-cell__ft"><a href="{{route('reports.index')}}">查看</a></div>
+             </div>
 
 
 
             <div class="weui-cell weui-cell_active weui-cell_access">
                <div class="weui-cell__bd">
-                   <span style="vertical-align: middle;">我的借阅</span>
+                   <span style="vertical-align: middle;"> <a href="{{route('user.rent.index')}}"> 我的借阅</a></span>
 
                </div>
-               <div class="weui-cell__ft"><a href="{{route('root')}}">查看</a></div>
+               <div class="weui-cell__ft"><a href="{{route('rent.index')}}">查看</a></div>
            </div>
 
             <div class="weui-cell weui-cell_active weui-cell_access">
@@ -60,18 +60,18 @@ closeable
 
            <div class="weui-cell weui-cell_active weui-cell_access">
               <div class="weui-cell__bd">
-                  <span style="vertical-align: middle;">我的收藏</span>
+                  <span style="vertical-align: middle;"><a href="{{route('products.favorites')}}">我的收藏</a></span>
 
               </div>
-              <div class="weui-cell__ft"><a href="{{route('root')}}">查看</a></div>
+              <div class="weui-cell__ft"><a href="{{route('products.favorites')}}">查看</a></div>
           </div>
 
           <div class="weui-cell weui-cell_active weui-cell_access">
              <div class="weui-cell__bd">
-                 <span style="vertical-align: middle;">收货地址</span>
+                 <span style="vertical-align: middle;"><a href="{{route('user_addresses.index')}}">收货地址</a></span>
 
              </div>
-             <div class="weui-cell__ft"><a href="{{route('root')}}">查看</a></div>
+             <div class="weui-cell__ft"><a href="{{route('user_addresses.index')}}">查看</a></div>
          </div>
 
            <div class="weui-cell weui-cell_active weui-cell_access">

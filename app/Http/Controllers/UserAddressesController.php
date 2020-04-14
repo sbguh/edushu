@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
-use App\Http\Requests\UserAddressesRequest;
+use App\Http\Requests\UserAddressRequest;
 
 class UserAddressesController extends Controller
 {
@@ -36,7 +36,7 @@ class UserAddressesController extends Controller
         return view('user_addresses.create_and_edit', ['address' => $user_address]);
     }
 
-    public function update(UserAddress  $user_address, UserAddressesRequest $request)
+    public function update(UserAddress  $user_address, UserAddressRequest $request)
     {
         $this->authorize('own', $user_address);
         $user_address->update($request->only([
@@ -53,7 +53,7 @@ class UserAddressesController extends Controller
     }
 
 
-    public function store(UserAddressesRequest $request)
+    public function store(UserAddressRequest $request)
     {
         $request->user()->addresses()->create($request->only([
             'province',
