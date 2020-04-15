@@ -20,7 +20,7 @@ Route::any('/subscribe', 'WeChatController@subscribe')->name('wechat.subscribe')
 Auth::routes(['verify' => true]);
 //Auth::routes();
 
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => ['auth','wechat.oauth']], function() {
     Route::get('user_addresses', 'UserAddressesController@index')->name('user_addresses.index');
     Route::get('user_addresses/create', 'UserAddressesController@create')->name('user_addresses.create');
     Route::post('user_addresses', 'UserAddressesController@store')->name('user_addresses.store');
