@@ -91,7 +91,11 @@
 
 
 @section('scriptsAfterJs')
+<script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
+
 <script>
+
+wx.config({!! $app->jssdk->buildConfig(array('openAddress'), false) !!});
 
 function editAddress()
 {
