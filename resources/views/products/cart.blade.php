@@ -97,7 +97,7 @@ function editAddress()
 {
   WeixinJSBridge.invoke(
     'editAddress',
-    {!! $editAddress !!},
+    {!! $app->jssdk->shareAddressConfig($user_wechat->getToken()) !!},
     function(res){
       var value1 = res.proviceFirstStageName;
       var value2 = res.addressCitySecondStageName;

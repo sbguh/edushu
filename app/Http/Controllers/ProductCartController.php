@@ -64,10 +64,11 @@ class ProductCartController extends Controller
           session(['return_wechat' =>['url'=>route('product.cart.index'),'name'=> '购物车'] ]);
           return redirect(route('wechat.add.phone'));
         }
-        $user_wechat = session('wechat.oauth_user.default');
+        $user = session('wechat.oauth_user.default');
 
-        $editAddress = $app->jssdk->shareAddressConfig($user_wechat->getToken());
-        
+        //$editAddress = $app->jssdk->shareAddressConfig($user_wechat->getToken());
+        $editAddress = "";
+
         return view('products.cart', ['cartItems' => $cartItems,'app'=>$app, 'user'=>$user,'editAddress' =>$editAddress, 'addresses' => $addresses,'need_address'=>$need_address]);
     }
 
