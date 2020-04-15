@@ -58,8 +58,7 @@ class ProductCartController extends Controller
         $addresses = $request->user()->addresses()->orderBy('last_used_at', 'desc')->get();
         $need_address =1;
         $user   = $request->user();
-      //  $app = app('wechat.payment');
-      $app = app('wechat.official_account');
+        $app = app('wechat.payment');
 
         if($user->phone_number==false){
           session(['return_wechat' =>['url'=>route('product.cart.index'),'name'=> '购物车'] ]);
