@@ -10,7 +10,14 @@
 
 <div class="page">
     <div class="page__hd" style="text-align:center;">
-        <h1 class="page__title"><a href="{{route('reports.index')}}">学习报告</a></h1>
+        <h3 class="page__title">
+          @if(Auth::user()->id == $user->id)
+            <a href="{{route('reports.index')}}">学习报告</a>
+          @else
+            学习报告
+          @endif
+
+        </h3>
         <p class="page__desc">编号：{{$report->report_number}}</p>
     </div>
     <div class="page__bd">
@@ -39,6 +46,11 @@
                 <div class="weui-form-preview__item">
                     <label class="weui-form-preview__label">课程</label>
                     <span class="weui-form-preview__value">{{$classroom->name}}</span>
+                </div>
+
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">报告生成日期</label>
+                    <span class="weui-form-preview__value">{{$report->created_at}}</span>
                 </div>
             </div>
 

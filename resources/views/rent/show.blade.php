@@ -41,9 +41,29 @@
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">字数:</label> <span class="weui-form-preview__value">{{$novel->words/10000}}万字</span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">作者:</label> <span class="weui-form-preview__value">{{$novel->author}}</span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">当前状态:</label> <span class="weui-form-preview__value">{{$rent->state}}</span></div>
+              <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">
+                  @if($rent->deleted_at)
+                  还书时间
+                  @else
+                  还书截至日期
+                  @endif
+
+                </label> <span class="weui-form-preview__value">
+                @if($rent->deleted_at)
+                 {{$rent->deleted_at}}
+                @else
+                {{$rent->return_time}}
+                @endif
+              </span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">已阅读:</label> <span class="weui-form-preview__value">{{$rent->user->read_count?($rent->user->read_count/10000).'万字':0}}</span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">阅读等级:</label> <span class="weui-form-preview__value">{{$user->level}}级</span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">累计积分:</label> <span class="weui-form-preview__value">{{round($user->scores)}}分</span></div>
+              @if(Auth::user()->id == $user->id)
+              <div class="weui-form-preview__item"><label class="weui-form-preview__label">借书记录:</label> <span class="weui-form-preview__value"><a href="{{route('user.rent.index')}}">点击查看历史借书记录</a></span></div>
+              @endif
+
+
             </div>
 
         </div>

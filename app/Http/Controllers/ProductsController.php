@@ -67,8 +67,6 @@ class ProductsController extends Controller
         if(!Auth::check()) {
             return redirect(route('wechatoauth'));
         }
-
-
         $favored = false;
         // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
         if($user = $request->user()) {

@@ -46,7 +46,7 @@ class ReportCreatedEvent
               $app->template_message->send([
                 'touser' => $openid,
                 'template_id' => '5s88CJ8PJQMbgUjlIezPkFZuL2q-J2ceg92G2R9qASc',
-                'url' => 'https://book.edushu.co',
+                'url' => route('reports.show',$report->report_number),
                 'data' => [
                     'first' => $user->name.'本周学习报告已生成',
                     'keyword1' => $user->real_name?$user->real_name:$user->name,

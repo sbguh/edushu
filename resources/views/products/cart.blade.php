@@ -54,6 +54,7 @@
     <!-- 开始 -->
 <div>
   <form class="form-horizontal" role="form" id="order-form">
+
     <div class="form-group row">
       <label class="col-form-label col-sm-3 text-md-right">选择收货地址</label>
       <div class="col-sm-9 col-md-7">
@@ -64,6 +65,7 @@
         </select>
       </div>
     </div>
+
     <div class="form-group row">
       <label class="col-form-label col-sm-3 text-md-right">备注</label>
       <div class="col-sm-9 col-md-7">
@@ -90,6 +92,37 @@
 
 @section('scriptsAfterJs')
 <script>
+
+function editAddress()
+{
+  WeixinJSBridge.invoke(
+    'editAddress',
+    {!! $editAddress !!},
+    function(res){
+      var value1 = res.proviceFirstStageName;
+      var value2 = res.addressCitySecondStageName;
+      var value3 = res.addressCountiesThirdStageName;
+      var value4 = res.addressDetailInfo;
+      var tel = res.telNumber;
+
+      alert(value1 + value2 + value3 + value4 + ":" + tel);
+    }
+  );
+}
+
+window.onload = function(){
+  if (typeof WeixinJSBridge == "undefined"){
+      if( document.addEventListener ){
+          document.addEventListener('WeixinJSBridgeReady', editAddress, false);
+      }else if (document.attachEvent){
+          document.attachEvent('WeixinJSBridgeReady', editAddress);
+          document.attachEvent('onWeixinJSBridgeReady', editAddress);
+      }
+  }else{
+    editAddress();
+  }
+};
+
   $(document).ready(function () {
     // 监听 移除 按钮的点击事件
     $('.btn-remove').click(function () {
@@ -175,6 +208,40 @@
               }
             });
         });
+
+
+        $('.btn-check-now').click(function () {
+     // 请求加入购物车接口
+     axios.post('{{ route('product.cart.add') }}', {
+       sku_id: $('label.active input[name=skus]').val(),
+       amount: $('.cart_amount input').val(),
+     })
+       .then(function () { // 请求成功执行此回调
+         swal('加入购物车成功', '', 'success')
+         .then(function() {
+         location.href = '{{ route('product.cart.index') }}';
+       });
+       }, function (error) { // 请求失败执行此回调
+         if (error.response.status === 401) {
+           // http 状态码为 401 代表用户未登陆
+           swal('请先登录', '', 'error');
+         } else if (error.response.status === 422) {
+           // http 状态码为 422 代表用户输入校验失败
+           var html = '<div>';
+           _.each(error.response.data.errors, function (errors) {
+             _.each(errors, function (error) {
+               html += error+'<br>';
+             })
+           });
+           html += '</div>';
+           swal({content: $(html)[0], icon: 'error'})
+         } else {
+           // 其他情况应该是系统挂了
+           swal('系统错误', '', 'error');
+         }
+       })
+   });
+
 
   });
 </script>

@@ -13,9 +13,9 @@ class RentController extends Controller
     public function index(Request $request)
     {
       $user   = $request->user();
-      $rent_book = $user->rents()->where('state','借阅中')->orderBy('id','DESC')->paginate(50);
-      $return_book =$user->rents()->onlyTrashed()->where('state','已还书')->orderBy('id','DESC')->paginate(50);
-
+      $rent_book = $user->rents()->orderBy('id','DESC')->get();
+      $return_book =$user->rents()->onlyTrashed()->where('state','已还书')->orderBy('id','DESC')->paginate(10);
+      session(['return_wechat' =>['url'=>route('user.rent.index'),'name'=> $user->name] ]);
       return view('rent.index', ['user'=>$user,'rent_book'=>$rent_book,'return_book'=>$return_book]);
 
 
@@ -40,6 +40,8 @@ class RentController extends Controller
         //$categories = $book->categories()->where('parent_id',)
 
         $tags = $novel->tags()->get();
+
+        session(['return_wechat' =>['url'=>route('rent.show',$rent->rent_number),'name'=> $rent->rent_number] ]);
 
 
         $favored = false;

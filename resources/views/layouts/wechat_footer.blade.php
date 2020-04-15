@@ -13,12 +13,13 @@ closeable
                <div class="weui-cell__ft"></div>
            </div>
 
-          <div class="weui-cell weui-cell_active weui-cell_access">
-             <div class="weui-cell__bd">
-                 <span style="vertical-align: middle;"><a class="nav-link" href="{{ route('login') }}">登录</a></span>
-             </div>
-             <div class="weui-cell__ft"><a class="nav-link" href="{{ route('login') }}">Login</a></div>
-         </div>
+           <div class="weui-cell weui-cell_active weui-cell_access">
+              <div class="weui-cell__bd">
+                  <span style="vertical-align: middle;"><a class="nav-link" href="{{ route('wechatoauth') }}">登录</a></span>
+              </div>
+              <div class="weui-cell__ft"><a class="nav-link" href="{{ route('wechatoauth') }}">Login</a></div>
+          </div>
+
 
   @else
               <div class="weui-cell weui-cell_active">
@@ -47,7 +48,7 @@ closeable
                    <span style="vertical-align: middle;">我的借阅</span>
 
                </div>
-               <div class="weui-cell__ft"><a href="{{route('root')}}">查看</a></div>
+               <div class="weui-cell__ft"><a href="{{route('user.rent.index')}}">查看</a></div>
            </div>
 
             <div class="weui-cell weui-cell_active weui-cell_access">

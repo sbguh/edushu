@@ -18,7 +18,7 @@ class ProductSku extends Resource
      *
      * @var string
      */
-    public static $group = 'product';  
+    public static $group = 'product';
     public static $model = 'App\Models\ProductSku';
 
     /**
@@ -59,6 +59,7 @@ class ProductSku extends Resource
             Text::make('库存数','stock')
                 ->rules('required', 'max:255'),
             Currency::make('价格','price')->nullable()->hideFromIndex(),
+            Text::make('限购','limit_buy')->nullable(),
             Markdown::make('description')->nullable()->hideFromIndex(),
 
             BelongsTo::make('product')->searchable(), //禁止删除的选项

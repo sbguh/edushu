@@ -16,10 +16,10 @@
 
         <van-card
           thumb= "{{ Storage::disk('edushu')->url($rent->novel->image) }}"
-          thumb-link="{{route('novel.show',$rent->novel->id)}}"
+          thumb-link="{{route('rent.show',$rent->rent_number)}}"
         >
         <template #title>
-        <a href="{{route('novel.show',$rent->novel->id)}}">{{  $rent->novel->title }}</a>
+        <a href="{{route('rent.show',$rent->rent_number)}}">{{  $rent->novel->title }}</a>
         </template>
 
         <template #desc>
@@ -42,10 +42,10 @@
     @foreach($return_book as $rent)
     <van-card
       thumb= "{{ Storage::disk('edushu')->url($rent->novel->image) }}"
-      thumb-link="{{route('novel.show',$rent->novel->id)}}"
+      thumb-link="{{route('rent.show',$rent->rent_number)}}"
     >
     <template #title>
-    <a href="{{route('novel.show',$rent->novel->id)}}">{{  $rent->novel->title }}</a>
+    <a href="{{route('rent.show',$rent->rent_number)}}">{{  $rent->novel->title }}</a>
     </template>
 
     <template #desc>

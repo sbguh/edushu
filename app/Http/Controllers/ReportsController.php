@@ -17,6 +17,8 @@ class ReportsController extends Controller
 
       $reports = Report::whereIn('userclassroom_id',$user->classrooms()->pluck('id'))->orderBy('id','DESC')->paginate(8);
 
+      session(['return_wechat' =>['url'=>route('reports.index'),'name'=> $user->name] ]);
+
       return view('reports.index', ['user'=>$user,'reports'=>$reports]);
 
 
@@ -33,6 +35,8 @@ class ReportsController extends Controller
 
 
         $user =$userclassroom->user;
+
+        session(['return_wechat' =>['url'=>route('reports.show',$report->report_number),'name'=> $report->report_number] ]);
 
         // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
 

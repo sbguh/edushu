@@ -74980,6 +74980,10 @@ window.Plyr = plyr__WEBPACK_IMPORTED_MODULE_0___default.a;
 
 
 
+
+
+Vue.use(vant__WEBPACK_IMPORTED_MODULE_3__["Form"]);
+Vue.use(vant__WEBPACK_IMPORTED_MODULE_3__["Field"]);
 Vue.use(vant__WEBPACK_IMPORTED_MODULE_3__["Collapse"]);
 Vue.use(vant__WEBPACK_IMPORTED_MODULE_3__["CollapseItem"]);
 Vue.use(vant__WEBPACK_IMPORTED_MODULE_3__["Popup"]);

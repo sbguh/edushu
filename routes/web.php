@@ -46,14 +46,17 @@ Route::group(['middleware' => ['auth']], function() {
     Route::delete('product_cart/{sku}', 'ProductCartController@remove')->name('product.cart.remove');
 
 
-    Route::post('wechat/phone', 'WeChatController@save_phone')->name('wechat.save.phone');
+    Route::post('wechat/verify_phone', 'WeChatController@save_phone')->name('wechat.save.phone');
     Route::get('wechat/phone', 'WeChatController@add_phone')->name('wechat.add.phone');
 
 Route::post('orders', 'OrdersController@store')->name('orders.store');
 
 
 Route::post('checkout/wechatpay', 'ProductsController@wechatpay')->name('checkout.wechatpay');
-
+Route::get('rent/{rent_number}', 'RentController@show')->name('rent.show');
+Route::get('userrent', 'RentController@index')->name('user.rent.index');
+Route::get('reports/{report_number}', 'ReportsController@show')->name('reports.show');
+Route::get('reports/', 'ReportsController@index')->name('reports.index');
 
 });
 
@@ -88,6 +91,10 @@ Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
 
         dd($user);
     });
+
+
+
+
 });
 
 Route::get('books/audio/{book}', 'BooksController@bookaudio')->name('books.audio');
@@ -107,10 +114,7 @@ Route::get('tags/{tag}', 'TagsController@show')->name('tags.show');
 
 Route::get('tags/novel/{tag}', 'TagsController@novel')->name('tags.novel');
 
-Route::get('rent/{rent_number}', 'RentController@show')->name('rent.show');
-Route::get('userrent', 'RentController@index')->name('user.rent.index');
-Route::get('reports/{report_number}', 'ReportsController@show')->name('reports.show');
-Route::get('reports/', 'ReportsController@index')->name('reports.index');
+
 
 Route::get('books', 'BooksController@index')->name('books.index');
 Route::get('books/{book}', 'BooksController@show')->name('books.show');

@@ -22,9 +22,22 @@ class ProductCartController extends Controller
         if ($cart = $user->cartProducts()->where('product_sku_id', $skuId)->first()) {
 
             // 如果存在则直接叠加商品数量
-            $cart->update([
-                'amount' => $cart->amount + $amount,
-            ]);
+
+            $productsku = ProductSku::where('id',$skuId)->first();
+            if($productsku->limit_buy){
+
+              if(($cart->amount + $amount)>$productsku->limit_buy){
+                $cart->update([
+                    'amount' => $productsku->limit_buy,
+                ]);
+              }
+
+            }else{
+              $cart->update([
+                  'amount' => $cart->amount + $amount,
+              ]);
+            }
+
         } else {
 
             // 否则创建一个新的购物车记录
@@ -41,8 +54,21 @@ class ProductCartController extends Controller
     public function index(Request $request)
     {
         $cartItems = $request->user()->cartProducts()->with(['productSku.product'])->get();
+
         $addresses = $request->user()->addresses()->orderBy('last_used_at', 'desc')->get();
-        return view('products.cart', ['cartItems' => $cartItems, 'addresses' => $addresses]);
+        $need_address =1;
+        $user   = $request->user();
+        $app = app('wechat.payment');
+
+        if($user->phone_number==false){
+          session(['return_wechat' =>['url'=>route('product.cart.index'),'name'=> '购物车'] ]);
+          return redirect(route('wechat.add.phone'));
+        }
+        $user_wechat = session('wechat.oauth_user.default');
+
+        $editAddress = $app->jssdk->shareAddressConfig($user_wechat->getToken());
+        
+        return view('products.cart', ['cartItems' => $cartItems,'app'=>$app, 'user'=>$user,'editAddress' =>$editAddress, 'addresses' => $addresses,'need_address'=>$need_address]);
     }
 
 

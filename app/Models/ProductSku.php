@@ -20,7 +20,7 @@ class ProductSku extends Model
     // public $timestamps = false;
     protected $guarded = ['id'];
 
-    protected $fillable = ['title', 'description', 'price', 'stock','product_id'];
+    protected $fillable = ['title', 'description', 'price', 'stock','limit_buy','product_id'];
 
     public function product()
     {

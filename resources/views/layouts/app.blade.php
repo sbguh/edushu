@@ -40,6 +40,10 @@
           active: 0,
           show: false,
           searchResult:false,
+          phone:'',
+          dis:false,
+          verification_key:'',
+          sms:''
 
         },
         methods: {
@@ -68,6 +72,56 @@
                    },
                    onClickButton() {
                      Toast('点击按钮');
+                   },
+                   verify_phone(){
+
+                      if(this.phone==false){
+                        swal("填写手机号码")
+                        return false
+                      }
+
+                      if(this.sms==false){
+                        swal("填写验证码")
+                        return false
+                      }
+                      let data = {"phone":this.phone,"sms":this.sms,'verification_key':this.verification_key};
+                      axios.post('/wechat/verify_phone',data)
+
+                      .then(response => {
+                         swal('验证成功', '', 'success');
+                         location.href = "{{ session('return_wechat')['url'] }}";
+                        })
+                        .catch(error => {
+                          //  console.log(error.response)
+                            swal(error.response.data.message, '', 'error');
+                        });
+
+
+                   },
+                   send_sms(){
+
+                     if(this.phone==false){
+                       swal("填写手机号码")
+                       return false
+                     }
+
+                     axios.post('/wechat/send_sms/'+this.phone)
+                      .then(function (response) { // 请求成功会执行这个回调
+
+                        //$("#verification_key").val(response.data.key)
+                        app.verification_key = response.data.key;
+                        console.log("verification_key"+ app.verification_key);
+                        swal('发送成功', '', 'success');
+
+                        //location.reload();
+                      })
+
+                     this.dis = true;
+                       setTimeout(() => {
+                        this.dis = false;
+                      }, 30000);
+
+
                    },
                    showPopup() {
 

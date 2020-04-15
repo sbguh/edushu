@@ -2,76 +2,39 @@
 @section('title', $product->title)
 
 @section('content')
-<div class="row">
+
+<div class="row products-show-page">
 <div class="col-lg-10 offset-lg-1">
 <div class="card">
   <div class="card-body product-info">
     <div class="row">
-      <div class="col-xs-12 col-md-5 col-lg-5">
-        <img class="cover" src="{{ $product->image_url }}" alt="" width="300px">
+      <div class="col-5">
+        <img class="cover" src="{{Storage::disk('edushu')->url($product->image)  }}" width="180px" alt="">
       </div>
-      <div class="col-xs-12 col-md-7 col-lg-5">
-        <div class="title">{{ $product->title }}</div>
+      <div class="col-7">
+        <div class="title">{{ $product->name }}</div>
         <div class="price"><label>价格</label><em>￥</em><span>{{ $product->price }}</span></div>
-        <div class="sales_and_reviews">
-          <div class="sold_count">累计销量 <span class="count">{{ $product->sold_count }}</span></div>
-          <div class="review_count">累计评价 <span class="count">{{ $product->review_count }}</span></div>
-          <div class="rating" title="评分 {{ $product->rating }}">评分 <span class="count">{{ str_repeat('★', floor($product->rating)) }}{{ str_repeat('☆', 5 - floor($product->rating)) }}</span></div>
-        </div>
-        @if($product->virtual)
-          <form class="form-horizontal" role="form" action="{{ route('checkout.wechatpay') }}" method="post">
-            {{ csrf_field() }}
-        @endif
+
         <div class="skus">
           <label>选择</label>
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             @foreach($product->skus as $sku)
-              <label
-                  class="btn sku-btn"
-                  data-price="{{ $sku->price }}"
-                  data-stock="{{ $sku->stock }}"
-                  data-toggle="tooltip"
-                  title=""
-                  data-placement="bottom">
-                <input type="radio" name="skus" autocomplete="off" value="{{ $sku->id }}"> {{ $sku->title }}
-              </label>
+            <label
+                class="btn sku-btn"
+                data-price="{{ $sku->price }}"
+                data-stock="{{ $sku->stock }}"
+                data-toggle="tooltip"
+                title="{{ $sku->description }}"
+                data-placement="bottom">
+              <input type="radio" name="skus" autocomplete="off" value="{{ $sku->id }}"> {{ $sku->title }}
+            </label>
             @endforeach
           </div>
-
-          @if (count($errors) > 0)
-            <div class="alert alert-danger">
-              <ul>
-                  @foreach ($errors->all() as $error)
-                      <li>{{ $error }}</li>
-                  @endforeach
-              </ul>
-            </div>
-            @endif
-
-
         </div>
-        @if($product->virtual==false)
         <div class="cart_amount"><label>数量</label><input type="text" class="form-control form-control-sm" value="1"><span>件</span><span class="stock"></span></div>
-        @endif
-
         <div class="buttons">
-          @if($favored)
-            <button class="btn btn-danger btn-disfavor">取消收藏</button>
-          @else
-            <button class="btn btn-success btn-favor">❤ 收藏</button>
-          @endif
-          @if($product->virtual)
-              <button class="btn btn-primary btn-add-to-cart">立即付款</button>
-          @else
-            <button class="btn btn-primary btn-add-to-cart">加入购物车</button>
-          @endif
+          <van-goods-action-button type="danger" class="btn-add-to-cart" text="立即购买" /></van-goods-action-button >
         </div>
-
-        @if($product->virtual)
-        </form>
-        @endif
-
-
       </div>
     </div>
     <div class="product-detail">
@@ -95,6 +58,7 @@
 </div>
 </div>
 </div>
+
 @endsection
 
 @section('scriptsAfterJs')

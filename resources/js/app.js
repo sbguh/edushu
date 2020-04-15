@@ -61,7 +61,11 @@ import { Pagination } from 'vant';
 import { Cell, CellGroup } from 'vant';
 import { Popup } from 'vant';
 import { Collapse, CollapseItem } from 'vant';
+import { Field } from 'vant';
+import { Form } from 'vant';
 
+Vue.use(Form);
+Vue.use(Field);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
 Vue.use(Popup);

@@ -1,72 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">用户信息</div>
 
-                @if (count($errors) > 0)
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+<van-field v-model="phone" type="tel" label="手机号" placeholder="请输入手机号码"
+:rules="[{ required: true, message: '请填写手机号码' }]"
+ /></van-field>
 
+<van-field
+  v-model="sms"
+  center
+  clearable
+  label="短信验证码"
+  placeholder="请输入短信验证码"
+  :rules="[{ required: true, message: '请填写验证码' }]"
+>
+  <template #button>
+    <van-button size="small" v-bind:disabled="dis" @click="send_sms" type="primary">发送验证码</van-button>
+  </template>
+</van-field>
 
+<div style="margin: 16px;">
+    <van-button round block type="info"  @click='verify_phone' native-type="submit">
+      绑定手机号
+    </van-button>
+  </div>
 
-                <div class="card-body">
-                <form class="form-horizontal" role="form" action="{{ route('wechat.save.phone') }}" method="post">
-                  {{ csrf_field() }}
-
-                  </div>
-                  <div class="form-group row">
-                    <label class="col-form-label text-md-right col-sm-2">电话</label>
-
-                      @if($user->phone_number)
-                      <div class="col-sm-9">
-                      <input type="text" class="form-control" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}" readonly>
-                      </div>
-                      @else
-                      <div class="col-sm-6">
-                      <input type="text" class="form-control contact_phone" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}">
-                      </div>
-                      <div class="col-sm-3">
-                        <input type="hidden" name="verification_key" id="verification_key">
-                      <button id="sendButton" type="button" name="verify_phone" class="verify_phone btn btn-info">获取验证码</button>
-                      </div>
-
-
-                        <label class="col-form-label text-md-right col-sm-2">验证码</label>
-                        <div class="col-sm-4">
-
-                          <input type="text" class="form-control" name="verify_code" value="">
-                        </div>
-
-
-                      @endif
-
-                  </div>
-
-
-                  @if($user->phone_number==false)
-                  <div class="form-group row text-center">
-                    <div class="col-12">
-                      <button type="submit" class="btn btn-primary">提交</button>
-                    </div>
-                  </div>
-                  @endif
-
-                </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 
 

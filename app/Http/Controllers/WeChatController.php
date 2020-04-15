@@ -435,19 +435,95 @@ file_put_contents(base_path(). '/public/uploads/images/qrcode/'.$result['ticket'
 
           $app = app('wechat.official_account');
           //$app->menu->delete();
-            $buttons = [
-              [
-                  "type" => "click",
-                  "name" => "最新活动",
-                  "key" =>"LatestEvents"
-              ],
+          $buttons = [
+            [
+                "type" => "click",
+                "name" => "商城",
+                "url"  => route('books.index')
+            ],
 
-                [
-                  "type" => "view",
-                  "name" => "精选必读好书",
-                  "url"  => "https://book.edushu.co"
-              ]
+              [
+                "type" => "view",
+                "name" => "借阅中心",
+                "url"  => route('rent.index')
+            ],
+
+            [
+              "type" => "view",
+              "name" => "在线阅读",
+              "url"  => route('books.index')
+            ],
+
+            [
+
+              "name" => "我的账户",
+              "sub_button" => [
+                  [
+                      "type"=>"view",
+                      "name"=>"设置",
+                      "url"=> route('rent.index')
+                   ],
+                   [
+                      "type"=>"view",
+                      "name"=>"我的借阅",
+                      "url"=> route('user.rent.index')
+                   ],
+                   [
+                      "type"=>"view",
+                      "name"=>"我的学习报告",
+                      "url"=> route('reports.index')
+                   ]
+                 ]
+
+            ]
+
           ];
+
+          $buttons = [
+  [
+      "type" => "view",
+      "name" => "在线商城",
+      "url"  => route('books.index')
+  ],
+
+  [
+      "name" => "图书",
+      "sub_button" => [
+          [
+              "type" => "view",
+              "name"=>"借阅中心",
+              "url"  => route('rent.index')
+          ],
+          [
+              "type" => "view",
+              "name"=>"有声阅读",
+              "url"  => route('books.index')
+          ],
+      ],
+  ],
+
+
+  [
+      "name"       => "账户",
+      "sub_button" => [
+          [
+              "type" => "view",
+              "name"=>"设置",
+              "url"=> route('rent.index')
+          ],
+          [
+              "type" => "view",
+              "name"=>"我的借阅",
+              "url"=> route('user.rent.index')
+          ],
+          [
+              "type" => "view",
+              "name"=>"学习报告",
+              "url"=> route('reports.index')
+          ],
+      ],
+  ],
+];
 
             $matchRule = [
               "tag_id" => "100",
@@ -482,10 +558,14 @@ file_put_contents(base_path(). '/public/uploads/images/qrcode/'.$result['ticket'
 
           public function save_phone(Request $request){
 
-            $validatedData = $request->validate([
-                  'phone_number' => 'required|unique:users|max:255',
-                  'verify_code' => 'required',
-              ]);
+
+              $user = User::where('phone_number',$request->get('phone'))->first();
+              if($user){
+                return response()->json([
+                    'success' => false,
+                    'message' => '该手机号码已绑定其他微信账号',
+                ])->setStatusCode(422);
+              }
 
 
             //var_dump(session('return_wechat'));save_phone
@@ -493,13 +573,24 @@ file_put_contents(base_path(). '/public/uploads/images/qrcode/'.$result['ticket'
             $verifyData = \Cache::get($request->get('verification_key'));
 
           if (!$verifyData) {
-              return view('auth.phone',['user' => $user])->withErrors('验证码已失效');
+              //return view('auth.phone',['user' => $user])->withErrors('验证码已失效');
+              return response()->json([
+                  'success' => false,
+                  'message' => '验证码已失效'.$request->get('verification_key'),
+              ])->setStatusCode(422);
+
               //abort(403, '验证码已失效');
            }
 
-           if (!hash_equals($verifyData['code'],$request->get('verify_code'))) {
+           if (!hash_equals($verifyData['code'],$request->get('sms'))) {
                // 返回401
-                return view('auth.phone',['user' => $user])->withErrors('验证码错误');
+                //return view('auth.phone',['user' => $user])->withErrors('验证码错误');
+
+                return response()->json([
+                    'success' => false,
+                    'message' => '验证码错误',
+                ])->setStatusCode(422);
+
                //throw new AuthenticationException('验证码错误');
            }
            //dd($request->get('verify_code'));
@@ -512,7 +603,13 @@ file_put_contents(base_path(). '/public/uploads/images/qrcode/'.$result['ticket'
            // 清除验证码缓存
            \Cache::forget($request->verification_key);
 
-           return view('auth.phone',['user' => $user]);
+            // return view('auth.phone',['user' => $user]);
+
+            return response()->json([
+                'success' => true,
+                'message' => '验证码成功',
+            ])->setStatusCode(200);
+
 
           }
 
@@ -524,7 +621,7 @@ file_put_contents(base_path(). '/public/uploads/images/qrcode/'.$result['ticket'
 
           // 生成4位随机数，左侧补0
               $code = str_pad(random_int(1, 9999), 4, 0, STR_PAD_LEFT);
-
+/*
               try {
                   $result = $easySms->send($phone, [
                       'template' => config('easysms.gateways.aliyun.templates.register'),
@@ -536,7 +633,7 @@ file_put_contents(base_path(). '/public/uploads/images/qrcode/'.$result['ticket'
                   $message = $exception->getException('aliyun')->getMessage();
                   abort(500, $message ?: '短信发送异常');
               }
-
+*/
               $key = 'verificationCode_'.Str::random(15);
               $expiredAt = now()->addMinutes(5);
               // 缓存验证码 5 分钟过期。
@@ -614,7 +711,8 @@ $password = 'Edushuco2020!@';
             $user_info->check_subscribe = $subscribe;
             $user_info->save();
           }
-
+          $user_info->extras = $user->toArray();
+          $user_info->save();
 
           if($user_info->name != $name){
             $user_info->name = $nickname;
@@ -670,7 +768,8 @@ $password = 'Edushuco2020!@';
         if ( Auth::attempt(['openid' => $openid,'password' => $password]) ){
           //return redirect(session("return_web_url"));
           //return redirect(route('books.index'));
-          //Redirect::back();
+        //  Redirect::back();
+
           if(session('return_wechat')){
             return redirect(session('return_wechat')['url']);
           }else{
@@ -679,7 +778,7 @@ $password = 'Edushuco2020!@';
 
         }
         //Redirect::back();
-
+      //  Redirect::back();
         if(session('return_wechat')){
             return redirect(session('return_wechat')['url']);
         }else{
