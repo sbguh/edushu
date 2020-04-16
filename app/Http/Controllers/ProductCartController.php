@@ -58,16 +58,18 @@ class ProductCartController extends Controller
         $addresses = $request->user()->addresses()->orderBy('last_used_at', 'desc')->get();
         $need_address =1;
         $user   = $request->user();
-      //  $app = app('wechat.payment');
-      $app = app('wechat.official_account');
+
+        //$app = app('wechat.official_account');
 
         if($user->phone_number==false){
           session(['return_wechat' =>['url'=>route('product.cart.index'),'name'=> '购物车'] ]);
           return redirect(route('wechat.add.phone'));
         }
-        $user = session('wechat.oauth_user.default');
 
-        //$editAddress = $app->jssdk->shareAddressConfig($user_wechat->getToken());
+        //$app = app('wechat.payment');
+        $app = app('wechat.official_account');
+        $user = session('wechat.oauth_user.default');
+        //$editAddress = $app->jssdk->shareAddressConfig($user_wechat->token);
         $editAddress = "";
 
         return view('products.cart', ['cartItems' => $cartItems,'app'=>$app, 'user'=>$user,'editAddress' =>$editAddress, 'addresses' => $addresses,'need_address'=>$need_address]);

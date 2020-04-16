@@ -56,12 +56,14 @@
   <form class="form-horizontal" role="form" id="order-form">
 
     <div class="form-group row">
-      <label class="col-form-label col-sm-3 text-md-right"><button class="shippingaddress">选择收货地址</button></label>
+      <label class="col-form-label col-sm-3 text-md-right"><a class="shippingaddress">选择收货地址</a></label>
       <div class="col-sm-9 col-md-7">
         <select class="form-control" name="address">
-
+          @foreach($addresses as $address)
+            <option value="{{ $address->id }}">{{ $address->full_address }} {{ $address->contact_name }} {{ $address->contact_phone }}</option>
+          @endforeach
         </select>
-        <input type="text" name="address">
+        <input type="text" name="address" class="address">
       </div>
     </div>
 
@@ -90,41 +92,62 @@
 
 
 @section('scriptsAfterJs')
-<script src="https://res.wx.qq.com/open/js/jweixin-1.1.0.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
 
-wx.config({!! $app->jssdk->buildConfig(array('openAddress'), false) !!});
+
+wx.config({!! $app->jssdk->buildConfig(array('openAddress'), true) !!});
 
 wx.ready(function () {
 
-  $(".shippingaddress").click(function () {
 
-    wx.openAddress({
-        success: function (res) {
-          alert(res.userName);
-          var userName = res.userName; // 收货人姓名
-          var postalCode = res.postalCode; // 邮编
-          var provinceName = res.provinceName; // 国标收货地址第一级地址（省）
-          var cityName = res.cityName; // 国标收货地址第二级地址（市）
-          var countryName = res.countryName; // 国标收货地址第三级地址（国家）
-          var detailInfo = res.detailInfo; // 详细收货地址信息
-          var nationalCode = res.nationalCode; // 收货地址国家码
-          var telNumber = res.telNumber; // 收货人手机号码
-        },
-        cancel: function (errMsg) {
-          // 用户取消拉出地址
-          alert(errMsg);
-          }
+  wx.openAddress({
 
-      });
-  });
+    success: function (res) {
+      $(".address").val(JSON.stringify(res));
+      //alert("成功");
+    },
+    fail: function(err) {
+      //alert("失败");
+      //alert(err.errMsg);
+    },
+    cancel: function(err) {
+      //alert("取消");
+    }
 
 
 
-  });
+    });
+
+});
+
 
   $(document).ready(function () {
+
+
+
+    $('.shippingaddress').click(function () {
+      $(".address").val("Hello world!");
+      wx.openAddress({
+
+        success: function (res) {
+          alert("成功");
+        },
+        fail: function(err) {
+          alert(err.errMsg);
+        },
+        cancel: function(err) {
+          alert("取消");
+        }
+
+
+
+        });
+
+    });
+
     // 监听 移除 按钮的点击事件
     $('.btn-remove').click(function () {
       // $(this) 可以获取到当前点击的 移除 按钮的 jQuery 对象
