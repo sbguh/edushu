@@ -7,27 +7,23 @@ use App\Models\ProductSku;
 use App\Models\UserAddress;
 use App\Models\Order;
 use Carbon\Carbon;
-
+use Illuminate\Http\Request;
 use App\Exceptions\InvalidRequestException;
 
 class OrdersController extends Controller
 {
     public function store(OrderRequest $request)
     {
+
         $user  = $request->user();
         // 开启一个数据库事务
         $order = \DB::transaction(function () use ($user, $request) {
             $address = UserAddress::find($request->input('address_id'));
             // 更新此地址的最后使用时间
-            $address->update(['last_used_at' => Carbon::now()]);
+          //  $address->update(['last_used_at' => Carbon::now()]);
             // 创建一个订单
             $order   = new Order([
-                'address'      => [ // 将地址信息放入订单中
-                    'address'       => $address->full_address,
-                    'zip'           => $address->zip,
-                    'contact_name'  => $address->contact_name,
-                    'contact_phone' => $address->contact_phone,
-                ],
+                'address'      => $request->input('address'),
                 'remark'       => $request->input('remark'),
                 'total_amount' => 0,
             ]);
@@ -62,10 +58,20 @@ class OrdersController extends Controller
             // 将下单的商品从购物车中移除
             $skuIds = collect($items)->pluck('sku_id');
             $user->cartProducts()->whereIn('product_sku_id', $skuIds)->delete();
-
-            return $order;
+            //return redirect(route('orders.show',$order->id));
+            //return $order;
         });
 
-        return $order;
+        //return $order;
+        //return redirect(route('orders.show',$order->id));
+        return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);
     }
+
+    public function show(Order $order, Request $request)
+    {
+
+        $this->authorize('own',$order);
+        return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);
+    }
+
 }

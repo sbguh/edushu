@@ -20,7 +20,7 @@ Route::any('/subscribe', 'WeChatController@subscribe')->name('wechat.subscribe')
 Auth::routes(['verify' => true]);
 //Auth::routes();
 
-Route::group(['middleware' => ['auth','wechat.oauth']], function() {
+Route::group(['middleware' => ['auth',env('WE_CHAT_DISPLAY', true)?'wechat.oauth':"web"]], function() {
     Route::get('user_addresses', 'UserAddressesController@index')->name('user_addresses.index');
     Route::get('user_addresses/create', 'UserAddressesController@create')->name('user_addresses.create');
     Route::post('user_addresses', 'UserAddressesController@store')->name('user_addresses.store');
@@ -49,14 +49,15 @@ Route::group(['middleware' => ['auth','wechat.oauth']], function() {
     Route::post('wechat/verify_phone', 'WeChatController@save_phone')->name('wechat.save.phone');
     Route::get('wechat/phone', 'WeChatController@add_phone')->name('wechat.add.phone');
 
-Route::post('orders', 'OrdersController@store')->name('orders.store');
+    Route::post('orders', 'OrdersController@store')->name('orders.store');
+    Route::get('orders/{order}', 'OrdersController@show')->name('orders.show');
 
 
-Route::post('checkout/wechatpay', 'ProductsController@wechatpay')->name('checkout.wechatpay');
-Route::get('rent/{rent_number}', 'RentController@show')->name('rent.show');
-Route::get('userrent', 'RentController@index')->name('user.rent.index');
-Route::get('reports/{report_number}', 'ReportsController@show')->name('reports.show');
-Route::get('reports/', 'ReportsController@index')->name('reports.index');
+    Route::post('checkout/wechatpay', 'ProductsController@wechatpay')->name('checkout.wechatpay');
+    Route::get('rent/{rent_number}', 'RentController@show')->name('rent.show');
+    Route::get('userrent', 'RentController@index')->name('user.rent.index');
+    Route::get('reports/{report_number}', 'ReportsController@show')->name('reports.show');
+    Route::get('reports/', 'ReportsController@index')->name('reports.index');
 
 });
 
@@ -85,27 +86,16 @@ Route::any('/wechat/usermenu', 'WeChatController@usermenu');  //自定义菜单
 Route::any('/wechat/qrcode', 'WeChatController@qrcode')->name('wechat.qrcode');  //自定义菜单
 
 
-Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
-    Route::get('/user', function () {
-        $user = session('wechat.oauth_user.default'); // 拿到授权用户资料
-
-        dd($user);
-    });
-
-
-
-
-});
 
 Route::get('books/audio/{book}', 'BooksController@bookaudio')->name('books.audio');
 Route::get('chapter/audio/{chapter}', 'BooksController@chapteraudio')->name('chapter.audio');
-
+/*
 Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
     Route::get('wechat/auth', function () {
         $user = session('wechat.oauth_user.default'); // 拿到授权用户资料
     });
 });
-
+*/
 Route::get('category', 'CategoryController@index')->name('category.index');
 Route::get('category/{category}', 'CategoryController@show')->name('category.show');
 Route::get('category/novel/{category}', 'CategoryController@novel')->name('category.novel');
@@ -126,15 +116,9 @@ Route::any('search/{keyword}', 'BooksController@search')->name('books.search');
 Route::get('rents', 'NovelsController@index')->name('rent.index');
 Route::get('rents/{novel}', 'NovelsController@show')->name('novel.show');
 
-Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
-
-
-
-
+Route::group(['middleware' => ['web',  env('WE_CHAT_DISPLAY', true)?'wechat.oauth':"web" ]], function () {
   Route::any('/jssdk', 'WeChatController@jssdk')->name('jssdk');
   Route::any('/wechatoauth', 'WeChatController@wechatoauth')->name('wechatoauth');
-
-
 });
 
 

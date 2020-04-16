@@ -16,7 +16,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         //
-        InvalidRequestException::class,
+      //  InvalidRequestException::class,
     ];
 
     /**

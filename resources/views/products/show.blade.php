@@ -26,7 +26,7 @@
                 data-toggle="tooltip"
                 title="{{ $sku->description }}"
                 data-placement="bottom">
-              <input type="radio" name="skus" autocomplete="off" value="{{ $sku->id }}"> {{ $sku->title }}
+              <input type="radio" name="skus" class="skus" autocomplete="off" value="{{ $sku->id }}"> {{ $sku->title }}
             </label>
             @endforeach
           </div>

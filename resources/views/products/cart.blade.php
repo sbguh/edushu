@@ -6,6 +6,17 @@
 <div class="col-lg-10 offset-lg-1">
 <div class="card">
   <div class="card-header">我的购物车</div>
+
+  @if ($errors->any())
+<div class="jd_login_panle_input" style="padding: 0 26px; font-size: 13px; color: red;">
+	<ul>
+		@foreach ($errors->all() as $error)
+		<li>{{ $error }}</li>
+		@endforeach
+	</ul>
+</div>
+@endif
+
   <div class="card-body">
     <table class="table table-striped">
       <thead>
@@ -53,16 +64,13 @@
 
     <!-- 开始 -->
 <div>
-  <form class="form-horizontal" role="form" id="order-form">
+    <form class="form-horizontal" method="POST" action="{{ route('orders.store') }}">
+        @csrf
+
 
     <div class="form-group row">
-      <label class="col-form-label col-sm-3 text-md-right"><a class="shippingaddress">选择收货地址</a></label>
+      <label class="col-form-label col-sm-3 text-md-right"> 收货地址</label>
       <div class="col-sm-9 col-md-7">
-        <select class="form-control" name="address">
-          @foreach($addresses as $address)
-            <option value="{{ $address->id }}">{{ $address->full_address }} {{ $address->contact_name }} {{ $address->contact_phone }}</option>
-          @endforeach
-        </select>
         <input type="text" name="address" class="address">
       </div>
     </div>
@@ -75,7 +83,7 @@
     </div>
     <div class="form-group">
       <div class="offset-sm-3 col-sm-3">
-        <button type="button" class="btn btn-primary btn-create-order">提交订单</button>
+        <button type="submit" class="btn btn-primary">提交订单</button>
       </div>
     </div>
   </form>
@@ -92,6 +100,9 @@
 
 
 @section('scriptsAfterJs')
+
+@if(env('WE_CHAT_DISPLAY', true))
+
 
 <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
 
@@ -122,8 +133,9 @@ wx.ready(function () {
     });
 
 });
-
-
+</script>
+@endif
+<script>
   $(document).ready(function () {
 
 
@@ -188,7 +200,7 @@ wx.ready(function () {
     $('.btn-create-order').click(function () {
           // 构建请求参数，将用户选择的地址的 id 和备注内容写入请求参数
           var req = {
-            address_id: $('#order-form').find('select[name=address]').val(),
+            address: $('.address').val(),
             items: [],
             remark: $('#order-form').find('textarea[name=remark]').val(),
           };

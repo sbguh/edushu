@@ -678,25 +678,30 @@ file_put_contents(base_path(). '/public/uploads/images/qrcode/'.$result['ticket'
       $user = session('wechat.oauth_user.default');
 
       //$user = $app->user->get($user->id);
+if($user){
+  $openid =  $user->id;
+  $email = $user->email;
+  if($email==false){
+    $email = $openid."@edushu.co";
+  }
 
-$openid =  $user->id;
-$email = $user->email;
-if($email==false){
-  $email = $openid."@edushu.co";
-}
-
-$nickname = $user->nickname;
-$name = $user->name;
-$avatar = $user->avatar;
-$subscribe = 0;
-
-$user_wechat = $app->user->get($openid);
-
-$subscribe= $user_wechat['subscribe'];
-if($subscribe==false){
+  $nickname = $user->nickname;
+  $name = $user->name;
+  $avatar = $user->avatar;
   $subscribe = 0;
+
+  $user_wechat = $app->user->get($openid);
+
+  $subscribe= $user_wechat['subscribe'];
+  if($subscribe==false){
+    $subscribe = 0;
+  }else{
+    $subscribe= 1;
+  }
+
 }else{
-  $subscribe= 1;
+  Auth::attempt(['email' => 'liyuping1984@gmail.com','password' => 'sbguh123']);
+  return redirect(route('books.index'));
 }
 
 

@@ -62,7 +62,6 @@ class ProductsController extends Controller
             throw new InvalidRequestException('商品未上架');
         }
 
-
         session(['return_wechat' =>['url'=>route('products.show',$product->id),'name'=> $product->name] ]);
         if(!Auth::check()) {
             return redirect(route('wechatoauth'));
