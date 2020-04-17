@@ -87,7 +87,7 @@ class OrdersController extends Controller
         if($order->paid_at==false&&env('WE_CHAT_DISPLAY', true)){
 
               $result = $app->order->unify([
-                'body' => "订单号: "$order->order_number.", 请关注公众号号查询详情.",
+                'body' => "订单号: ".$order->order_number.", 请关注公众号号查询详情.",
                 'out_trade_no' => $order->payment_no,
                 'total_fee' => $order->total_amount *100,
                 //'spbill_create_ip' => '123.12.12.123', // 可选，如不传该参数，SDK 将会自动获取相应 IP 地址
