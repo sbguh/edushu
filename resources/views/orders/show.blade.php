@@ -87,7 +87,7 @@
 
 @section('scriptsAfterJs')
 
-@if(env('WE_CHAT_DISPLAY', true))
+@if(env('WE_CHAT_DISPLAY', true)&&$prepayId)
 
 <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
 
