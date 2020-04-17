@@ -71,8 +71,8 @@
     <div class="form-group row">
       <label class="col-form-label col-sm-3 text-md-right shippingaddress" > <i class="fa fa-address-card-o" aria-hidden="true">收货地址</i> </label>
       <div class="col-sm-9 col-md-7">
-        <select name="address">
-          <option  class="address" value="" selected />
+        <select  name="address" >
+          <option class="address" selected /></option>
         </select>
 
       </div>
@@ -121,7 +121,7 @@ wx.ready(function () {
 
     success: function (res) {
 
-      $(".address option").first().val("收件人: "+ res.userName +", 电话: "+res.telNumber +", 地址: "+ res.provinceName + res.cityName + res.detailInfo);
+      $(".address").val("收件人: "+ res.userName +", 电话: "+res.telNumber +", 地址: "+ res.provinceName + res.cityName + res.detailInfo).text("收件人: "+ res.userName +", 电话: "+res.telNumber +", 地址: "+ res.provinceName + res.cityName + res.detailInfo);
       //alert("成功");
     },
     fail: function(err) {
@@ -150,7 +150,7 @@ wx.ready(function () {
 
         success: function (res) {
           //alert("成功");
-          $(".address option").first().val("收件人: "+ res.userName +", 电话: "+res.telNumber +", 地址: "+ res.provinceName + res.cityName + res.detailInfo);
+          $(".address").val("收件人: "+ res.userName +", 电话: "+res.telNumber +", 地址: "+ res.provinceName + res.cityName + res.detailInfo).text("收件人: "+ res.userName +", 电话: "+res.telNumber +", 地址: "+ res.provinceName + res.cityName + res.detailInfo);
         },
         fail: function(err) {
           //alert(err.errMsg);

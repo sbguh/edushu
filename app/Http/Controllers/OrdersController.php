@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Exceptions\InvalidRequestException;
 use Redirect;
-
+use App\Models\Charge;
 class OrdersController extends Controller
 {
     public function store(OrderRequest $request)
