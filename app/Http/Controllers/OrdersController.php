@@ -23,6 +23,7 @@ class OrdersController extends Controller
             // 更新此地址的最后使用时间
           //  $address->update(['last_used_at' => Carbon::now()]);
             // 创建一个订单
+            $prefix = date('YmdHis');
             $pay_no = 'wechat'.$prefix.str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
             $order   = new Order([
