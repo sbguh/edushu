@@ -121,7 +121,7 @@ wx.ready(function () {
 
     success: function (res) {
 
-      $(".address").val("收件人: "+ res.userName +", 电话: "+res.telNumber +", 地址: "+ res.provinceName + res.cityName + res.detailInfo).text("收件人: "+ res.userName +", 电话: "+res.telNumber +", 地址: "+ res.provinceName + res.cityName + res.detailInfo);
+      $(".address").val(res.userName +", "+res.telNumber +", "+ res.provinceName + res.cityName + res.detailInfo).text(res.userName +", "+res.telNumber +", "+ res.provinceName + res.cityName + res.detailInfo);
       //alert("成功");
     },
     fail: function(err) {
@@ -150,7 +150,7 @@ wx.ready(function () {
 
         success: function (res) {
           //alert("成功");
-          $(".address").val("收件人: "+ res.userName +", 电话: "+res.telNumber +", 地址: "+ res.provinceName + res.cityName + res.detailInfo).text("收件人: "+ res.userName +", 电话: "+res.telNumber +", 地址: "+ res.provinceName + res.cityName + res.detailInfo);
+          $(".address").val(res.userName +", "+res.telNumber +", "+ res.provinceName + res.cityName + res.detailInfo).text(res.userName +", "+res.telNumber +", "+ res.provinceName + res.cityName + res.detailInfo);
         },
         fail: function(err) {
           //alert(err.errMsg);
