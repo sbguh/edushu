@@ -77,7 +77,7 @@ Route::get('products/{product}', 'ProductsController@show')->name('products.show
 Route::group(['middleware' => ['web']], function () {
 
 Route::any('/wechat', 'WeChatController@serve');
-Route::any('payments/wechat-notify', 'ProductsController@pay_notify')->name('checkout.notify');
+Route::any('payments/wechat-notify', 'OrdersController@pay_notify')->name('checkout.notify');
 });
 
 

@@ -23,8 +23,11 @@ class OrdersController extends Controller
             // 更新此地址的最后使用时间
           //  $address->update(['last_used_at' => Carbon::now()]);
             // 创建一个订单
+            $pay_no = 'wechat'.$prefix.str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
             $order   = new Order([
                 'address'      => $request->input('address'),
+                'payment_no' => $pay_no,
                 'remark'       => $request->input('remark'),
                 'total_amount' => 0,
             ]);
@@ -83,8 +86,8 @@ class OrdersController extends Controller
         if($order->paid_at==false&&env('WE_CHAT_DISPLAY', true)){
 
               $result = $app->order->unify([
-                'body' => $order->order_number,
-                'out_trade_no' => $order->order_number,
+                'body' => $order->order_number."微信在线订单",
+                'out_trade_no' => $order->payment_no,
                 'total_fee' => $order->total_amount *100,
                 //'spbill_create_ip' => '123.12.12.123', // 可选，如不传该参数，SDK 将会自动获取相应 IP 地址
                 'notify_url' => route('checkout.notify'), // 支付结果通知网址，如果不设置则会使用配置里的默认地址
@@ -94,6 +97,7 @@ class OrdersController extends Controller
 
             if($result['return_code']=="SUCCESS"){
               \Log::info("log sign".$result['sign']);
+
                 $order->sign =  $result['sign'];
                 $order->save();
                 $prepayId = $result['prepay_id']; //就是拿这个id 很重要
@@ -107,5 +111,74 @@ class OrdersController extends Controller
 
 
     }
+
+
+
+    public function pay_notify(Request $request){
+
+      \Log::info("pay_notify begin");
+      $app = app('wechat.payment');
+
+      $response = $app->handlePaidNotify(function($message, $fail){
+          // 使用通知里的 "微信支付订单号" 或者 "商户订单号" 去自己的数据库找到订单
+
+          $order= Order::where('payment_no',$message['out_trade_no'])->first();
+
+          if (!$order || $order->paid_at) { // 如果订单不存在 或者 订单已经支付过了
+              return true; // 告诉微信，我已经处理完了，订单没找到，别再通知我了
+          }
+
+          ///////////// <- 建议在这里调用微信的【订单查询】接口查一下该笔订单的情况，确认是已经支付 /////////////
+
+          if ($message['return_code'] === 'SUCCESS') { // return_code 表示通信状态，不代表支付状态
+              // 用户是否支付成功
+
+              \Log::info("pay_notify SUCCESS");
+
+              if (array_get($message, 'result_code') === 'SUCCESS') {
+                \Log::info("pay_notify write data");
+
+                  $order->paid_at = time(); // 更新支付时间为当前时间
+                  $order->status = 'paid';
+
+                  $charger_count = Charge::where('charge_number',$order->payment_no)->count();
+
+                  $item= $order->items()->first();
+                  if($item->product->id==65&&$charger_count==0){
+
+                    $charge = new Charge([
+                      'charge_number'=>$order->payment_no,
+                      //'amount'=>$order->total_amount,
+                      'remark'=>'自动入账',
+                      'type' => "自动在线充值",
+                      //'sign'=>$result['sign']
+
+                    ]);
+
+                    $charge->user()->associate($order->user_id);
+                    $charge->amount = $order->total_amount;
+                    $charge->save();
+
+                    $order->ship_status="完成充值";
+                    $order->save();
+                  }
+
+
+              // 用户支付失败
+              } elseif (array_get($message, 'result_code') === 'FAIL') {
+                  $order->status = 'paid_fail';
+              }
+          } else {
+              return $fail('通信失败，请稍后再通知我');
+          }
+
+          $order->save(); // 保存订单
+
+          return true; // 返回处理完成
+      });
+
+      return $response;
+    }
+
 
 }
