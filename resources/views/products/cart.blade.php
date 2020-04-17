@@ -69,7 +69,7 @@
 
 
     <div class="form-group row">
-      <label class="col-form-label col-sm-3 text-md-right"> 收货地址</label>
+      <label class="col-form-label col-sm-3 text-md-right shippingaddress" > <i class="fa fa-address-card-o" aria-hidden="true">收货地址</i> </label>
       <div class="col-sm-9 col-md-7">
         <input type="text" name="address" class="address">
       </div>
@@ -117,7 +117,8 @@ wx.ready(function () {
   wx.openAddress({
 
     success: function (res) {
-      $(".address").val(JSON.stringify(res));
+
+      $(".address").val("收件人: "+ res.userName +", 电话: "+res.telNumber +", 地址: "+ res.provinceName + res.cityName + res.detailInfo);
       //alert("成功");
     },
     fail: function(err) {
@@ -141,17 +142,18 @@ wx.ready(function () {
 
 
     $('.shippingaddress').click(function () {
-      $(".address").val("Hello world!");
+
       wx.openAddress({
 
         success: function (res) {
-          alert("成功");
+          //alert("成功");
+          $(".address").val("收件人: "+ res.userName +", 电话: "+res.telNumber +", 地址: "+ res.provinceName + res.cityName + res.detailInfo);
         },
         fail: function(err) {
-          alert(err.errMsg);
+          //alert(err.errMsg);
         },
         cancel: function(err) {
-          alert("取消");
+          //alert("取消");
         }
 
 

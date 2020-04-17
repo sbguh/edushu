@@ -6,19 +6,43 @@
 <div class="row products-show-page">
 <div class="col-lg-10 offset-lg-1">
 <div class="card">
+
+  @if ($errors->any())
+<div class="jd_login_panle_input" style="padding: 0 26px; font-size: 13px; color: red;">
+  <ul>
+    @foreach ($errors->all() as $error)
+    <li>{{ $error }}</li>
+    @endforeach
+  </ul>
+</div>
+@endif
+
   <div class="card-body product-info">
+
+
     <div class="row">
       <div class="col-5">
         <img class="cover" src="{{Storage::disk('edushu')->url($product->image)  }}" width="180px" alt="">
       </div>
       <div class="col-7">
+
+        @if($product->skus()->count()==1)
+        <div class="title"> {{ $product->skus()->first()->title }} </div>
+          <div class="price"><label>价格</label><em>￥</em><span>{{ $product->skus()->first()->price }}</span></div>
+        @else
         <div class="title">{{ $product->name }}</div>
-        <div class="price"><label>价格</label><em>￥</em><span>{{ $product->price }}</span></div>
+          <div class="price"><label>价格</label><em>￥</em><span>{{ $product->price }}</span></div>
+        @endif
 
         <div class="skus">
-          <label>选择</label>
+
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            @if($product->skus()->count()==1)
+              <input type="hidden" name="skus" class="skus" autocomplete="off" value="{{ $product->skus()->first()->id }}">
+            @else
+            <label>选择</label>
             @foreach($product->skus as $sku)
+
             <label
                 class="btn sku-btn"
                 data-price="{{ $sku->price }}"
@@ -29,6 +53,8 @@
               <input type="radio" name="skus" class="skus" autocomplete="off" value="{{ $sku->id }}"> {{ $sku->title }}
             </label>
             @endforeach
+
+            @endif
           </div>
         </div>
         <div class="cart_amount"><label>数量</label><input type="text" class="form-control form-control-sm" value="1"><span>件</span><span class="stock"></span></div>
@@ -55,6 +81,7 @@
       </div>
     </div>
   </div>
+
 </div>
 </div>
 </div>
@@ -64,10 +91,16 @@
 @section('scriptsAfterJs')
 <script>
   $(document).ready(function () {
+
     $('[data-toggle="tooltip"]').tooltip({trigger: 'hover'});
     $('.sku-btn').click(function () {
       $('.product-info .price span').text($(this).data('price'));
       $('.product-info .stock').text('库存：' + $(this).data('stock') + '件');
+      if( $(this).data('stock')==0){
+        $(".btn-add-to-cart").attr("style","display:none;");
+      }else{
+        $(".btn-add-to-cart").attr("style","display:block");
+      }
     });
 
 
