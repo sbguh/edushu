@@ -87,7 +87,7 @@ class OrdersController extends Controller
         if($order->paid_at==false&&env('WE_CHAT_DISPLAY', true)){
 
               $result = $app->order->unify([
-                'body' => "订单号: ".$order->order_number.", 请关注公众号号查询详情.",
+                'body' => "订单号: ".$order->order_number.", 请关注公众号查询详情.",
                 'out_trade_no' => $order->payment_no,
                 'total_fee' => $order->total_amount *100,
                 //'spbill_create_ip' => '123.12.12.123', // 可选，如不传该参数，SDK 将会自动获取相应 IP 地址
@@ -138,6 +138,24 @@ class OrdersController extends Controller
 
               if (array_get($message, 'result_code') === 'SUCCESS') {
                 \Log::info("pay_notify write data");
+
+                $app_wechat = app('wechat.official_account');
+                $user = $request->user()
+                $openid = $user->openid;
+                $app_wechat->template_message->send([
+                  'touser' => $openid,
+                  'template_id' => 'PC3n2HvWWdaSxXfhXFH_KZvU_uWkO8LECsYlhxV2lIM',
+                  'url' => route('orders.show',$order->id),
+                  'data' => [
+                      'first' =>'支付成功通知',
+                      'keyword1' => $order->order_number,
+                      'keyword2' => $order->total_amount,
+                      'keyword3' => $order->paid_at,
+                      'remark' => "感谢您的使用，详情请点击查看"
+
+                  ],
+              ]);
+
 
                   $order->paid_at = time(); // 更新支付时间为当前时间
                   $order->status = 'paid';
