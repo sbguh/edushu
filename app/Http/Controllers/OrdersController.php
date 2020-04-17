@@ -140,7 +140,7 @@ class OrdersController extends Controller
                 \Log::info("pay_notify write data");
 
                 $app_wechat = app('wechat.official_account');
-                $user = $request->user()
+                $user = $request->user();
                 $openid = $user->openid;
                 $app_wechat->template_message->send([
                   'touser' => $openid,
