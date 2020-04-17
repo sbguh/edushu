@@ -106,7 +106,7 @@ class OrdersController extends Controller
 
             }
         }else{
-              return view('orders.show', ['app' => $app, 'order' => $order->load(['items.productSku', 'items.product'])]);
+              return view('orders.show', ['app' => $app,'prepayId'=>false, 'order' => $order->load(['items.productSku', 'items.product'])]);
         }
 
 
