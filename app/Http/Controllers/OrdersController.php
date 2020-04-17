@@ -97,7 +97,7 @@ class OrdersController extends Controller
                 $order->sign =  $result['sign'];
                 $order->save();
                 $prepayId = $result['prepay_id']; //就是拿这个id 很重要
-                return view('orders.show', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$productSku->price, 'order' => $order->load(['items.productSku', 'items.product'])]);
+                return view('orders.show', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$order->total_amount, 'order' => $order->load(['items.productSku', 'items.product'])]);
 
             }
         }else{

@@ -71,7 +71,7 @@
     <div class="form-group row">
       <label class="col-form-label col-sm-3 text-md-right shippingaddress" > <i class="fa fa-address-card-o" aria-hidden="true">收货地址</i> </label>
       <div class="col-sm-9 col-md-7">
-        <input type="text" name="address" class="address">
+        <input name="address" type="radio" class="address" value="" />
       </div>
     </div>
 
@@ -109,7 +109,7 @@
 <script>
 
 
-wx.config({!! $app->jssdk->buildConfig(array('openAddress'), true) !!});
+wx.config({!! $app->jssdk->buildConfig(array('openAddress'), false) !!});
 
 wx.ready(function () {
 
