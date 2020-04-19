@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="cart_amount"><label>数量</label><input type="text" class="form-control form-control-sm" value="1"><span>件</span></div>
-        <div class="buttons">
+        <div class="buttons" style="margin-bottom:5px;">
           <van-goods-action-button type="danger" class="btn-add-to-cart" text="立即购买" /></van-goods-action-button >
         </div>
       </div>
