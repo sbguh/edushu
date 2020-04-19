@@ -122,8 +122,8 @@ wx.ready(function () {
   wx.openAddress({
 
     success: function (res) {
-
-      $(".address").val(res.userName +", "+res.telNumber +", "+ res.provinceName + res.cityName + res.detailInfo);
+      data.address = res.userName +", "+res.telNumber +", "+ res.provinceName + res.cityName + res.detailInfo;
+    //  $(".address").val(res.userName +", "+res.telNumber +", "+ res.provinceName + res.cityName + res.detailInfo);
       //alert("成功");
     },
     fail: function(err) {

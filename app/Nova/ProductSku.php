@@ -22,7 +22,7 @@ class ProductSku extends Resource
      */
     public static $group = 'product';
     public static $model = 'App\Models\ProductSku';
-
+public static $trafficCop = false;
     /**
      * The single value that should be used to represent the resource when being displayed.
      *

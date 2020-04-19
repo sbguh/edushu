@@ -77,7 +77,7 @@
           <a class="nav-link" href="#product-reviews-tab" aria-controls="product-reviews-tab" role="tab" data-toggle="tab" aria-selected="false">用户评价</a>
         </li>
       </ul>
-      <div class="tab-content">
+      <div class="tab-content image_fix">
         <div role="tabpanel" class="tab-pane active" id="product-detail-tab">
           {!! $product->description !!}
         </div>
@@ -179,7 +179,7 @@
         })
     });
 
-
+$(".sku-btn").first().click();
   });
 </script>
 
@@ -192,10 +192,10 @@ wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','update
 
   wx.ready(function () {
         wx.updateAppMessageShareData({
-            title: {{$product->extras->meta_title?$product->extras->meta_title:$product->name}}, // 分享标题
-            desc: {{$product->extras->meta_description?$product->extras->meta_description:$product->name}}, // 分享描述
-            link: {{route('products.show',$product->id)}} // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: '', // 分享图标
+            title: "{{$product->extras->meta_title?$product->extras->meta_title:$product->name}}", // 分享标题
+            desc: "{{$product->extras->meta_description?$product->extras->meta_description:$product->name}}", // 分享描述
+            link: "{{route('products.show',$product->id)}}",// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '{{Storage::disk('edushu')->url($product->image)}}', // 分享图标
             success: function () {
               // 设置成功
             }
