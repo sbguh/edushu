@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth',env('WE_CHAT_DISPLAY', true)?'wechat.oauth
 
     Route::post('orders', 'OrdersController@store')->name('orders.store');
     Route::get('orders/{order}', 'OrdersController@show')->name('orders.show');
+    Route::get('orders', 'OrdersController@index')->name('orders.index');
 
 
     Route::post('checkout/wechatpay', 'ProductsController@wechatpay')->name('checkout.wechatpay');

@@ -13,8 +13,24 @@ use Redirect;
 use App\Models\Charge;
 use App\Jobs\CloseOrder;
 
+
 class OrdersController extends Controller
 {
+
+
+  public function index(Request $request)
+  {
+    $user   = $request->user();
+
+    $orders = $user->orders()->orderBy('id','DESC')->paginate(8);
+
+    session(['return_wechat' =>['url'=>route('orders.index'),'name'=> $user->name] ]);
+
+    return view('orders.index', ['user'=>$user,'orders'=>$orders]);
+
+
+  }
+
     public function store(OrderRequest $request)
     {
 

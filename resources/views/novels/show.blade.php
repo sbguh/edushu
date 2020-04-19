@@ -1,4 +1,4 @@
-@extends('layouts.rent_app')
+@extends('layouts.app')
 @section('title', $novel->title)
 
 @section('jssdk')

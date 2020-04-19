@@ -51,13 +51,13 @@ closeable
            </div>
 
 
-            <div class="weui-cell weui-cell_active weui-cell_access">
-               <div class="weui-cell__bd">
-                   <span style="vertical-align: middle;">订单查询</span>
+           <div class="weui-cell weui-cell_active weui-cell_access">
+              <div class="weui-cell__bd">
+                  <span style="vertical-align: middle;"><a href="{{route('orders.index')}}">订单查询</a></span>
 
-               </div>
-               <div class="weui-cell__ft"><a href="{{route('root')}}">查看</a></div>
-           </div>
+              </div>
+              <div class="weui-cell__ft"><a href="{{route('orders.index')}}">查看</a></div>
+          </div>
 
            <div class="weui-cell weui-cell_active weui-cell_access">
               <div class="weui-cell__bd">

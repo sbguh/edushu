@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', $product->extras->meta_title?$product->extras->meta_title:$product->name)
+@section('title', isset($product->extras->meta_title)?$product->extras->meta_title:$product->name)
 
 @section('content')
 
@@ -68,23 +68,13 @@
         </div>
       </div>
     </div>
-    <div class="product-detail">
-      <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" href="#product-detail-tab" aria-controls="product-detail-tab" role="tab" data-toggle="tab" aria-selected="true">商品详情</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#product-reviews-tab" aria-controls="product-reviews-tab" role="tab" data-toggle="tab" aria-selected="false">用户评价</a>
-        </li>
-      </ul>
-      <div class="tab-content image_fix">
-        <div role="tabpanel" class="tab-pane active" id="product-detail-tab">
-          {!! $product->description !!}
-        </div>
-        <div role="tabpanel" class="tab-pane" id="product-reviews-tab">
-        </div>
-      </div>
-    </div>
+
+    <van-tabs v-model="active" >
+      <van-tab title="详细" class="image_fix">{!! $product->description !!}</van-tab>
+      <van-tab title="用户评价">暂未开放</van-tab>
+
+    </van-tabs>
+
   </div>
 
 </div>
@@ -207,5 +197,9 @@ wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','update
 
 
 @endif
+
+@endsection
+
+@section('search')
 
 @endsection
