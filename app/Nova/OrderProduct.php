@@ -22,9 +22,9 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\BelongsTo;
+use App\Models\Order;
 
-
-class OrderItem extends Resource
+class OrderProduct extends Resource
 {
     /**
      * The model the resource corresponds to.
@@ -32,8 +32,8 @@ class OrderItem extends Resource
      * @var string
      */
     public static $group = '订单';
-    public static $model = 'App\Models\OrderItem';
-
+    public static $model = 'App\Models\OrderProduct';
+public static $displayInNavigation = false;
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
@@ -64,12 +64,21 @@ class OrderItem extends Resource
 
      public static function indexQuery(NovaRequest $request, $query)
      {
+       /*
          return $query->where(function ($query) {
                                 $query->select('status')
                                     ->from('orders')
                                     ->whereColumn('order_id', 'orders.id')
                                     ->limit(1);
-                            }, 'paid');
+                            }, 'complete');
+
+
+
+        $orders = Order::whereNotNull('paid_at')->pluck("id");
+        return $query->whereIn('order_id',$orders);
+*/
+
+
      }
 
 
@@ -78,11 +87,10 @@ class OrderItem extends Resource
         return [
             ID::make()->sortable(),
             Currency::make('价格','price')->nullable()->hideFromIndex(),
+            Text::make('product_name'),
             Number::make('amount'),
             Textarea::make('review'),
 
-            BelongsTo::make('productSku')->searchable(),
-            BelongsTo::make('product'),
             BelongsTo::make('order'),
         ];
     }

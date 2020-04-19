@@ -38,6 +38,7 @@ class Product extends Model
         'extra_features' => 'object',
         'images'       => 'array',
         'virtual' => 'boolean',
+        'extras' => 'object',
     ];
 
     public $translatable = ['features', 'extras'];

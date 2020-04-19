@@ -5,21 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\AddCartRequest;
 use App\Models\CartItem;
+use App\Models\Cart;
 use App\User;
 use App\Models\Book;
 class CartController extends Controller
 {
     //
-    public function add(AddCartRequest $request)
+    public function add(Request $request)
         {
 
+
             $user   = $request->user();
-            $bookId  = $request->input('book_id');
-            $amount = 1;
+            $itemId  = $request->input('item_id');
+            $itemType  = $request->input('item_type');
+            $amount = $request->input('amount');
+            $commentable_id = $itemId;
+            $commentable_type=sprintf("App\Models\%s",ucfirst($itemType));
 
 
             // 从数据库中查询该商品是否已经在购物车中
-            if ($cart = $user->cartItems()->where('book_id', $bookId)->first()) {
+            if ($cart = $user->carts()->where('commentable_id', $commentable_id)->where('commentable_type',$commentable_type)->first()) {
 
                 // 如果存在则直接叠加商品数量
                 $cart->update([
@@ -28,11 +33,13 @@ class CartController extends Controller
             } else {
 
                 // 否则创建一个新的购物车记录
-                $cart = new CartItem(['amount' => $amount]);
+                $cart = new Cart([
+                  'amount' => $amount,
+                  'commentable_id' =>$commentable_id,
+                  'commentable_type'=>$commentable_type
+                ]);
 
                 $cart->user()->associate($user);
-
-                $cart->book()->associate($bookId);
                 $cart->save();
             }
 
@@ -42,16 +49,43 @@ class CartController extends Controller
 
         public function index(Request $request)
           {
-              $cartItems = $request->user()->cartItems()->with(['book'])->get();
 
 
-              return view('cart.index', ['cartItems' => $cartItems]);
+            $cartItems = $request->user()->carts()->get();
+            $product_items = array();
+            foreach($cartItems as $key=>$item){
+              $model_name = $item->commentable_type;
+              $model_id = $item->commentable_id;
+
+              $item_orm = (New $model_name)::find($model_id);
+              $item->product = $item_orm;
+              $cartItems[$key] = $item;
+            }
+
+            $need_address =1;
+            $user   = $request->user();
+
+            //$app = app('wechat.official_account');
+
+            if($user->phone_number==false){
+              session(['return_wechat' =>['url'=>route('cart.index'),'name'=> '购物车'] ]);
+              return redirect(route('wechat.add.phone'));
+            }
+
+            //$app = app('wechat.payment');
+            $app = app('wechat.official_account');
+            $user = session('wechat.oauth_user.default');
+            //$editAddress = $app->jssdk->shareAddressConfig($user_wechat->token);
+            $editAddress = "";
+
+            return view('cart.index', ['cartItems' => $cartItems,'app'=>$app, 'user'=>$user,'editAddress' =>$editAddress, 'need_address'=>$need_address]);
+
           }
 
-        public function remove(Book $book, Request $request)
+        public function remove(Cart $cart, Request $request)
         {
 
-            $request->user()->cartItems()->where('book_id', $book->id)->delete();
+            $cart->delete();
 
             return [];
         }

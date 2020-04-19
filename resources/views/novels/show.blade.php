@@ -50,7 +50,7 @@
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">作者:</label> <span class="weui-form-preview__value">{{$novel->author}}</span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">借阅:</label> <span class="weui-form-preview__value">{{$novel->rent_count}}</span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">浏览:</label> <span class="weui-form-preview__value">{{$novel->count}}</span></div>
-              <div class="weui-form-preview__item"><label class="weui-form-preview__label">价格:</label> <span class="weui-form-preview__value">￥{{$novel->price}}</span></div>
+              <div class="weui-form-preview__item"><label class="weui-form-preview__label">在线预约:</label> <span class="weui-form-preview__value">￥{{$novel->price}}</span></div>
             </div>
 
         </div>
@@ -61,8 +61,7 @@
            @else
            <van-goods-action-icon icon="star" text="未收藏" class="btn-favor" color="#ff5000" /> </van-goods-action-icon>
            @endif
-          <van-goods-action-button type="warning" text="借书" /> </van-goods-action-button>
-          <van-goods-action-button type="danger" text="在线购买" /></van-goods-action-button >
+          <van-goods-action-button type="danger" class="btn-add-to-cart" text="预约此书" /> </van-goods-action-button>
         </div>
 
 
@@ -174,7 +173,43 @@
        });
    });
 
+   $('.btn-add-to-cart').click(function () {
 
+      // 请求加入购物车接口
+      axios.post('{{ route("cart.add") }}', {
+        item_id: {{$novel->id}},
+        item_type: 'Novel',
+        amount: 1,
+      })
+        .then(function () { // 请求成功执行此回调
+          swal('加入购物车成功', '', 'success')
+          .then(function() {
+          location.href = '{{ route('cart.index') }}';
+        });
+        }, function (error) { // 请求失败执行此回调
+          if (error.response.status === 401) {
+
+            // http 状态码为 401 代表用户未登陆
+            swal('请先登录', '', 'error');
+
+          } else if (error.response.status === 422) {
+
+            // http 状态码为 422 代表用户输入校验失败
+            var html = '<div>';
+            _.each(error.response.data.errors, function (errors) {
+              _.each(errors, function (error) {
+                html += error+'<br>';
+              })
+            });
+            html += '</div>';
+            swal({content: $(html)[0], icon: 'error'})
+          } else {
+
+            // 其他情况应该是系统挂了
+            swal('系统错误', '', 'error');
+          }
+        })
+    });
 
   });
 </script>

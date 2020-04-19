@@ -55,6 +55,11 @@
             @endforeach
 
             @endif
+
+
+            <input type="hidden" name="item_type" class="skus" autocomplete="off" value="Product_sku">
+
+
           </div>
         </div>
         <div class="cart_amount"><label>数量</label><input type="text" class="form-control form-control-sm" value="1"><span>件</span><span class="stock"></span></div>
@@ -139,14 +144,15 @@
    $('.btn-add-to-cart').click(function () {
 
       // 请求加入购物车接口
-      axios.post('{{ route('product.cart.add') }}', {
-        sku_id: $('label.active input[name=skus]').val(),
+      axios.post('{{ route("cart.add") }}', {
+        item_id: $('label.active input[name=skus]').val(),
+        item_type: 'Product_sku',
         amount: $('.cart_amount input').val(),
       })
         .then(function () { // 请求成功执行此回调
           swal('加入购物车成功', '', 'success')
           .then(function() {
-          location.href = '{{ route('product.cart.index') }}';
+          location.href = '{{ route('cart.index') }}';
         });
         }, function (error) { // 请求失败执行此回调
           if (error.response.status === 401) {
@@ -176,4 +182,30 @@
 
   });
 </script>
+
+@if(env('WE_CHAT_DISPLAY', true))
+
+<script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript" charset="utf-8">
+wx.config({!! $app->jssdk->buildConfig(array('updateAppMessageShareData','updateTimelineShareData'), false) !!});
+
+  wx.ready(function () {
+        wx.updateAppMessageShareData({
+            title: {{$product->extras->meta_title?$product->extras->meta_title:$product->name}}, // 分享标题
+            desc: {{$product->extras->meta_description?$product->extras->meta_description:$product->name}}, // 分享描述
+            link: {{route('products.show',$product->id)}} // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '', // 分享图标
+            success: function () {
+              // 设置成功
+            }
+          })
+      });
+
+
+</script>
+
+
+@endif
+
 @endsection

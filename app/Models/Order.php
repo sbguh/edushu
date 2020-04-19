@@ -91,6 +91,12 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+
+    public function products()
+    {
+        return $this->hasMany(OrderProduct::class);
+    }
+
     public static function findAvailableNo()
     {
         // 订单流水号前缀

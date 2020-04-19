@@ -37,7 +37,16 @@ class NovelUserRule implements Rule
 
       \Log::info("NovelUserRule value:".$value);
         $novel =Novel::find($value);
-        $novel->current_rent =$novel->current_rent + 1;
+        $novel->stock =$novel->stock - 1;
+        if($novel->stock < 0){
+          //$this->has_error =false;
+          return false;
+        }else{
+          return true;
+        //  $this->has_error =true;
+        }
+
+        /*
         if($novel->current_rent >= $novel->stock){
           //$this->has_error =false;
           return false;
@@ -46,6 +55,8 @@ class NovelUserRule implements Rule
         //  $this->has_error =true;
         }
         //return $this->has_error;
+
+        */
 
     }
 

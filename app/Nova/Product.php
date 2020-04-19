@@ -21,6 +21,7 @@ use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\Trix;
 use Laravel\Nova\Fields\MorphToMany;
+use Laravel\Nova\Fields\KeyValue;
 
 class Product extends Resource
 {
@@ -87,6 +88,11 @@ class Product extends Resource
                     Boolean::make('虚拟物品','virtual')->hideFromIndex(),
                     Heading::make('详细信息')->hideFromIndex(),
                     Trix::make('详细描述','description')->alwaysShow()->nullable()->hideFromIndex()->withFiles('edushu'),
+                    KeyValue::make('meta属性','extras')
+                          ->keyLabel('meta属性') // Customize the key heading
+                          ->valueLabel('meta属性值') // Customize the value heading
+                          ->actionText('添加') // Customize the "add row" button text
+                          ->withMeta(['value'=>$this->extras ? $this->extras : ["meta_title"=>"", "meta_description"=>""]]),
 
 
                   //  HasMany::make('users'),

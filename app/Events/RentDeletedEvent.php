@@ -42,6 +42,7 @@ class RentDeletedEvent
         $openid = $user->openid;
         $score = 0;
         $user->rent_count = $user->rent_count +1;
+        $novel->stock = $novel->stock +1;
         $user->level_upgrade = $user->level_upgrade+10;
         $user->scores =  $user->scores + 10;
         $score +=10;

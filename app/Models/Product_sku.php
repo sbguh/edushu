@@ -19,15 +19,25 @@ class Product_sku extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'on_sale'    => 'boolean',
+    ];
+
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
 
-    protected $fillable = ['title', 'description', 'price', 'stock','product_id'];
+    protected $fillable = ['title', 'description', 'price', 'stock','product_id','image','on_sale'];
 
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function getLinkAttribute()
+    {
+        return route('products.show',$this->product->id);
     }
 
     public function decreaseStock($amount)
@@ -46,7 +56,7 @@ class Product_sku extends Model
         }
         $this->increment('stock', $amount);
     }
-    
+
 
 
     /*

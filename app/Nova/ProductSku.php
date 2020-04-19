@@ -10,6 +10,8 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Markdown;
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\Boolean;
 
 class ProductSku extends Resource
 {
@@ -58,6 +60,8 @@ class ProductSku extends Resource
 
             Text::make('库存数','stock')
                 ->rules('required', 'max:255'),
+            Boolean::make('on_sale'),
+            Image::make('图片','image')->disk('edushu')->nullable(),
             Currency::make('价格','price')->nullable()->hideFromIndex(),
             Text::make('限购','limit_buy')->nullable(),
             Markdown::make('description')->nullable()->hideFromIndex(),

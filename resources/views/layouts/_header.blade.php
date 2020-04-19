@@ -1,3 +1,5 @@
+@section('search')
+
   <van-search
     v-model="value"
     placeholder="请输入搜索关键词"
@@ -14,3 +16,4 @@
                 </div>
             </div>
 </div>
+@show

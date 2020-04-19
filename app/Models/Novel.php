@@ -28,6 +28,16 @@ class Novel extends BaseModel
     }
 */
 
+public function decreaseStock($amount)
+{
+    if ($amount < 0) {
+        //throw new InternalException('减库存不可小于0');
+    }
+
+    return $this->where('id', $this->id)->where('stock', '>=', $amount)->decrement('stock', $amount);
+}
+
+
 public function getCurrentRentAttribute()
 {
     $count = Rent::where('novel_id',$this->id)->where('state', '借阅中')->count();

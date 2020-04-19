@@ -2,79 +2,82 @@
 @section('title', '查看订单')
 
 @section('content')
+  <div class="card-header">订单详情</div>
 <div class="row">
 <div class="col-lg-10 offset-lg-1">
-<div class="card">
-  <div class="card-header">
-    <h4>订单详情</h4>
-  </div>
-  <div class="card-body">
-    <table class="table">
-      <thead>
-      <tr>
-        <th>商品信息</th>
-        <th class="text-center">单价</th>
-        <th class="text-center">数量</th>
-        <th class="text-right item-amount">小计</th>
-      </tr>
-      </thead>
-      @foreach($order->items as $index => $item)
-        <tr>
-          <td class="product-info">
-            <div class="preview">
-              <a target="_blank" href="{{ route('products.show', [$item->product_id]) }}">
-                <img src="{{ $item->product->image_url }}">
-              </a>
-            </div>
-            <div>
-              <span class="product-title">
-                 <a target="_blank" href="{{ route('products.show', [$item->product_id]) }}">{{ $item->product->title }}</a>
-              </span>
-              <span class="sku-title">{{ $item->productSku->title }}</span>
-            </div>
-          </td>
-          <td class="sku-price text-center vertical-middle">￥{{ $item->price }}</td>
-          <td class="sku-amount text-center vertical-middle">{{ $item->amount }}</td>
-          <td class="item-amount text-right vertical-middle">￥{{ number_format($item->price * $item->amount, 2, '.', '') }}</td>
-        </tr>
-      @endforeach
-      <tr><td colspan="4"></td></tr>
-    </table>
-    <div class="order-bottom">
-      <div class="order-info ">
-        <div class="line"><div class="line-label">收货地址：</div><div class="line-value">{{ $order->address }}</div></div>
-        <div class="line"><div class="line-label">订单备注：</div><div class="line-value">{{ $order->remark ?: '-' }}</div></div>
-        <div class="line"><div class="line-label">订单编号：</div><div class="line-value">{{ $order->order_number }}</div></div>
-      </div>
-      <div class="order-summary  ">
-        <div class="total-amount">
-          <span>订单总价：</span>
-          <div class="value">￥{{ $order->total_amount }}</div>
-        </div>
-        <div>
-          <span>订单状态：</span>
-          <div class="value">
-            @if($order->paid_at)
-              @if($order->refund_status === \App\Models\Order::REFUND_STATUS_PENDING)
-                已支付
-              @else
-                {{ \App\Models\Order::$refundStatusMap[$order->refund_status] }}
-              @endif
-            @elseif($order->closed)
-              已关闭
-            @else
-              未支付
-            @endif
 
-          </div>
-        </div>
+<div class="card">
+
+  <div class="card-body">
+
+<div class="weui-form-preview__bd">
+      @foreach($order->products as $index => $item)
+
+
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">商品</label>
+                    <span class="weui-form-preview__value"><a href="{{ $item->product->link }}">{{$item->product_name}}</a></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">单价</label>
+                    <span class="weui-form-preview__value">￥{{ $item->price }}</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">数量</label>
+                    <span class="weui-form-preview__value">{{ $item->amount }}</span>
+                </div>
+
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">小计</label>
+                    <span class="weui-form-preview__value">￥{{ number_format($item->price * $item->amount, 2, '.', '') }}</span>
+                </div>
+      @endforeach
+</div>
+    <div class="order-bottom">
+      <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">收货地址：</label>
+                    <span class="weui-form-preview__value">{{ $order->address }}</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">订单备注：</label>
+                    <span class="weui-form-preview__value">{{ $order->remark ?: '-' }} </span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">订单编号：</label>
+                    <span class="weui-form-preview__value">{{ $order->order_number }}</span>
+                </div>
+
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">订单总价：</label>
+                    <span class="weui-form-preview__value">￥{{ $order->total_amount }}</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">订单状态：</label>
+                    <span class="weui-form-preview__value">
+                      @if($order->paid_at)
+                        @if($order->refund_status === \App\Models\Order::REFUND_STATUS_PENDING)
+                          已支付
+                        @else
+                          {{ \App\Models\Order::$refundStatusMap[$order->refund_status] }}
+                        @endif
+                      @elseif($order->closed)
+                        已关闭
+                      @else
+                        未支付
+                      @endif
+
+                    </span>
+                </div>
       </div>
+
 
     </div>
 
     @if($order->paid_at==false)
-    <div class="clearfix">
-      <button style="width:210px; height:50px; border-radius: 15px;background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >立即支付</button>
+    <div class="clearfix" style="text-align:center">
+
+      <van-goods-action-button type="danger" onclick="callpay()"  class="btn-add-to-cart" text="立即支付" /> </van-goods-action-button>
     </div>
     @endif
 
@@ -126,4 +129,8 @@ function callpay()
 
 </script>
 @endif
+@endsection
+
+@section('search')
+
 @endsection

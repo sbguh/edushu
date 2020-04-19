@@ -24,28 +24,33 @@
     @include('layouts._footer')
 
 </div>
-    @yield('scriptsAfterJs')
+
 
     <script>
+
+var data = {
+  //message: 'Hello Vue!'
+  value:'',
+  activeNames: ['1'],
+  inputVal:'',
+  result:[],
+  active: 0,
+  show: false,
+  searchResult:false,
+  phone:'',
+  dis:false,
+  verification_key:'',
+  sms:'',
+  remark: "",
+  address:"",
+  amount:0
+
+};
 
     var app = new Vue({
         el: '#app',
         delimiters : ['[[', ']]'],
-        data: {
-          //message: 'Hello Vue!'
-          value:'',
-          activeNames: ['1'],
-          inputVal:'',
-          result:[],
-          active: 0,
-          show: false,
-          searchResult:false,
-          phone:'',
-          dis:false,
-          verification_key:'',
-          sms:''
-
-        },
+        data: data,
         methods: {
                   onSearch(val) {
                     this.value = val;
@@ -72,6 +77,36 @@
                    },
                    onClickButton() {
                      Toast('点击按钮');
+                   },
+                   submitorder(values) {
+                     var req = {
+                       address: this.address,
+                       items: [],
+                       remark: this.remark,
+                     };
+                     axios.post('{{ route('orders.store') }}', req)
+                       .then(function (response) {
+                         swal('订单提交成功', '', 'success');
+                         location.href = response.data;
+                         console.log('response:', response.data);
+                       }, function (error) {
+                         if (error.response.status === 422) {
+                           // http 状态码为 422 代表用户输入校验失败
+                           var html = '<div>';
+                           _.each(error.response.data.errors, function (errors) {
+                             _.each(errors, function (error) {
+                               html += error+'<br>';
+                             })
+                           });
+                           html += '</div>';
+                           swal({content: $(html)[0], icon: 'error'})
+                         } else {
+                           // 其他情况应该是系统挂了
+                           swal('系统错误', '', 'error');
+                         }
+                       });
+
+                     //console.log('submit', req);
                    },
                    verify_phone(){
 
@@ -139,6 +174,11 @@
 $(function(){
 
   })
+
+
     </script>
+
+
+    @yield('scriptsAfterJs')
 </body>
 </html>

@@ -33,6 +33,7 @@ class RentCreatedEvent
         //
         $novel =Novel::find($rent->novel_id);
         $novel->rent_count =$novel->rent_count + 1;
+        $novel->stock = $novel->stock -1;
         $novel->save();
         $rent->state = "借阅中";
         $rent->save();

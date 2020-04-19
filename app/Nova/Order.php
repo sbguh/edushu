@@ -20,6 +20,7 @@ use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Select;
 
 class Order extends Resource
 {
@@ -60,33 +61,42 @@ class Order extends Resource
 
      public static function indexQuery(NovaRequest $request, $query)
      {
-         return $query->where('status', 'paid');
+         return $query->whereNotNull('paid_at');
      }
 
     public function fields(Request $request)
     {
         return [
             ID::make()->sortable(),
-            BelongsTo::make('user'),
+            BelongsTo::make('user')->readonly(),
             Text::make('order_number')->help(
                 '可以为空，会自动创建新订单'
-            ),
+            )->readonly(),
             Text::make('address')->hideFromIndex(),
             Number::make('total_amount')->rules('required')->help(
                 '数量必须要填'
             ),
+            Textarea::make('address')->hideFromIndex(),
             Textarea::make('remark')->hideFromIndex(),
             Date::make('paid_at')->hideFromIndex(),
-            Text::make('payment_method'),
-            Text::make('payment_no'),
+            Text::make('payment_method')->readonly(),
+            Text::make('payment_no')->readonly(),
             Text::make('refund_status')->hideFromIndex(),
             Text::make('refund_no')->hideFromIndex(),
             Boolean::make('closed')->hideFromIndex(),
             Boolean::make('reviewed')->hideFromIndex(),
             Text::make('ship_status'),
-            Text::make('status'),
+            //Text::make('status'),
+            Select::make('status')->options([
+                'unpaid' => '未付款',
+                'paid' => '已付款',
+                'pending' => '订单未处理',
+                'complete' => '订单已完成',
+                'cancel' => '订单已取消',
+                'refund' => '订单已退款',
+            ])->displayUsingLabels(),
             Date::make('ship_data')->hideFromIndex(),
-            HasMany::make('items','items','App\Nova\OrderItem'),
+            HasMany::make('products','products','App\Nova\OrderProduct'),
 
 
         ];

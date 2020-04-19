@@ -37,9 +37,7 @@ Route::group(['middleware' => ['auth',env('WE_CHAT_DISPLAY', true)?'wechat.oauth
 
     Route::delete('books/{book}/favorite', 'BooksController@disfavor')->name('books.disfavor');
     Route::get('books/favorites', 'BooksController@favorites')->name('books.favorites');
-    Route::post('cart', 'CartController@add')->name('cart.add');
-    Route::get('cart', 'CartController@index')->name('cart.index');
-    Route::delete('cart/{book}', 'CartController@remove')->name('cart.remove');
+
 
     Route::post('product_cart', 'ProductCartController@add')->name('product.cart.add');
     Route::get('product_cart', 'ProductCartController@index')->name('product.cart.index');
@@ -58,6 +56,11 @@ Route::group(['middleware' => ['auth',env('WE_CHAT_DISPLAY', true)?'wechat.oauth
     Route::get('userrent', 'RentController@index')->name('user.rent.index');
     Route::get('reports/{report_number}', 'ReportsController@show')->name('reports.show');
     Route::get('reports/', 'ReportsController@index')->name('reports.index');
+
+    Route::post('cart', 'CartController@add')->name('cart.add');
+    Route::get('cart',  'CartController@index')->name('cart.index');
+    Route::delete('cart/{cart}', 'CartController@remove')->name('cart.remove');
+
 
 });
 

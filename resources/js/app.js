@@ -63,7 +63,9 @@ import { Popup } from 'vant';
 import { Collapse, CollapseItem } from 'vant';
 import { Field } from 'vant';
 import { Form } from 'vant';
+import { SubmitBar } from 'vant';
 
+Vue.use(SubmitBar);
 Vue.use(Form);
 Vue.use(Field);
 Vue.use(Collapse);

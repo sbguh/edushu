@@ -27,6 +27,11 @@ class ProductSku extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function getLinkAttribute()
+    {
+        return route('products.show',$this->product->id);
+    }
+
     public function decreaseStock($amount)
     {
         if ($amount < 0) {
