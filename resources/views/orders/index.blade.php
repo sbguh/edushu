@@ -26,13 +26,20 @@
         <div class="weui-form-preview">
 
             <div class="weui-form-preview__bd">
-
+              @if($orders->count())
               @foreach($orders as $order)
               <div class="weui-form-preview__item">
-                  <label class="weui-form-preview__label">订购时间: {{$order->created_at}}</label>
-                  <span class="weui-form-preview__value">订单号：<a href="{{route('orders.show',$order->id)}}">{{$order->order_number}}</a></span>
+                  <label class="weui-form-preview__label">订单号</label>
+                  <span class="weui-form-preview__value"><a href="{{route('orders.show',$order->id)}}">{{$order->order_number}}</a></span>
               </div>
               @endforeach
+
+              @else
+              <div class="weui-form-preview__item">
+                  <label class="weui-form-preview__label">订单</label>
+                  <span class="weui-form-preview__value">暂无</span>
+              </div>
+              @endif
 
             </div>
 

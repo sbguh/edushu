@@ -22,7 +22,7 @@
 
     <div class="row">
       <div class="col-5">
-        <img class="cover" src="{{Storage::disk('edushu')->url($product->image)  }}" width="180px" alt="">
+        <img class="cover" src="{{Storage::disk('edushu')->url($product->image)  }}" alt="">
       </div>
       <div class="col-7">
 
@@ -62,7 +62,7 @@
 
           </div>
         </div>
-        <div class="cart_amount"><label>数量</label><input type="text" class="form-control form-control-sm" value="1"><span>件</span><span class="stock"></span></div>
+        <div class="cart_amount"><label>数量</label><input type="text" class="form-control form-control-sm" value="1"><span>件</span></div>
         <div class="buttons">
           <van-goods-action-button type="danger" class="btn-add-to-cart" text="立即购买" /></van-goods-action-button >
         </div>
