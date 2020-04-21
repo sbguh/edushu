@@ -76,6 +76,7 @@ class ProductsController extends Controller
         }
         $order_user = array();
         $orders = array();
+        $users = array();
         if($product->skus->count()){
           foreach($product->skus as $skus){
             foreach($skus->productOrders->all() as $productOrders)

@@ -4,7 +4,7 @@
 @section('content')
 @if(count($order_user))
 <van-notice-bar color="#1989fa" left-icon="volume-o">
-  最新订购用户
+  今日订购用户
               @foreach($order_user as $user)
                  <img src="{{$user->avatar}}" width="18px">
               @endforeach
