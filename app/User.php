@@ -118,9 +118,9 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-    public function vipcard()
+    public function cards()
     {
-        return $this->hasOne('App\Models\VipCard','user_id');
+        return $this->hasMany('App\Models\Card','user_id');
     }
 
 

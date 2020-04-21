@@ -74,8 +74,28 @@ class ProductsController extends Controller
             // boolval() 函数用于把值转为布尔值
             $favored = boolval($user->favoriteProducts()->find($product->id));
         }
+        $order_user = array();
+        $orders = array();
+        if($product->skus->count()){
+          foreach($product->skus as $skus){
+            foreach($skus->productOrders->all() as $productOrders)
+            $users[] = $productOrders->order->user;
+          }
+          $order_user = array();
+          if(count($users)){
+            foreach ($users as $user) {
+              if($user->extras){
+                if($user->id==47){
+                  continue;
+                }
+                $order_user[$user->id] = $user->extras;
+              }
 
-        return view('products.show', ['product' => $product, 'favored' => $favored,'app'=>$app]);
+            }
+          }
+
+        }
+        return view('products.show', ['product' => $product, 'favored' => $favored,'app'=>$app,'order_user'=>$order_user]);
     }
 
     public function pay_notify(Request $request){

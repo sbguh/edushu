@@ -50,6 +50,12 @@ class ProductSku extends Model
     }
 
 
+    public function productOrders()
+       {
+          return $this->morphMany('App\Models\OrderProduct', 'commentable');
+       }
+
+
 
 
     // protected $fillable = [];

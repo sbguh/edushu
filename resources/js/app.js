@@ -64,7 +64,9 @@ import { Collapse, CollapseItem } from 'vant';
 import { Field } from 'vant';
 import { Form } from 'vant';
 import { SubmitBar } from 'vant';
+import { NoticeBar } from 'vant';
 
+Vue.use(NoticeBar);
 Vue.use(SubmitBar);
 Vue.use(Form);
 Vue.use(Field);

@@ -2,6 +2,16 @@
 @section('title', isset($product->extras->meta_title)?$product->extras->meta_title:$product->name)
 
 @section('content')
+@if(count($order_user))
+<van-notice-bar color="#1989fa" left-icon="volume-o">
+  最新订购用户
+              @foreach($order_user as $user)
+                 <img src="{{$user->avatar}}" width="18px">
+              @endforeach
+</van-notice-bar>
+
+
+@endif
 
 <div class="row products-show-page">
 <div class="col-lg-10 offset-lg-1">
@@ -70,7 +80,8 @@
     </div>
 
     <van-tabs v-model="active" >
-      <van-tab title="详细" class="image_fix">{!! $product->description !!}</van-tab>
+      <van-tab title="详细" class="image_fix">
+        {!! $product->description !!}</van-tab>
       <van-tab title="用户评价">暂未开放</van-tab>
 
     </van-tabs>
@@ -136,7 +147,7 @@
       // 请求加入购物车接口
       axios.post('{{ route("cart.add") }}', {
         item_id: $('label.active input[name=skus]').val(),
-        item_type: 'Product_sku',
+        item_type: 'ProductSku',
         amount: $('.cart_amount input').val(),
       })
         .then(function () { // 请求成功执行此回调

@@ -120,6 +120,8 @@ class User extends Resource
 */          HasMany::make('借阅','rents','App\Nova\Rent')
             ->creationRules('required',new NovelUserRule($request->route('resourceId'))),
 
+            HasMany::make('借阅卡','cards', 'App\Nova\Card'),
+
             HasMany::make('充值记录','chargers','App\Nova\Charge'),
 
             HasMany::make('课程','classrooms', 'App\Nova\ClassRoom'),
