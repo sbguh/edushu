@@ -74,7 +74,7 @@ class CardUpdatedEvent
               $app->template_message->send([
                 'touser' => $openid,
                 'template_id' => 'LFs-fHCwqLgzoKe5VW3_qqUMKFpIfaboRDLwGw3aJ5A',
-              //  'url' => route('rent.show',$card->card_number),
+                'url' => route('cards.show'),
                 'data' => [
                     'first' => $user->name.'您好！您的会员卡激活成功',
                     'keyword1' => $card->card_number,
