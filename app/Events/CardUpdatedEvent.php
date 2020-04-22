@@ -47,6 +47,7 @@ class CardUpdatedEvent
           $card->save();
 
         $user = User::find($card->user_id);
+        $app = app('wechat.official_account');
         $openid = $user->openid;
         $check_subscribe = $user->check_subscribe;
         $addition_information ="";

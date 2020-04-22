@@ -32,7 +32,7 @@ class CardCreatedEvent
 
         //
         \Log::info("card active".strtotime(sprintf("+\d days",$card->duration)));
-
+        $app = app('wechat.official_account');
         $user = User::find($card->user_id);
         $openid = $user->openid;
         $check_subscribe = $user->check_subscribe;
