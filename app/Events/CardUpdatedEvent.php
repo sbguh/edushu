@@ -79,8 +79,9 @@ class CardUpdatedEvent
                 'data' => [
                     'first' => $user->name.'您好！您的会员卡激活成功',
                     'keyword1' => $card->card_number,
-                    'keyword2' => $card->end_date,
-                    'keyword3' =>$card_type,
+                    'keyword2' => $card_type,
+                    'keyword3' => '具体请查看订单',
+                    'keyword4' =>$card->end_date,
                     'remark' => "您的会员卡已经可以正常使用，详情请点击查看！".$addition_information
 
                 ],
