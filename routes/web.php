@@ -62,6 +62,11 @@ Route::group(['middleware' => ['auth',env('WE_CHAT_DISPLAY', true)?'wechat.oauth
     Route::get('cart',  'CartController@index')->name('cart.index');
     Route::delete('cart/{cart}', 'CartController@remove')->name('cart.remove');
 
+    Route::get('users', 'UsersController@show')->name('users.show');
+    Route::post('users', 'UsersController@store')->name('users.save');
+
+    Route::get('cards', 'CardsController@show')->name('cards.show');
+
 
 });
 

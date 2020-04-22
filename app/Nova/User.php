@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Textarea;
@@ -120,7 +121,7 @@ class User extends Resource
 */          HasMany::make('借阅','rents','App\Nova\Rent')
             ->creationRules('required',new NovelUserRule($request->route('resourceId'))),
 
-            HasMany::make('借阅卡','cards', 'App\Nova\UserCard'),
+            HasOne::make('借阅卡','cards', 'App\Nova\UserCard'),
 
             HasMany::make('充值记录','chargers','App\Nova\Charge'),
 

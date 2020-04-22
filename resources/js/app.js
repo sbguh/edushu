@@ -65,7 +65,9 @@ import { Field } from 'vant';
 import { Form } from 'vant';
 import { SubmitBar } from 'vant';
 import { NoticeBar } from 'vant';
+import { DatetimePicker } from 'vant';
 
+Vue.use(DatetimePicker);
 Vue.use(NoticeBar);
 Vue.use(SubmitBar);
 Vue.use(Form);

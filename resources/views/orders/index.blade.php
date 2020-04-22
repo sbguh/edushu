@@ -12,7 +12,7 @@
 <div class="page">
   <div class="weui-cell weui-cell_active">
       <div class="weui-cell__hd" style="position: relative; margin-right: 10px;">
-           <img src="{{ isset(Auth::user()->extras->headimgurl)?Auth::user()->extras->headimgurl:'https://img.yzcdn.cn/vant/user-inactive.png' }}" width="80px">
+        <img src="{{ isset(Auth::user()->extras->avatar)?Auth::user()->extras->avatar:'https://img.yzcdn.cn/vant/user-inactive.png' }}" width="80px">
           <span class="weui-badge" style="position: absolute; top: -0.4em; right: -0.4em;">Level {{Auth::user()->level?Auth::user()->level:0}}级</span>
       </div>
       <div class="weui-cell__bd">

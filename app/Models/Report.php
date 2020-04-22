@@ -42,7 +42,7 @@ class Report extends Model
       {
           return $this->morphMany('App\Models\Comment', 'commentable');
       }
-      
+
 
     public function userclassroom()
     {

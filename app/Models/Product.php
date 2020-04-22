@@ -9,7 +9,7 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Relations\Relation;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model
 {
     //use CrudTrait;
@@ -22,7 +22,7 @@ class Product extends Model
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
     */
-
+    use  SoftDeletes; //软删除
     protected $fillable = [
                     'name','sub_title','count', 'description', 'image', 'on_sale',
                     'rating', 'sold_count', 'review_count', 'price','details','features','images','image','category_id','extras','virtual'

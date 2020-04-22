@@ -21,9 +21,15 @@ closeable
          </div>
 
   @else
+  @if(isset(Auth::user()->cards)&&Auth::user()->cards->active== false)
+  <van-notice-bar color="#1989fa" left-icon="volume-o">
+    您有一张借阅卡尚未激活
+  </van-notice-bar>
+  @endif
               <div class="weui-cell weui-cell_active">
+
                   <div class="weui-cell__hd" style="position: relative; margin-right: 10px;">
-                       <img src="{{ isset(Auth::user()->extras->headimgurl)?Auth::user()->extras->headimgurl:'https://img.yzcdn.cn/vant/user-inactive.png' }}" width="80px">
+                       <img src="{{ isset(Auth::user()->extras->avatar)?Auth::user()->extras->avatar:'https://img.yzcdn.cn/vant/user-inactive.png' }}" width="80px">
                       <span class="weui-badge" style="position: absolute; top: -0.4em; right: -0.4em;">Level {{Auth::user()->level?Auth::user()->level:0}}级</span>
                   </div>
                   <div class="weui-cell__bd">
@@ -31,6 +37,18 @@ closeable
                       <p style="font-size: 13px; color: #888;">账户余额: {{Auth::user()->balance}}, 押金: {{Auth::user()->deposit}}, 阅读级别:  {{Auth::user()->level?Auth::user()->level:0}}级, 阅读字数:  {{Auth::user()->read_count?(Auth::user()->read_count/10000).'万字':0}}， 借过: {{Auth::user()->rent_count?Auth::user()->rent_count:0}}本</p>
                   </div>
               </div>
+
+                @if(Auth::user()->cards)
+
+                <div class="weui-cell weui-cell_active weui-cell_access">
+                   <div class="weui-cell__bd">
+                       <span style="vertical-align: middle;"><a href="{{route('cards.show')}}">我的借阅卡</a></span>
+
+                   </div>
+                   <div class="weui-cell__ft"><a href="{{route('cards.show')}}">查看</a></div>
+               </div>
+
+                @endif
 
              <div class="weui-cell weui-cell_active weui-cell_access">
                 <div class="weui-cell__bd">
@@ -67,20 +85,12 @@ closeable
               <div class="weui-cell__ft"><a href="{{route('products.favorites')}}">查看</a></div>
           </div>
 
-          <div class="weui-cell weui-cell_active weui-cell_access">
-             <div class="weui-cell__bd">
-                 <span style="vertical-align: middle;"><a href="{{route('user_addresses.index')}}">收货地址</a></span>
-
-             </div>
-             <div class="weui-cell__ft"><a href="{{route('user_addresses.index')}}">查看</a></div>
-         </div>
-
            <div class="weui-cell weui-cell_active weui-cell_access">
               <div class="weui-cell__bd">
-                  <span style="vertical-align: middle;">账号设置</span>
+                  <span style="vertical-align: middle;"><a href="{{route('users.show')}}">账号设置</a></span>
 
               </div>
-              <div class="weui-cell__ft"><a href="{{route('root')}}">查看</a></div>
+              <div class="weui-cell__ft"><a href="{{route('users.show')}}">查看</a></div>
           </div>
 
 

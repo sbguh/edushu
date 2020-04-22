@@ -8,6 +8,8 @@
 
 @section('content')
 
+
+
 <div class="page">
     <div class="page__hd" style="text-align:center;">
         <h3 class="page__title">
@@ -69,5 +71,10 @@
 
 @section('scriptsAfterJs')
 
+
+@endsection
+
+
+@section('search')
 
 @endsection

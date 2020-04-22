@@ -51,7 +51,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'extras' => 'object',
-        'birthday' => 'datetime',
+        'birthday' => 'date',
         'enable'=>'boolean',
 
     ];
@@ -120,7 +120,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function cards()
     {
-        return $this->hasMany('App\Models\Card','user_id');
+        return $this->hasOne('App\Models\Card','user_id');
     }
 
 

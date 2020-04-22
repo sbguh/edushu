@@ -21,6 +21,7 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Select;
+use App\Rules\UserCardRule;
 
 class UserCard extends Resource
 {
@@ -65,8 +66,9 @@ class UserCard extends Resource
      return [
          ID::make()->sortable(),
          Text::make('卡号','card_number')->readonly(),
-         BelongsTo::make('User')->searchable(),
-         Boolean::make("激活",'active'),
+         BelongsTo::make('User')->searchable()
+         ->creationRules('required',new UserCardRule()),
+         Boolean::make("激活",'active')->hideWhenCreating(),
          Boolean::make("账号可用",'enable'),
          Select::make('等级','type_id')->options([
              '1' => '白银会员',

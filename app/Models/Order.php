@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     //
+    use  SoftDeletes; //软删除
     const REFUND_STATUS_PENDING = 'pending';
     const REFUND_STATUS_APPLIED = 'applied';
     const REFUND_STATUS_PROCESSING = 'processing';

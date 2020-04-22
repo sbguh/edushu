@@ -5,6 +5,10 @@ namespace App\Models;
 //use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Events\CardCreatedEvent;
+use App\Events\CardUpdatedEvent;
+
 class Card extends Model
 {
   //  use CrudTrait;
@@ -14,6 +18,7 @@ class Card extends Model
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
     */
+    use  SoftDeletes; //软删除
 
     protected $table = 'cards';
     // protected $primaryKey = 'id';
@@ -43,7 +48,26 @@ class Card extends Model
         'end_date'  => 'date',
     ];
 
+    protected $dispatchesEvents = [
+    //  'creating' => RentCreatingEvent::class,
+      'created' =>  CardCreatedEvent::class,
+      'updated' => CardUpdatedEvent::class,
 
+
+    ];
+
+/*
+    public function setEndDateAttribute($value)
+             {
+                 $attribute_name = "end_date";
+                 $this->attributes['end_date'] = $value;
+
+                 $this->attributes['duration'] = 0;
+
+             // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
+             }
+
+*/
     protected static function boot()
     {
         parent::boot();

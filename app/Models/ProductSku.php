@@ -4,7 +4,7 @@ namespace App\Models;
 
 //use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class ProductSku extends Model
 {
     //use CrudTrait;
@@ -14,7 +14,7 @@ class ProductSku extends Model
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
     */
-
+    use  SoftDeletes; //软删除
     protected $table = 'product_skus';
     // protected $primaryKey = 'id';
     // public $timestamps = false;

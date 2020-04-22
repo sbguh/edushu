@@ -10,7 +10,7 @@
   />
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', '中小学生免费借书平台') - 隆回共读书房</title>
+    <title>@yield('title', '专注于中小学阅读和写作')</title>
     <!-- 样式 -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <script src="{{ mix('js/app.js') }}"></script>
@@ -38,6 +38,13 @@ var data = {
   show: false,
   searchResult:false,
   phone:'',
+  real_name:'',
+  birthday:'',
+  minDate: new Date(2000, 0, 1),
+  maxDate: new Date(),
+  currentDate: new Date(),
+  showPicker: false,
+  gender:'',
   dis:false,
   verification_key:'',
   sms:'',
@@ -68,9 +75,52 @@ var data = {
                   }
 
                   },
+                  onConfirm(time) {
+                     this.value = time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate();
+                     this.birthday = time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate();
+                     this.showPicker = false;
+                   },
+                   formatter(type, val) {
+                      if (type === 'year') {
+                        return `${val}年`;
+                      } else if (type === 'month') {
+                        return `${val}月`;
+                      }
+                      return val;
+                    },
+                  changeUserInformation(){
+                    var req = {
+                      real_name: this.real_name,
+                      birthday: this.birthday,
+                    };
+                    axios.post('{{ route('users.save') }}', req)
+                      .then(function (response) {
+                        swal('更新成功', '', 'success');
+                        location.reload();
+                      }, function (error) {
+                        if (error.response.status === 422) {
+                          // http 状态码为 422 代表用户输入校验失败
+                          var html = '<div>';
+                          _.each(error.response.data.errors, function (errors) {
+                            _.each(errors, function (error) {
+                              html += error+'<br>';
+                            })
+                          });
+                          html += '</div>';
+                          swal({content: $(html)[0], icon: 'error'})
+                        } else {
+                          // 其他情况应该是系统挂了
+                          swal('系统错误', '', 'error');
+                        }
+                      });
+                  },
                   onCancel() {
                     Toast('取消');
                   },
+
+                  onClickLeftNovel() {
+                    location.href = '{{ route('rent.index') }}';
+                   },
 
                   onClickIcon() {
                      Toast('点击图标');
