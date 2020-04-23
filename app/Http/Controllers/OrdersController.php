@@ -138,7 +138,12 @@ class OrdersController extends Controller
 
                 $order->sign =  $result['sign'];
                 $order->save();
-                $prepayId = $result['prepay_id']; //就是拿这个id 很重要
+                if(isset($result['prepay_id'])){
+                  $prepayId = $result['prepay_id'];
+                }else{
+                  $prepayId =false;
+                }
+                 //就是拿这个id 很重要
                 return view('orders.show', ['app' => $app, 'prepayId' => $prepayId,'total_fee'=>$order->total_amount, 'order' => $order]);
 
             }

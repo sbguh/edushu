@@ -79,7 +79,7 @@ class Order extends Resource
             Textarea::make('address')->hideFromIndex(),
             Textarea::make('remark')->hideFromIndex(),
             Date::make('paid_at')->hideFromIndex(),
-            Text::make('payment_method')->readonly(),
+          //  Text::make('payment_method')->readonly(),
             Text::make('payment_no')->readonly(),
             Text::make('refund_status')->hideFromIndex(),
             Text::make('refund_no')->hideFromIndex(),
