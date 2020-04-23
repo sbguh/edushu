@@ -22,6 +22,8 @@ use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Select;
 use App\Rules\UserCardRule;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Titasgailius\SearchRelations\SearchesRelations;
 
 class UserCard extends Resource
 {
@@ -30,6 +32,8 @@ class UserCard extends Resource
      *
      * @var string
      */
+    use SearchesRelations;
+    use  SoftDeletes;
     public static $group = 'user';
     public static $model = 'App\Models\Card';
 
@@ -59,6 +63,10 @@ class UserCard extends Resource
      {
          return "借阅卡";
      }
+
+     public static $searchRelations = [
+           'user' => ['name', 'real_name','phone_number'],
+       ];
 
 
      public function fields(Request $request)

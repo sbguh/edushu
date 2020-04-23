@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\Novel;
 use App\Models\OrderItem;
 use App\Models\Charge;
+use App\Models\UserLastUrl;
 use Auth;
 
 class ProductsController extends Controller
@@ -73,6 +74,13 @@ class ProductsController extends Controller
             // 从当前用户已收藏的商品中搜索 id 为当前商品 id 的商品
             // boolval() 函数用于把值转为布尔值
             $favored = boolval($user->favoriteProducts()->find($product->id));
+            if($user->lasturl=== null){
+              $lasturl = new UserLastUrl(['url'=>route("products.show",[$product->id]),'title'=>$product->name]);
+              $user->lasturl()->save($lasturl);
+            }else{
+              $user->lasturl->update(['url'=>route("products.show",[$product->id]),'title'=>$product->name]);
+            }
+
         }
         $order_user = array();
         $orders = array();

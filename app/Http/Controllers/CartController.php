@@ -43,6 +43,8 @@ class CartController extends Controller
                 $cart->save();
             }
 
+
+
             return [];
         }
 
@@ -58,6 +60,14 @@ class CartController extends Controller
               $model_id = $item->commentable_id;
 
               $item_orm = (New $model_name)::find($model_id);
+
+              if(isset($item_orm->limit_buy)&& $item_orm->limit_buy){
+                    if($item->amount > $item_orm->limit_buy){
+                        $item->amount = $item_orm->limit_buy;
+                    }
+
+                  }
+              $item->save();
               $item->product = $item_orm;
               $cartItems[$key] = $item;
             }
