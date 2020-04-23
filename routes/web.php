@@ -68,13 +68,17 @@ Route::group(['middleware' => ['auth',env('WE_CHAT_DISPLAY', true)?'wechat.oauth
     Route::get('cards', 'CardsController@show')->name('cards.show');
 
 
-    Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 });
 
-    Route::get('products', 'ProductsController@index')->name('products.index');
+Route::group(['middleware' => [env('WE_CHAT_DISPLAY', true)?'wechat.oauth':"web"]], function () {
+  Route::get('products/{product}', 'ProductsController@show')->name('products.show');
+
+  });
+
 
     Route::post('wechat/send_sms/{phone}', 'WeChatController@send_sms')->name('wechat.send_sms');
 
+Route::get('products', 'ProductsController@index')->name('products.index');
 
 
 
