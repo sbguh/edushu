@@ -73,7 +73,7 @@ class Order extends Resource
                 '可以为空，会自动创建新订单'
             )->readonly(),
             Text::make('address')->hideFromIndex(),
-            Number::make('total_amount')->rules('required')->help(
+            Currency::make('total_amount')->rules('required')->help(
                 '数量必须要填'
             ),
             Textarea::make('address')->hideFromIndex(),
