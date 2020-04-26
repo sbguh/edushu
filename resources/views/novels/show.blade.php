@@ -9,14 +9,6 @@
 @section('content')
 <div class="page">
 
-<van-nav-bar
-  title=""
-  left-text="返回"
-  right-text=""
-  left-arrow
-  @click-left="onClickLeftNovel"
-/></van-nav-bar>
-
 <van-tabs v-model="active">
 
   <van-tab title="详细">
@@ -24,7 +16,14 @@
       <div class="page__hd">
 
         <div class="weui-flex">
-            <div class="weui-flex__item"><div class="placeholder" style="padding:5px;"><img src="{{ Storage::disk('edushu')->url($novel->image) }}" width="180px"></div></div>
+            <div class="weui-flex__item"><div class="placeholder" style="padding:5px;"><img src="{{ Storage::disk('edushu')->url($novel->image) }}" width="180px"></div>
+            <div>
+               @if($favored)
+                <van-goods-action-icon icon="star" text="已收藏" class="btn-disfavor"  color="blue" /> </van-goods-action-icon>
+               @else
+                <van-goods-action-icon icon="star" text="未收藏" class="btn-favor" color="#ff5000" /> </van-goods-action-icon>
+               @endif
+             </div></div>
             <div class="weui-flex__item">
               <div class="placeholder">
                 <h3>{{$novel->title}}</h3>
@@ -46,22 +45,29 @@
                 </div>
                 @endif
               </div>
-              <div class="weui-form-preview__item"><label class="weui-form-preview__label">字数:</label> <span class="weui-form-preview__value">{{$novel->words/10000}}万字</span></div>
+              <div class="weui-form-preview__item"><label class="weui-form-preview__label">出版社:</label> <span class="weui-form-preview__value">{{$novel->press}}</span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">作者:</label> <span class="weui-form-preview__value">{{$novel->author}}</span></div>
-              <div class="weui-form-preview__item"><label class="weui-form-preview__label">借阅:</label> <span class="weui-form-preview__value">{{$novel->rent_count}}</span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">浏览:</label> <span class="weui-form-preview__value">{{$novel->count}}</span></div>
-              <div class="weui-form-preview__item"><label class="weui-form-preview__label">在线预约:</label> <span class="weui-form-preview__value">￥{{$novel->price}}</span></div>
+              <div class="weui-form-preview__item"><label class="weui-form-preview__label">图书价格:</label> <span class="weui-form-preview__value">￥{{$novel->price}}</span></div>
+              <div class="weui-form-preview__item"><label class="weui-form-preview__label">在线预约:</label> <span class="weui-form-preview__value">￥{{$novel->rent_price}}</span></div>
             </div>
 
         </div>
-        <div class="weui-flex" class="weui-tabbar" style="padding:15px 5px;">
-          <van-goods-action-icon icon="cart-o" text="购物车" badge="0" /></van-goods-action-icon>
-            @if($favored)
-           <van-goods-action-icon icon="star" text="已收藏" class="btn-disfavor"  color="blue" /> </van-goods-action-icon>
-           @else
-           <van-goods-action-icon icon="star" text="未收藏" class="btn-favor" color="#ff5000" /> </van-goods-action-icon>
-           @endif
-          <van-goods-action-button type="danger" class="btn-add-to-cart" text="预约此书" /> </van-goods-action-button>
+        <div class="weui-flex" class="weui-tabbar" >
+          @if(Auth::user()->cards)
+            @if(Auth::user()->cards->active)
+              @if(strtotime(Auth::user()->cards->end_date)> strtotime("now"))
+              <van-goods-action-button type="danger" class="btn-add-to-cart" text="会员预约借书" /> </van-goods-action-button>
+              @else
+                <van-goods-action-button type="danger"  text="您的账号已过有效期" /> </van-goods-action-button>
+              @endif
+            @else
+              <van-goods-action-button type="danger"  text="您的账号尚未激活" /> </van-goods-action-button>
+            @endif
+
+          @else
+          <van-goods-action-button type="danger" text="您尚未成为我们的会员" /> </van-goods-action-button>
+          @endif
         </div>
 
 
@@ -82,29 +88,7 @@
 
   </div>
   </van-tab>
-  <van-tab title="谁在借阅">
 
-<div class="page">
-  <div class="weui-cells">
-@foreach($rent_book as $rent)
-
-            <div class="weui-cell weui-cell_active">
-                <div class="weui-cell__hd" style="position: relative; margin-right: 10px;">
-                     <img src="{{ isset($rent->user->extras->headimgurl)?$rent->user->extras->headimgurl:'https://img.yzcdn.cn/vant/user-inactive.png' }}" width="80px">
-                    <span class="weui-badge" style="position: absolute; top: -0.4em; right: -0.4em;">Level {{$rent->user->level?$rent->user->level:0}}级</span>
-                </div>
-                <div class="weui-cell__bd">
-                    <p>{{$rent->user->name}} </p>
-                    <p style="font-size: 13px; color: #888;">阅读级别:  {{$rent->user->level?$rent->user->level:0}}级, 阅读字数:  {{$rent->user->read_count?($rent->user->read_count/10000).'万字':0}}， 借过: {{$rent->user->rent_count?$rent->user->rent_count:0}}本</p>
-                </div>
-            </div>
-
-
-@endforeach
-  </div>
-</div>
-
-  </van-tab>
   <van-tab title="谁借阅过">
     <div class="page">
       <div class="weui-cells">
@@ -114,11 +98,11 @@
                 <div class="weui-cell weui-cell_active">
                     <div class="weui-cell__hd" style="position: relative; margin-right: 10px;">
                          <img src="{{ isset($rent->user->extras->headimgurl)?$rent->user->extras->headimgurl:'https://img.yzcdn.cn/vant/user-inactive.png' }}" width="80px">
-                        <span class="weui-badge" style="position: absolute; top: -0.4em; right: -0.4em;">Level {{$rent->user->level?$rent->user->level:0}}级</span>
+                        <span class="weui-badge" style="position: absolute; top: -0.4em; right: -0.4em;">Level {{$rent->card->user->level?$rent->card->user->level:0}}级</span>
                     </div>
                     <div class="weui-cell__bd">
-                        <p>{{$rent->user->name}} </p>
-                        <p style="font-size: 13px; color: #888;">阅读级别:  {{$rent->user->level?$rent->user->level:0}}级, 阅读字数:  {{$rent->user->read_count?($rent->user->read_count/10000).'万字':0}}， 借过: {{$rent->user->rent_count?$rent->user->rent_count:0}}本</p>
+                        <p>{{$rent->card->user->name}} </p>
+                        <p style="font-size: 13px; color: #888;">阅读级别:  {{$rent->card->user->level?$rent->card->user->level:0}}级, 阅读字数:  {{$rent->card->user->read_count?($rent->card->user->read_count/10000).'万字':0}}， 借过: {{$rent->card->user->rent_count?$rent->card->user->rent_count:0}}本</p>
                     </div>
                 </div>
 

@@ -17,7 +17,8 @@ class Rent extends Model
     protected $fillable = [
         'rent_number',
         'novel_id',
-        'user_id',
+        'card_id',
+        'current_rent',
         'return_time',
         'fee',
         'note',
@@ -47,9 +48,33 @@ class Rent extends Model
         return $this->belongsTo('App\Models\Novel', 'novel_id');
     }
 
+/*
     public function user()
     {
-        return $this->belongsTo('App\User', 'user_id');
+        //return $this->belongsTo('App\User', 'user_id'); 第一个参数是希望访问的模型名称，第二个参数是中间模型的名称。第三个参数表示中间模型的外键名，第四个参数表示最终模型的外键名。第五个参数表示本地键名，而第六个参数表示中间模型的本地键名：
+        return $this->hasOneThrough(
+            'App\User',
+            'App\Models\Card',
+            'user_id',
+            'id',
+            'id',
+            'id'
+
+
+        );
+    }
+*/
+
+    public function getUserAttribute()
+    {
+
+        return $this->card->user->real_name?$this->card->user->real_name:$this->card->user->name;
+    }
+
+    public function card()
+    {
+        //return $this->belongsTo('App\User', 'user_id');
+        return $this->belongsTo('App\Models\Card');
     }
 
     public function comments()

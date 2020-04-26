@@ -59,7 +59,7 @@ class Rent extends Resource
      */
 
      public static $searchRelations = [
-           'user' => ['name', 'real_name','phone_number'],
+           'card.user' => ['name', 'real_name','phone_number'],
            'novel' => ['title', 'author','press'],
        ];
 
@@ -75,14 +75,16 @@ class Rent extends Resource
                     'placeholder' => '借书编号',
                 ],
             ])->readonly(),
-            BelongsTo::make('用户','user','App\Nova\User')->searchable()->hideWhenUpdating()
+            //Text::make('用户','user')->exceptOnForms(),
+
+            BelongsTo::make('会员卡','card','App\Nova\UserCard')->searchable()->hideWhenUpdating()
             ->creationRules('required',new UserNovelRule()),
 
             BelongsTo::make('书籍','novel','App\Nova\Novel')->searchable()->hideWhenUpdating()
               ->creationRules('required',new NovelUserRule()),
 
             Date::make(' 归还时间','return_time')
-            ->withMeta(['value'=>$this->return_time ? $this->return_time : date('Y-m-d', strtotime('7 days'))]),
+            ->withMeta(['value'=>$this->return_time ? $this->return_time : date('Y-m-d', strtotime('15 days'))]),
             Currency::make('费用','fee')->nullable()->withMeta(['value'=>$this->fee ? $this->fee : 0]),
             Text::make('状态','state')->onlyOnIndex(),
             Text::make('还书时间','return_at')->withMeta(['value'=>$this->return_at ? $this->return_at : "尚未归还"])->onlyOnIndex(),

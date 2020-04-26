@@ -14,7 +14,7 @@ class Novel extends BaseModel
     protected $table = 'novels';
     protected $fillable = [
                     'title','sub_title','count', 'description', 'image', 'on_sale',
-                    'rating', 'sold_count', 'review_count', 'price','thumbnail','image','stock','extras','barcode','audio','author','press','press_date','features','rent_count','deleted_at'
+                    'rating', 'sold_count', 'review_count', 'price','rent_price','sale_price','thumbnail','image','stock','extras','barcode','audio','author','press','press_date','features','rent_count','deleted_at'
     ];
     protected $casts = [
         'on_sale' => 'boolean', // on_sale 是一个布尔类型的字段

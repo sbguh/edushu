@@ -124,6 +124,7 @@ Route::get('books/{book}', 'BooksController@show')->name('books.show');
 Route::get('read/{book}', 'BooksController@read')->name('book.read');
 Route::get('read/{book}/{chapter}', 'BooksController@chapter')->name('book.read.chapter');
 Route::any('search/{keyword}', 'BooksController@search')->name('books.search');
+Route::any('/rent/search/{keyword}', 'NovelsController@search')->name('books.search');
 
 
 Route::get('rents', 'NovelsController@index')->name('rent.index');

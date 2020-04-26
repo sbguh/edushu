@@ -52,7 +52,10 @@ class User extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-
+     public function title()
+     {
+         return $this->real_name?$this->real_name:$this->name;
+     }
      public static function label()
      {
          return "用户列表";
@@ -73,7 +76,7 @@ class User extends Resource
             //Text::make('手机号码','phone_number')->rules('required','unique:users'),
             Text::make('手机号码','phone_number'),
             //Text::make('已借书','rented_count')->onlyOnDetail(),
-            Text::make('最多可借','limit_count'),
+            //Text::make('最多可借','limit_count'),
             Text::make('历史借阅','rent_count')->onlyOnDetail(),
             Text::make('阅读文字','read_count')->onlyOnDetail(),
             Text::make('阅读级别','level')->onlyOnDetail(),
@@ -118,9 +121,9 @@ class User extends Resource
 
             BelongsToMany::make('历史记录','history_novels', 'App\Nova\NovelUserHistory')->searchable()
             ->fields(new NovelUserHistoryFields),
-*/          HasMany::make('借阅','rents','App\Nova\Rent')
+        HasMany::make('借阅','rents','App\Nova\Rent')
             ->creationRules('required',new NovelUserRule($request->route('resourceId'))),
-
+*/
             HasOne::make('借阅卡','cards', 'App\Nova\UserCard'),
 
             HasMany::make('充值记录','chargers','App\Nova\Charge'),

@@ -34,6 +34,8 @@ class OrdersController extends Controller
     public function store(OrderRequest $request)
     {
 
+      \Log::info("order store");
+
         $user  = $request->user();
         // 开启一个数据库事务
         $order = \DB::transaction(function () use ($user, $request) {
@@ -100,7 +102,7 @@ class OrdersController extends Controller
             $order->update(['total_amount' => $totalAmount]);
 
 
-            $this->dispatch(new CloseOrder($order, config('app.order_ttl',3600)));
+          //  $this->dispatch(new CloseOrder($order, config('app.order_ttl',3600)));
 
             return $order;
         });

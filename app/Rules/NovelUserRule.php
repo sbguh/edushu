@@ -5,6 +5,7 @@ namespace App\Rules;
 use Illuminate\Contracts\Validation\Rule;
 use App\Models\NovelUser;
 use App\Models\Novel;
+use App\Models\Rent;
 use App\User;
 
 class NovelUserRule implements Rule
@@ -36,13 +37,14 @@ class NovelUserRule implements Rule
       //  \Log::info("attribute value:".$value);
 
       \Log::info("NovelUserRule value:".$value);
+        $rent_count = Rent::where('novel_id',$value)->where('state', '借阅中')->count();
         $novel =Novel::find($value);
-        $novel->stock =$novel->stock - 1;
-        if($novel->stock < 0){
+      //  $novel->stock =$novel->stock - 1;
+        if(($rent_count + 1)<= $novel->stock ){
           //$this->has_error =false;
-          return false;
-        }else{
           return true;
+        }else{
+          return false;
         //  $this->has_error =true;
         }
 

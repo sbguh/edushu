@@ -63,7 +63,7 @@ var data = {
                     this.value = val;
                     if(this.value.length) {
                       this.searchResult = true;
-                      axios.post('/search/' + this.value)
+                      axios.post('/rent/search/' + this.value)
                       .then(
                         response => {
                           this.result=response.data;
@@ -114,10 +114,10 @@ var data = {
                         }
                       });
                   },
-                  onCancel() {
-                    Toast('取消');
+                  onCancel(val) {
+                    alert("tset")
+                    console.log("test")
                   },
-
                   onClickLeftNovel() {
                     location.href = '{{ route('rent.index') }}';
                    },

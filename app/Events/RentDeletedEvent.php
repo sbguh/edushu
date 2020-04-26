@@ -38,7 +38,7 @@ class RentDeletedEvent
         //$novel->save();
 
         $app = app('wechat.official_account');
-        $user = User::find($rent->user_id);
+        $user = $rent->card->user;
         $openid = $user->openid;
         $score = 0;
         $user->rent_count = $user->rent_count +1;

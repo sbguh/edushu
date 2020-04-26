@@ -24,6 +24,9 @@ use Laravel\Nova\Fields\Select;
 use App\Rules\UserCardRule;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Titasgailius\SearchRelations\SearchesRelations;
+use App\Nova\Fields\NovelUserFields;
+use App\Nova\Fields\NovelUserHistoryFields;
+use App\Rules\NovelUserRule;
 
 class UserCard extends Resource
 {
@@ -32,6 +35,7 @@ class UserCard extends Resource
      *
      * @var string
      */
+    public static $trafficCop = false;
     use SearchesRelations;
     use  SoftDeletes;
     public static $group = 'user';
@@ -64,6 +68,13 @@ class UserCard extends Resource
          return "借阅卡";
      }
 
+     public function title()
+     {
+       $user_name = $this->user->real_name?$this->user->real_name:$this->user->name;
+         return $this->card_number."(".$user_name.")";
+     }
+
+
      public static $searchRelations = [
            'user' => ['name', 'real_name','phone_number'],
        ];
@@ -77,15 +88,18 @@ class UserCard extends Resource
          BelongsTo::make('User')->searchable()
          ->creationRules('required',new UserCardRule()),
          Boolean::make("激活",'active')->hideWhenCreating(),
-         Boolean::make("账号可用",'enable'),
+         Boolean::make("账号可用",'enable')->withMeta(['value'=>$this->enable ? $this->enable : 0]),
          Select::make('等级','type_id')->options([
              '1' => '白银会员',
              '2' => '白金会员',
              '3' => '钻石会员',
          ])->displayUsingLabels(),
+         Text::make('最多可借','rent_limit')->withMeta(['value'=>$this->rent_limit ? $this->rent_limit : 2]),
          Number::make('期限(天数)','duration'),
          Date::make('开始日期','start_date')->nullable(),
          Date::make('结束日期','end_date')->nullable(),
+         HasMany::make('借阅','rents','App\Nova\Rent')
+         ->creationRules('required',new NovelUserRule($request->route('resourceId'))),
 
      ];
  }

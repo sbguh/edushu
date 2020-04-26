@@ -31,7 +31,7 @@ class Novel extends Resource
      *
      * @var string
      */
-
+     public static $trafficCop = false;
     public static $group = '借阅';
     public static $model = 'App\Models\Novel';
 
@@ -90,15 +90,18 @@ class Novel extends Resource
             ->rules('required', 'max:255')
             ->hideFromIndex(),
             Text::make('本书字数，必须为阿拉伯数字','words')
-                ->rules('required', 'max:255'),
+                ->rules('required', 'max:255')->hideFromIndex(),
             Text::make('总库存数','stock')
                 ->rules('required', 'max:255'),
             Text::make('历史借出次数','rent_count')
-                    ->rules('required', 'max:255')->onlyOnIndex(),
+                    ->rules('required', 'max:255')->onlyOnDetail(),
             Text::make('当前借出未还','current_rent')
                  ->rules('required', 'max:255')->onlyOnIndex(),
 
-            Currency::make('价格','price')->nullable()->hideFromIndex(),
+            Currency::make('前台显示价格','price')->nullable()->hideFromIndex(),
+            Currency::make('实际进货','buying_price')->nullable()->hideFromIndex(),
+            Currency::make('销售价格','sale_price')->nullable()->hideFromIndex(),
+            Currency::make('预约价格','rent_price')->nullable()->hideFromIndex(),
             /*
             Image::make('image')->disk('edushu')->nullable()->thumbnail(function ($value, $disk) {
                 return $value? Storage::disk($disk)->url($value): null;
@@ -115,7 +118,7 @@ class Novel extends Resource
             })->hideFromIndex(),
             Boolean::make('是否销售','on_sale')->hideFromIndex(),
             Heading::make('详细信息'),
-            Text::make('作者','author'),
+            Text::make('作者','author')->hideFromIndex(),
             Text::make('出版社','press')->hideFromIndex(),
             Trix::make('详细描述','description')->alwaysShow()->nullable()->hideFromIndex()->withFiles('edushu'), //带附件
 
@@ -190,11 +193,7 @@ class Novel extends Resource
     {
       return [
 
-        (new Actions\NovelAction)
-          ->confirmText('是否确定要更新？?')
-          ->confirmButtonText('更新')
-          ->cancelButtonText("撤销操作")
-          ->showOnTableRow(),
+
       ];
     }
 }

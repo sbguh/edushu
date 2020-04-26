@@ -183,7 +183,7 @@ class NovelsController extends Controller
      {
          //$keyword  = $request->get('keyword');
          //dd( $keyword);
-         $result = Book::where('name','like','%'.$keyword.'%')->where('state',1)->select('id','name','image')->get()->toJson();
+         $result = Novel::where('title','like','%'.$keyword.'%')->where('on_sale',1)->select('id','title','image')->get()->take(3)->toJson();
          return $result;
          //return view('books.favorites', ['books' => $books]);
      }

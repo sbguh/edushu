@@ -70,7 +70,7 @@
                 {{$rent->return_time}}
                 @endif
               </span></div>
-              <div class="weui-form-preview__item"><label class="weui-form-preview__label">已阅读:</label> <span class="weui-form-preview__value">{{$rent->user->read_count?($rent->user->read_count/10000).'万字':0}}</span></div>
+              <div class="weui-form-preview__item"><label class="weui-form-preview__label">已阅读:</label> <span class="weui-form-preview__value">{{$user->read_count?($user->read_count/10000).'万字':0}}</span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">阅读等级:</label> <span class="weui-form-preview__value">{{$user->level}}级</span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">累计积分:</label> <span class="weui-form-preview__value">{{round($user->scores)}}分</span></div>
               @if(Auth::user()->id == $user->id)
@@ -121,11 +121,11 @@
                 <div class="weui-cell weui-cell_active">
                     <div class="weui-cell__hd" style="position: relative; margin-right: 10px;">
                          <img src="{{ isset($rent->user->extras->headimgurl)?$rent->user->extras->headimgurl:'https://img.yzcdn.cn/vant/user-inactive.png' }}" width="80px">
-                        <span class="weui-badge" style="position: absolute; top: -0.4em; right: -0.4em;">Level {{$rent->user->level?$rent->user->level:0}}级</span>
+                        <span class="weui-badge" style="position: absolute; top: -0.4em; right: -0.4em;">Level {{$user->level?$user->level:0}}级</span>
                     </div>
                     <div class="weui-cell__bd">
-                        <p>{{$rent->user->name}} </p>
-                        <p style="font-size: 13px; color: #888;">阅读级别:  {{$rent->user->level?$rent->user->level:0}}级, 阅读字数:  {{$rent->user->read_count?($rent->user->read_count/10000).'万字':0}}， 借过: {{$rent->user->rent_count?$rent->user->rent_count:0}}本</p>
+                        <p>{{$user->name}} </p>
+                        <p style="font-size: 13px; color: #888;">阅读级别:  {{$user->level?$user->level:0}}级, 阅读字数:  {{$user->read_count?($user->read_count/10000).'万字':0}}， 借过: {{$user->rent_count?$user->rent_count:0}}本</p>
                     </div>
                 </div>
 

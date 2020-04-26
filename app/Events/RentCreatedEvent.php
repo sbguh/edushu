@@ -33,17 +33,18 @@ class RentCreatedEvent
         //
         $novel =Novel::find($rent->novel_id);
         $novel->rent_count =$novel->rent_count + 1;
-        $novel->stock = $novel->stock -1;
+        //$novel->current_rent =$novel->current_rent + 1;
+        //$novel->stock = $novel->stock -1;
         $novel->save();
         $rent->state = "借阅中";
         $rent->save();
         $app = app('wechat.official_account');
-        $user = User::find($rent->user_id);
-        $openid = $user->openid;
-        $read_count = $user->read_count/10000;
+        $user = $rent->card->user;
+        $openid = isset($user->openid)?$user->openid:"";
+        $read_count = isset($user->read_count)?$user->read_count/10000:0;
         $read_count = "当前累计阅读:".$read_count."万字";
-        $level = $user->level?$user->level:0;
-        $words = $novel->words?$novel->words/10000:0;
+        $level = isset($user->level)?$user->level:0;
+        $words = isset($novel->words)?$novel->words/10000:0;
         if($openid&&env('WE_CHAT_DISPLAY', true)){
               $app->template_message->send([
                 'touser' => $openid,

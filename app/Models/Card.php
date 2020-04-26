@@ -32,6 +32,7 @@ class Card extends Model
         'type_id',
         'user_id',
         'card_number',
+        'rent_limit',
         'start_date',
         'end_date',
         'active',
@@ -111,6 +112,12 @@ class Card extends Model
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id');
+    }
+
+
+    public function rents()
+    {
+        return $this->hasMany("App\Models\Rent");
     }
 
 

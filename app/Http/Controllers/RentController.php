@@ -26,7 +26,8 @@ class RentController extends Controller
         $rent = Rent::withTrashed()->where('rent_number',$rent_number)->first();
         $app = app('wechat.official_account');
         $novel = $rent->novel;
-        $user =  $rent->user;
+        $user =  $rent->card->user;
+
 
         $rent_book = $novel->rents()->where('state','借阅中')->orderBy('id','DESC')->paginate(50);
 
