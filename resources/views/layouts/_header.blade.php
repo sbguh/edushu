@@ -24,7 +24,15 @@
 
 <div class="weui-cells searchbar-result" v-if="searchResult" id="searchResult">
   <div  v-for="book in result">
-      <div style="margin:5px;"><a :href="'https://book.edushu.co/books/'+ book.id"><img :src="'{{env("APP_URL")}}/uploads/' + book.image" width="80px"/>[[book.title]]</a></div>
+
+    <a :href="'https://book.edushu.co/rents/'+ book.id" class="weui-media-box weui-media-box_appmsg">
+                  <div class="weui-media-box__hd">
+                    <img :src="'{{env("APP_URL")}}/uploads/' + book.image" width="80px"/>
+                  </div>
+                  <div class="weui-media-box__bd">
+                      <h4 class="weui-media-box__title">[[book.title]]</h4>
+                  </div>
+              </a>
 <van-divider />
   </div>
 </div>

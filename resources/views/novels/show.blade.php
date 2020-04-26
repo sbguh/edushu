@@ -53,6 +53,12 @@
             </div>
 
         </div>
+          @guest
+          <div class="weui-flex" class="weui-tabbar" >
+           <van-goods-action-button type="danger" text="尚未登陆" /> </van-goods-action-button>
+          </div>
+
+          @else
         <div class="weui-flex" class="weui-tabbar" >
           @if(Auth::user()->cards)
             @if(Auth::user()->cards->active)
@@ -69,6 +75,7 @@
           <van-goods-action-button type="danger" text="您尚未成为我们的会员" /> </van-goods-action-button>
           @endif
         </div>
+        @endguest
 
 
 
