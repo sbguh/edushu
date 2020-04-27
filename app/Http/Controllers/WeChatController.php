@@ -75,7 +75,7 @@ class WeChatController extends Controller
              $active_wechat = Activity::where('slug',$eventkey)->first();
              if($user->activies()->where('slug',$eventkey)->count()){
                $app->template_message->send([
-                 'touser' => $openid,
+                 'touser' => $openId,
                  'template_id' => 'fplDztP3FVPpyr21rnBxYuku1m-EGGOYB6Ow9x2ob9E',
                  'url' => route('activities.show',$active_wechat->id),
                  'data' => [
@@ -100,7 +100,7 @@ class WeChatController extends Controller
                }
 
                $app->template_message->send([
-                 'touser' => $openid,
+                 'touser' => $openId,
                  'template_id' => 'fplDztP3FVPpyr21rnBxYuku1m-EGGOYB6Ow9x2ob9E',
                  'url' => route('activities.show',$active_wechat->id),
                  'data' => [
