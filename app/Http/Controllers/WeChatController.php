@@ -74,29 +74,50 @@ class WeChatController extends Controller
 
              $active_wechat = Activity::where('slug',$eventkey)->first();
              if($user->activies()->where('slug',$eventkey)->count()){
-               if($active_wechat->media_id){
+               $app->template_message->send([
+                 'touser' => $openid,
+                 'template_id' => 'fplDztP3FVPpyr21rnBxYuku1m-EGGOYB6Ow9x2ob9E',
+                 'url' => route('activities.show',$active_wechat->id),
+                 'data' => [
+                     'first' => $user->name.'您好！活动报名已成功',
+                     'keyword1' => $active_wechat->name,
+                     'keyword2' =>  $active_wechat->date_time,
+                     'keyword3' => $active_wechat->address,
+                     'remark' => '活动详情请点击链接查看, 如有变动请及时联系我们的工作人员。'
 
-                 $app->customer_service->message("活动报名成功！请扫描下图二维码加老师微信群互动，感谢您的参与!")->to($message['FromUserName'])->send();
-
-                 $image_wechat = new Image($active_wechat->media_id);
-                 return $image_wechat;
+                 ],
+               ]);
+               if($active_wechat->welcome_txt){
+                 return "活动报名成功'".$active_wechat->name."'，感谢您的参与!";
+               }else{
+                 return;
                }
-               return "您已经报名".$active_wechat->name."，感谢您的参与!";
+
              }else{
 
                if($active_wechat){
                  $user->activies()->save($active_wechat);
                }
 
-               if($active_wechat->media_id){
+               $app->template_message->send([
+                 'touser' => $openid,
+                 'template_id' => 'fplDztP3FVPpyr21rnBxYuku1m-EGGOYB6Ow9x2ob9E',
+                 'url' => route('activities.show',$active_wechat->id),
+                 'data' => [
+                     'first' => $user->name.'您好！活动报名已成功',
+                     'keyword1' => $active_wechat->name,
+                     'keyword2' =>  $active_wechat->date_time,
+                     'keyword3' => $active_wechat->address,
+                     'remark' => '活动详情请点击链接查看, 如有变动请及时联系我们的工作人员。'
 
-                 $app->customer_service->message("活动报名成功！请扫描下图二维码加老师微信群互动，感谢您的参与!")->to($message['FromUserName'])->send();
+                 ],
+             ]);
+              if($active_wechat->welcome_txt){
+                return "活动报名成功'".$active_wechat->name."'，感谢您的参与!";
+              }else{
+                return;
+              }
 
-                 $image_wechat = new Image($active_wechat->media_id);
-                 return $image_wechat;
-               }
-
-               return "活动报名成功'".$active_wechat->name."'，感谢您的参与!";
              }
 
 

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Laravel\Nova\Actions\Actionable;
 use Illuminate\Notifications\Notifiable;
+use App\Events\ActivityCreatedEvent;
+use App\Events\ActivityUpdatedEvent;
 
 class Activity extends Model
 {
@@ -36,12 +38,25 @@ class Activity extends Model
         'name',
         'slug',
         'image',
+        'welcome_txt',
+        'date_time',
+        'address',
+        'group_message',
         'description',
         'extras',
         'media_id',
         'image_group'
 
     ];
+
+    protected $dispatchesEvents = [
+    //  'creating' => RentCreatingEvent::class,
+      'created' =>  ActivityCreatedEvent::class,
+      'updated' => ActivityUpdatedEvent::class,
+
+
+    ];
+
 
 
     public function users()
@@ -112,7 +127,7 @@ class Activity extends Model
               }
           }
 
-
+/*
       public function setDescriptionAttribute($value)
           {
             $attribute_name = "description";
@@ -136,7 +151,7 @@ class Activity extends Model
 
           }
 
-
+*/
 
 
     public function setImageAttribute($value)

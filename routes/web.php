@@ -73,6 +73,9 @@ Route::group(['middleware' => ['auth',env('WE_CHAT_DISPLAY', true)?'wechat.oauth
 Route::group(['middleware' => [env('WE_CHAT_DISPLAY', true)?'wechat.oauth':"web"]], function () {
   Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 
+  Route::get('activities/{activity}', 'ActivityController@show')->name('activities.show');
+
+
   });
 
 

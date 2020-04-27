@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsToMany;
-
+use Laravel\Nova\Fields\Trix;
 class Activity extends Resource
 {
     /**
@@ -73,15 +73,33 @@ class Activity extends Resource
                     Text::make('image')->nullable()->hideFromIndex()->help(
             '如果为空，会自动生成'
             ),
+
+            Text::make('活动日期','date_time')->nullable()
+            ->rules('required', 'max:255')
+            ->hideFromIndex()->help(
+            '活动日期'
+            ),
+            Text::make('活动地点','address')->nullable()
+            ->rules('required', 'max:255')
+            ->hideFromIndex()->help(
+            '活动地点'
+            ),
+            Text::make('欢迎语','welcome_txt')->nullable()
+            ->hideFromIndex()->help(
+            '欢迎语'
+            ),
+
+            Text::make('群发信息','group_message')->nullable()
+            ->hideFromIndex()->help(
+            '不为空会群发'
+            ),
                         Text::make('media_id')->nullable()->hideFromIndex()->help(
                 'image_group 上传后，微信公众号生成的永久素材ID'
             ),
                         Image::make('image_group')->disk('edushu')->nullable()->hideFromIndex()->help(
                 '可以上传微信群二维码图片到微信公众号永久素材'
             ),
-                        Markdown::make('description')->nullable()->hideFromIndex()->help(
-                '群发订阅活动的微信号！如果不为空则群发，特别注意！需要修改上面信息且不群发需要清空这里'
-            ),
+             Trix::make('详细描述','description')->alwaysShow()->nullable()->hideFromIndex()->withFiles('edushu'), //带附件
 
             BelongsToMany::make('users'),
             HasMany::make('comments'),
