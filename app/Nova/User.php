@@ -20,6 +20,8 @@ use App\Nova\Fields\NovelUserFields;
 use App\Nova\Fields\NovelUserHistoryFields;
 use App\Rules\NovelUserRule;
 use Laravel\Nova\Fields\Boolean;
+use Titasgailius\SearchRelations\SearchesRelations;
+
 class User extends Resource
 {
     /**
@@ -27,6 +29,7 @@ class User extends Resource
      *
      * @var string
      */
+    use SearchesRelations;
     public static $group = 'user';
     public static $model = 'App\User';
     public static $perPageOptions = [50, 100, 150];
@@ -52,6 +55,10 @@ class User extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
+     public static $searchRelations = [
+           'cards' => ['card_number'],
+       ];
+
      public function title()
      {
          return $this->real_name?$this->real_name:$this->name;
