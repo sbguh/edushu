@@ -9,6 +9,7 @@ use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Date;
 class Comment extends Resource
 {
     /**
@@ -46,7 +47,9 @@ class Comment extends Resource
             ID::make()->sortable(),
             BelongsTo::make('用户','user','App\Nova\User')->searchable(),
             Text::make('content'),
-            Boolean::make('enable')
+            Boolean::make('enable'),
+            Date::make(' 创建时间','created_at')->readonly(),
+            //Date::make(' 更新时间','updated_at')->readonly(),
         ];
     }
 

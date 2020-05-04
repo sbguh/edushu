@@ -58,7 +58,7 @@ class NovelsController extends Controller
 
 
 
-              $new_file_name = time().$type;
+              $new_file_name = time().".".$type;
               $url_file = env('APP_URL')."/uploads/shufang/".$new_file_name;
               $new_file = public_path()."/uploads/shufang/".$new_file_name;
 
@@ -113,6 +113,11 @@ class NovelsController extends Controller
 
         $return_book =$novel->rents()->onlyTrashed()->where('state','已还书')->orderBy('id','DESC')->paginate(50);
 
+
+        $book_after_reads = $novel->comments()->with('user','files')->where('type',0)->orderBy('id','DESC')->get()->toJson();
+
+        $book_tips = $novel->comments()->with('user','files')->where('type',1)->orderBy('id','DESC')->get()->toJson();
+
         $return_book= $return_book->unique('user_id');
 
         $category= Category::where('name','适读年龄')->select('id')->first();
@@ -129,7 +134,7 @@ class NovelsController extends Controller
         $bookhistory = "";
         // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
 
-        return view('novels.show', ['novel' => $novel,'favored'=>$favored,'app'=>$app,'tags'=>$tags,'categories'=>$categories,'user'=>$user,'rent_book'=>$rent_book,'return_book'=>$return_book]);
+        return view('novels.show', ['novel' => $novel,'book_after_reads'=>$book_after_reads,'book_tips'=>$book_tips,'favored'=>$favored,'app'=>$app,'tags'=>$tags,'categories'=>$categories,'user'=>$user,'rent_book'=>$rent_book,'return_book'=>$return_book]);
     }
 
     public function read(Book $book, Request $request)

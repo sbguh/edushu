@@ -81,52 +81,11 @@
         <div class="weui-flex" class="weui-tabbar" style="margin-top:5px;text-align:center;padding:0px 5px;" >
 
             <van-button type="primary" icon="plus" size="small" @click="showAfterRead" class="btn-add-to-read" text="写读后感" /> </van-button>
-            <van-popup v-model="show_after_read"
-            closeable
-              position="bottom"
-              :style="{ height: '80%' }">
 
-
-              <van-field
-              v-model="after_read"
-              rows="3"
-              autosize
-              label=""
-              type="textarea"
-              placeholder="写读后感"
-            /></van-field>
-            <van-uploader v-model="fileList" :after-read="afterRead" multiple /></van-uploader>
-            <div style="margin: 16px;" >
-              <van-goods-action-button type="info" @click="after_read_click({{$novel->id}},0)" class="btn-add-to-cart" text="提交" /> </van-goods-action-button>
-            </div>
-
-            </van-popup>
 
             <van-button type="info" icon="add" size="small" @click="showTips" class="btn-add-to-tips" text="做读书笔记" /> </van-button>
 
-            <van-popup v-model="show_tips"
-            closeable
-              position="bottom"
-              :style="{ height: '80%' }">
-              <van-field v-model="comment_title" label="输入章节" /></van-field>
-              <van-field
-              v-model="after_read"
-              rows="3"
-              autosize
-              label=""
-              type="textarea"
-              placeholder="做读书笔记"
-            /></van-field>
 
-            <van-uploader v-model="fileList" :after-read="afterRead" multiple /></van-uploader>
-
-            <div style="margin: 16px;">
-              <van-goods-action-button type="info" @click="after_read_click({{$novel->id}},1)" class="add_tips" text="提交" /> </van-goods-action-button>
-
-            </div>
-
-
-            </van-popup>
 
         </div>
 
@@ -154,33 +113,106 @@
   </div>
   </van-tab>
 
-  <van-tab title="谁借阅过">
+  <van-tab title="读书笔记">
     <div class="page">
-      <div class="weui-cells">
-    @foreach($return_book as $rent)
 
-
-                <div class="weui-cell weui-cell_active">
-                    <div class="weui-cell__hd" style="position: relative; margin-right: 10px;">
-                         <img src="{{ isset($rent->user->extras->headimgurl)?$rent->user->extras->headimgurl:'https://img.yzcdn.cn/vant/user-inactive.png' }}" width="80px">
-                        <span class="weui-badge" style="position: absolute; top: -0.4em; right: -0.4em;">Level {{$rent->card->user->level?$rent->card->user->level:0}}级</span>
+      <div class="weui-cell weui-cell_active" v-for="afterread in book_after_reads">
+                    <div class="weui-cell__hd" style="position: relative; margin-right: 10px;" v-if="afterread.user.extras">
+                        <img :src="[[afterread.user.extras.avatar]]" style="width: 50px; display: block;"/>
+                    </div>
+                    <div class="weui-cell__hd" style="position: relative; margin-right: 10px;" v-else>
+                        <img src="https://img.yzcdn.cn/vant/user-inactive.png" style="width: 50px; display: block;"/>
                     </div>
                     <div class="weui-cell__bd">
-                        <p>{{$rent->card->user->name}} </p>
-                        <p style="font-size: 13px; color: #888;">阅读级别:  {{$rent->card->user->level?$rent->card->user->level:0}}级, 阅读字数:  {{$rent->card->user->read_count?($rent->card->user->read_count/10000).'万字':0}}， 借过: {{$rent->card->user->rent_count?$rent->card->user->rent_count:0}}本</p>
+                        <p>[[afterread.user.name]]</p>
+                        <p style="font-size: 13px; color: #888;">[[afterread.content]]</p>
+                        <div v-if="afterread.files">
+                          <p v-for="img in afterread.files" > <img :src="img.file" width="80px" @click="ImagePreview([img.file]);"  /></p>
+                        </div>
                     </div>
-                </div>
-
-
-    @endforeach
-  </div>
+    </div>
+    <div style="text-align:right;margin-top:10px"><van-button type="info" icon="add" size="small" @click="showTips" class="btn-add-to-tips" text="做读书笔记" /> </van-button></div>
 </div>
   </van-tab>
-  <van-tab title="读后感">暂未开放</van-tab>
+  <van-tab title="读后感">
+
+    <div class="page">
+
+      <div class="weui-cell weui-cell_active" v-for="afterread in book_tips">
+                    <div class="weui-cell__hd" style="position: relative; margin-right: 10px;" v-if="afterread.user.extras">
+                        <img :src="[[afterread.user.extras.avatar]]" style="width: 50px; display: block;"/>
+                        <p>[[afterread.user.name]]</p>
+                    </div>
+                    <div class="weui-cell__hd" style="position: relative; margin-right: 10px;" v-else>
+                        <img src="https://img.yzcdn.cn/vant/user-inactive.png" style="width: 50px; display: block;"/>
+                        <p>[[afterread.user.name]]</p>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <p>[[afterread.title]]</p>
+                        <p style="font-size: 13px; color: #888;">[[afterread.content]]</p>
+                        <div v-if="afterread.files">
+                          <p v-for="img in afterread.files" > <img :src="img.file" width="80px" @click="ImagePreview([img.file]);"  /></p>
+                        </div>
+                    </div>
+    </div>
+</div>
+
+<div style="text-align:right;margin-top:10px"><van-button type="primary" icon="plus" size="small" @click="showAfterRead" class="btn-add-to-read" text="写读后感" /> </van-button></div>
+
+
+  </van-tab>
 </van-tabs>
 
 
 </div>
+
+<van-popup v-model="show_tips"
+closeable
+  position="bottom"
+  :style="{ height: '80%' }">
+  <van-field v-model="comment_title" label="输入章节" /></van-field>
+  <van-field
+  v-model="after_read"
+  rows="3"
+  autosize
+  label=""
+  type="textarea"
+  placeholder="做读书笔记"
+/></van-field>
+
+<van-uploader v-model="fileList" :after-read="afterRead" multiple /></van-uploader>
+
+<div style="margin: 16px;">
+  <van-goods-action-button type="info" @click="after_read_click({{$novel->id}},1)" class="add_tips" text="提交" /> </van-goods-action-button>
+
+</div>
+
+
+</van-popup>
+
+
+<van-popup v-model="show_after_read"
+closeable
+  position="bottom"
+  :style="{ height: '80%' }">
+
+
+  <van-field
+  v-model="after_read"
+  rows="3"
+  autosize
+  label=""
+  type="textarea"
+  placeholder="写读后感"
+/></van-field>
+<van-uploader v-model="fileList" :after-read="afterRead" multiple /></van-uploader>
+<div style="margin: 16px;" >
+  <van-goods-action-button type="info" @click="after_read_click({{$novel->id}},0)" class="btn-add-to-cart" text="提交" /> </van-goods-action-button>
+</div>
+
+</van-popup>
+
+
 @endsection
 
 
@@ -193,6 +225,8 @@
 
   $(document).ready(function () {
 
+    data.book_tips = {!! $book_tips !!}
+    data.book_after_reads = {!!$book_after_reads!!}
 
     $('.after_read_click').click(function () {
      console.log("tes111t")

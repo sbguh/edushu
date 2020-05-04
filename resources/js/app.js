@@ -67,7 +67,11 @@ import { SubmitBar } from 'vant';
 import { NoticeBar } from 'vant';
 import { DatetimePicker } from 'vant';
 import { Uploader } from 'vant';
+import { ImagePreview } from 'vant';
 
+window.ImagePreview = ImagePreview;
+
+Vue.use(ImagePreview);
 Vue.use(Uploader);
 
 Vue.use(DatetimePicker);

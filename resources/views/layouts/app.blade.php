@@ -40,6 +40,8 @@ var data = {
   after_read:'',
   comment_title:'',
   tips:'',
+  book_tips:'',
+  book_after_reads:'',
   chapter:'',
   fileList:[],
   show_tips:false,
@@ -214,6 +216,16 @@ var data = {
                      .then(response => {
                        console.log(response.data)
                         swal('提交成功', '', 'success');
+                        if(type==1){
+                          this.active =2;
+                        }else{
+                          this.active =1;
+                        }
+                        this.after_read = "";
+                        this.fileList = [];
+                        this.comment_title ="";
+                        this.show_after_read =false;
+                        location.reload();
                         //location.href = "{{ session('return_wechat')['url'] }}";
                        })
                        .catch(error => {
