@@ -38,7 +38,7 @@ class Rent extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id','rent_number',
     ];
 
     public static function label()
@@ -59,7 +59,7 @@ class Rent extends Resource
      */
 
      public static $searchRelations = [
-           'card.user' => ['name', 'real_name','phone_number','rent_number'],
+           'card.user' => ['name', 'real_name','phone_number'],
            'novel' => ['title', 'author','press'],
        ];
 
