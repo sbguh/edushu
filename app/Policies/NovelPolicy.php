@@ -54,7 +54,7 @@ class NovelPolicy
     {
         //
         //return false;
-        return true;
+        return false;
     }
 
 
