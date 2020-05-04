@@ -113,7 +113,7 @@
   </div>
   </van-tab>
 
-  <van-tab title="读书笔记">
+  <van-tab title="读后感">
     <div class="page">
 
       <div class="weui-cell weui-cell_active" v-for="afterread in book_after_reads">
@@ -124,40 +124,42 @@
                         <img src="https://img.yzcdn.cn/vant/user-inactive.png" style="width: 50px; display: block;"/>
                     </div>
                     <div class="weui-cell__bd">
-                        <p>[[afterread.user.name]]</p>
+                        <p style="font-size：9px">[[afterread.user.name]]</p>
                         <p style="font-size: 13px; color: #888;">[[afterread.content]]</p>
                         <div v-if="afterread.files">
-                          <p v-for="img in afterread.files" > <img :src="img.file" width="80px" @click="ImagePreview([img.file]);"  /></p>
+                          <p v-for="img in afterread.files" @click="ImagePreview([img.file]);"> <img :src="img.file" width="80px"   /></p>
                         </div>
                     </div>
+                    <van-divider></van-divider>
     </div>
-    <div style="text-align:right;margin-top:10px"><van-button type="info" icon="add" size="small" @click="showTips" class="btn-add-to-tips" text="做读书笔记" /> </van-button></div>
+    <div style="text-align:right;margin-top:10px"><van-button type="info" icon="add" size="small" @click="showAfterRead" class="btn-add-to-tips" text="写读后感" /> </van-button></div>
 </div>
   </van-tab>
-  <van-tab title="读后感">
+  <van-tab title="读书笔记">
 
     <div class="page">
 
       <div class="weui-cell weui-cell_active" v-for="afterread in book_tips">
                     <div class="weui-cell__hd" style="position: relative; margin-right: 10px;" v-if="afterread.user.extras">
                         <img :src="[[afterread.user.extras.avatar]]" style="width: 50px; display: block;"/>
-                        <p>[[afterread.user.name]]</p>
+
                     </div>
                     <div class="weui-cell__hd" style="position: relative; margin-right: 10px;" v-else>
                         <img src="https://img.yzcdn.cn/vant/user-inactive.png" style="width: 50px; display: block;"/>
-                        <p>[[afterread.user.name]]</p>
                     </div>
                     <div class="weui-cell__bd">
                         <p>[[afterread.title]]</p>
+                        <p style="font-size：9px">[[afterread.user.name]]</p>
                         <p style="font-size: 13px; color: #888;">[[afterread.content]]</p>
                         <div v-if="afterread.files">
-                          <p v-for="img in afterread.files" > <img :src="img.file" width="80px" @click="ImagePreview([img.file]);"  /></p>
+                          <p v-for="img in afterread.files" @click="ImagePreview([img.file]);" > <img :src="img.file" width="80px"  /></p>
                         </div>
                     </div>
+                    <van-divider></van-divider>
     </div>
 </div>
 
-<div style="text-align:right;margin-top:10px"><van-button type="primary" icon="plus" size="small" @click="showAfterRead" class="btn-add-to-read" text="写读后感" /> </van-button></div>
+<div style="text-align:right;margin-top:10px"><van-button type="primary" icon="plus" size="small" @click="showTips" class="btn-add-to-read" text="做读书笔记" /> </van-button></div>
 
 
   </van-tab>
