@@ -97,7 +97,8 @@
           <div>{!!$novel->description!!}</div>
 
           <div class="visible-print text-center">
-          	{!! QrCode::size(100)->generate(Request::url()); !!}
+            <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate(Request::url())) !!} ">
+
           	<p>扫描二维码访问本页</p>
           </div>
 
