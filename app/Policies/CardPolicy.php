@@ -2,22 +2,22 @@
 
 namespace App\Policies;
 
-use App\Models\Novel;
+use App\Models\Card;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class NovelPolicy
+class CardPolicy
 {
     use HandlesAuthorization;
 
 
 
-    public function attachUser(User $user, Novel $novel)
+    public function attachUser(User $user, Card $card)
      {
          return true;
      }
 
-     public function attachUserHistory(User $user, Novel $novel)
+     public function attachUserHistory(User $user, Card $card)
       {
           return false;
       }
@@ -31,13 +31,13 @@ class NovelPolicy
     }
 
 
-    public function view(User $user, Novel $novel)
+    public function view(User $user, Card $card)
     {
         //
         return true;
     }
 
-    public function update(User $user, Novel $novel)
+    public function update(User $user, Card $card)
     {
         //return false;
         return true;
@@ -54,24 +54,24 @@ class NovelPolicy
     {
         //
         //return false;
-        return true;
+        return false;
     }
 
 
-    public function restore(User $user, Novel $novel)
+    public function restore(User $user, Card $card)
     {
         //
         return true;
     }
 
 
-    public function forceDelete(User $user, Novel $novel)
+    public function forceDelete(User $user, Card $card)
     {
         //
         return false;
     }
 
-    public function trashed(User $user, Novel $novel)
+    public function trashed(User $user, Card $card)
     {
         //
         return true;
