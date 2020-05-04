@@ -61,6 +61,7 @@ class Rent extends Resource
      public static $searchRelations = [
            'card.user' => ['name', 'real_name','phone_number'],
            'novel' => ['title', 'author','press'],
+           'card'=>['card_number'],
        ];
 
     public function fields(Request $request)
