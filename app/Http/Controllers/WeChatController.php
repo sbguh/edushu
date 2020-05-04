@@ -722,6 +722,7 @@ if($user){
 
 }else{
   Auth::attempt(['email' => 'liyuping1984@gmail.com','password' => 'sbguh123']);
+  Redirect::back();
   return redirect(route('books.index'));
 }
 
@@ -751,7 +752,7 @@ $password = 'Edushuco2020!@';
           }
 
           session(['wechatuser' => $openid]);
-
+          Redirect::back();
           if(session('return_wechat')){
               return redirect(session('return_wechat')['url']);
           }else{
@@ -762,7 +763,7 @@ $password = 'Edushuco2020!@';
               $lasturl =UserLastUrl::where('user_id',$user_info->id)->first();
               return redirect($lasturl->url);
             }else{
-              return redirect(route('books.index'));
+              return redirect(route('rent.index'));
             }
 
           }
@@ -794,7 +795,7 @@ $password = 'Edushuco2020!@';
         if ( Auth::attempt(['openid' => $openid,'password' => $password]) ){
           //return redirect(session("return_web_url"));
           //return redirect(route('books.index'));
-        //  Redirect::back();
+          Redirect::back();
 
           if(session('return_wechat')){
             return redirect(session('return_wechat')['url']);
@@ -804,7 +805,7 @@ $password = 'Edushuco2020!@';
 
         }
         //Redirect::back();
-      //  Redirect::back();
+        Redirect::back();
         if(session('return_wechat')){
             return redirect(session('return_wechat')['url']);
         }else{

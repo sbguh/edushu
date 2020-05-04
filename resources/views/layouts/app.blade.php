@@ -36,6 +36,13 @@ var data = {
   result:[],
   active: 0,
   show: false,
+  show_after_read:false,
+  after_read:'',
+  comment_title:'',
+  tips:'',
+  chapter:'',
+  fileList:[],
+  show_tips:false,
   searchResult:false,
   phone:'',
   real_name:'',
@@ -122,6 +129,19 @@ var data = {
                     location.href = '{{ route('rent.index') }}';
                    },
 
+                   showAfterRead(){
+                     this.show_after_read =true;
+                   },
+
+                   showTips(){
+                     this.show_tips =true;
+                   },
+
+                   afterRead(file) {
+                    // 此时可以自行将文件上传至服务器
+                    console.log(file.content);
+                  },
+
                   onClickIcon() {
                      Toast('点击图标');
                    },
@@ -180,6 +200,32 @@ var data = {
                           //  console.log(error.response)
                             swal(error.response.data.message, '', 'error');
                         });
+
+
+                   },
+                   after_read_click(id,type=0){
+//alert(id);
+                     if(this.after_read ==""){
+                       swal('读后感不可以为空', '', 'error');
+                     }
+
+                     let data = {"after_read":this.after_read,"fileList":this.fileList,'type':type,'comment_title':this.comment_title};
+                     axios.post('/rents/comment/'+id,data)
+                     .then(response => {
+                       console.log(response.data)
+                        swal('提交成功', '', 'success');
+                        //location.href = "{{ session('return_wechat')['url'] }}";
+                       })
+                       .catch(error => {
+                         //  console.log(error.response)
+                           if (error.response && error.response.status === 401) {
+                             swal('请先登录', '', 'error');
+                             $(window).attr('location','{{route("wechatoauth")}}');
+                           }else{
+                             swal(error.response.data.message, '', 'error');
+                           }
+
+                       });
 
 
                    },

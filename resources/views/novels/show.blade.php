@@ -26,7 +26,7 @@
              </div></div>
             <div class="weui-flex__item">
               <div class="placeholder">
-                <h3>{{$novel->title}}</h3>
+                <h6>{{$novel->title}}</h6>
                 @if($novel->categories()->count())
                 <div class="tags">
                   <div class="clearfix">
@@ -50,33 +50,85 @@
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">浏览:</label> <span class="weui-form-preview__value">{{$novel->count}}</span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">图书价格:</label> <span class="weui-form-preview__value">￥{{$novel->price}}</span></div>
               <div class="weui-form-preview__item"><label class="weui-form-preview__label">在线预约:</label> <span class="weui-form-preview__value">￥{{$novel->rent_price}}</span></div>
+              <div class="weui-form-preview__item">
+                <span class="weui-form-preview__value">
+                  @guest
+                    <van-button type="warning" text="尚未登陆" url="{{ route('wechatoauth') }}" /> </van-button>
+                  @else
+
+                    @if(Auth::user()->cards)
+                      @if(Auth::user()->cards->active)
+                        @if(strtotime(Auth::user()->cards->end_date)> strtotime("now"))
+                        <van-goods-action-button type="danger" class="btn-add-to-cart" text="会员预约借书" /> </van-goods-action-button>
+                        @else
+                          <van-goods-action-button type="danger"  text="您的账号已过有效期" /> </van-goods-action-button>
+                        @endif
+                      @else
+                        <van-goods-action-button type="danger"  text="您的账号尚未激活" /> </van-goods-action-button>
+                      @endif
+
+                    @else
+                    <van-goods-action-button type="danger" text="您尚未成为我们的会员" /> </van-goods-action-button>
+                    @endif
+
+                  @endguest
+                </span>
+              </div>
+
             </div>
 
         </div>
-          @guest
-          <div class="weui-flex" class="weui-tabbar" >
-           <van-goods-action-button type="danger" text="尚未登陆" /> </van-goods-action-button>
-          </div>
+        <div class="weui-flex" class="weui-tabbar" style="margin-top:5px;text-align:center;padding:0px 5px;" >
 
-          @else
-        <div class="weui-flex" class="weui-tabbar" >
-          @if(Auth::user()->cards)
-            @if(Auth::user()->cards->active)
-              @if(strtotime(Auth::user()->cards->end_date)> strtotime("now"))
-              <van-goods-action-button type="danger" class="btn-add-to-cart" text="会员预约借书" /> </van-goods-action-button>
-              @else
-                <van-goods-action-button type="danger"  text="您的账号已过有效期" /> </van-goods-action-button>
-              @endif
-            @else
-              <van-goods-action-button type="danger"  text="您的账号尚未激活" /> </van-goods-action-button>
-            @endif
+            <van-button type="primary" icon="plus" size="small" @click="showAfterRead" class="btn-add-to-read" text="写读后感" /> </van-button>
+            <van-popup v-model="show_after_read"
+            closeable
+              position="bottom"
+              :style="{ height: '80%' }">
 
-          @else
-          <van-goods-action-button type="danger" text="您尚未成为我们的会员" /> </van-goods-action-button>
-          @endif
+
+              <van-field
+              v-model="after_read"
+              rows="3"
+              autosize
+              label=""
+              type="textarea"
+              placeholder="写读后感"
+            /></van-field>
+            <van-uploader v-model="fileList" :after-read="afterRead" multiple /></van-uploader>
+            <div style="margin: 16px;" >
+              <van-goods-action-button type="info" @click="after_read_click({{$novel->id}},0)" class="btn-add-to-cart" text="提交" /> </van-goods-action-button>
+            </div>
+
+            </van-popup>
+
+            <van-button type="info" icon="add" size="small" @click="showTips" class="btn-add-to-tips" text="做读书笔记" /> </van-button>
+
+            <van-popup v-model="show_tips"
+            closeable
+              position="bottom"
+              :style="{ height: '80%' }">
+              <van-field v-model="comment_title" label="输入章节" /></van-field>
+              <van-field
+              v-model="after_read"
+              rows="3"
+              autosize
+              label=""
+              type="textarea"
+              placeholder="做读书笔记"
+            /></van-field>
+
+            <van-uploader v-model="fileList" :after-read="afterRead" multiple /></van-uploader>
+
+            <div style="margin: 16px;">
+              <van-goods-action-button type="info" @click="after_read_click({{$novel->id}},1)" class="add_tips" text="提交" /> </van-goods-action-button>
+
+            </div>
+
+
+            </van-popup>
+
         </div>
-        @endguest
-
 
 
 
@@ -84,6 +136,12 @@
         <article class="weui-article">
           <van-divider>共读书房推荐</van-divider>
           <div>{!!$novel->description!!}</div>
+
+          <div class="visible-print text-center">
+          	{!! QrCode::size(100)->generate(Request::url()); !!}
+          	<p>扫描二维码访问本页</p>
+          </div>
+
         </article>
 
       </div>
@@ -129,7 +187,22 @@
 
 @section('scriptsAfterJs')
 <script>
+
+
+
+
   $(document).ready(function () {
+
+
+    $('.after_read_click').click(function () {
+     console.log("tes111t")
+      alert("tesst");
+    });
+
+    $('.add_tips').click(function () {
+     console.log("tes111t")
+      alert("tesst");
+    });
 
     // 监听收藏按钮的点击事件
     $('.btn-favor').click(function () {

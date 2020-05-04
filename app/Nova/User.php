@@ -81,8 +81,8 @@ class User extends Resource
             Text::make('阅读文字','read_count')->onlyOnDetail(),
             Text::make('阅读级别','level')->onlyOnDetail(),
             Boolean::make('正常使用','enable'),
-            Text::make('押金','deposit')->exceptOnForms(),
-            Text::make('余额','balance')->exceptOnForms(),
+            Text::make('押金','deposit'),
+            Text::make('余额','balance'),
             Date::make('生日','birthday')->pickerFormat('Y.m.d')->hideFromIndex(),
             Select::make('性别','gender')->options([
                 '0' => '女',

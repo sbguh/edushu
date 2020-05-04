@@ -84,7 +84,9 @@ class UserCard extends Resource
  {
      return [
          ID::make()->sortable(),
-         Text::make('卡号','card_number')->readonly(),
+         Text::make('卡号','card_number')
+         ->creationRules('unique:cards,card_number')
+         ->updateRules('unique:cards,card_number,{{resourceId}}'),
          BelongsTo::make('User')->searchable()
          ->creationRules('required',new UserCardRule()),
          Boolean::make("激活",'active')->hideWhenCreating(),

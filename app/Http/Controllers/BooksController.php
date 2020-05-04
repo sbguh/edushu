@@ -35,10 +35,11 @@ class BooksController extends Controller
 
         $app = app('wechat.official_account');
         $user = $request->user();
+        session(['return_wechat' =>['url'=>route('books.show',$book->id),'name'=> $book->name] ]);
 
         if($book->check_subscribe){
           //session(['return_website_url' => route('books.show',$book->id)]);
-          session(['return_wechat' =>['url'=>route('books.show',$book->id),'name'=> $book->name] ]);
+          //session(['return_wechat' =>['url'=>route('books.show',$book->id),'name'=> $book->name] ]);
 
           if(!Auth::check()) {
               return redirect(route('wechatoauth'));

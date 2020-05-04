@@ -66,7 +66,8 @@ Route::group(['middleware' => ['auth',env('WE_CHAT_DISPLAY', true)?'wechat.oauth
     Route::post('users', 'UsersController@store')->name('users.save');
 
     Route::get('cards', 'CardsController@show')->name('cards.show');
-
+    Route::get('rents', 'NovelsController@index')->name('rent.index');
+    Route::get('rents/{novel}', 'NovelsController@show')->name('novel.show');
 
 });
 
@@ -130,8 +131,9 @@ Route::any('search/{keyword}', 'BooksController@search')->name('books.search');
 Route::any('/rent/search/{keyword}', 'NovelsController@search')->name('books.search');
 
 
-Route::get('rents', 'NovelsController@index')->name('rent.index');
-Route::get('rents/{novel}', 'NovelsController@show')->name('novel.show');
+
+
+Route::post('rents/comment/{novel}', 'NovelsController@comment')->name('novel.comment');
 
 Route::group(['middleware' => ['web',  env('WE_CHAT_DISPLAY', true)?'wechat.oauth':"web" ]], function () {
   Route::any('/jssdk', 'WeChatController@jssdk')->name('jssdk');

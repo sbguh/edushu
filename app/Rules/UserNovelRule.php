@@ -60,6 +60,13 @@ class UserNovelRule implements Rule
         //  return true;
         }
 
+        if($card->user->deposit == 0){
+          $this->has_error =true;
+          $this->out_error="借书需要缴纳押金！";
+        //  return true;
+        }
+
+
 
         if($this->has_error){
           return false;
