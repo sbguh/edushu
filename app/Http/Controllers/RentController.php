@@ -44,6 +44,20 @@ class RentController extends Controller
 
         session(['return_wechat' =>['url'=>route('rent.show',$rent->rent_number),'name'=> $rent->rent_number] ]);
 
+        if($user = $request->user()) {
+            // 从当前用户已收藏的商品中搜索 id 为当前商品 id 的商品
+            // boolval() 函数用于把值转为布尔值
+            if($user->lasturl=== null){
+
+              $lasturl = new UserLastUrl(['url'=>$request->url(),'title'=>$rent->rent_number]);
+              $user->lasturl()->save($lasturl);
+            }else{
+              $user->lasturl->update(['url'=>$request->url(),'title'=>$rent->rent_number]);
+            }
+
+
+        }
+
 
         $favored = false;
         $bookhistory = "";

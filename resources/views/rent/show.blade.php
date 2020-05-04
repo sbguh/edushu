@@ -33,7 +33,7 @@
             <div class="weui-flex__item"><div class="placeholder"><img src="{{ Storage::disk('edushu')->url($novel->image) }}" width="200px"></div></div>
             <div class="weui-flex__item">
               <div class="placeholder">
-                <h3><a href="{{route('novel.show',$novel->id)}}">{{$novel->title}}</a></h3>
+                <h6><a href="{{route('novel.show',$novel->id)}}">{{$novel->title}}</a></h6>
                 @if($novel->categories()->count())
                 <div class="tags">
                   <div class="clearfix">

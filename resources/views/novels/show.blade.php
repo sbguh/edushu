@@ -125,7 +125,7 @@
                         <img src="https://img.yzcdn.cn/vant/user-inactive.png" style="width: 50px; display: block;"/>
                     </div>
                     <div class="weui-cell__bd">
-                        <p style="font-size：9px">[[afterread.user.name]]</p>
+                        <p style="font-size：9px;text-align:right">[[afterread.user.name]]</p>
                         <p style="font-size: 13px; color: #888;">[[afterread.content]]</p>
                         <div v-if="afterread.files">
                           <p v-for="img in afterread.files" @click="ImagePreview([img.file]);"> <img :src="img.file" width="80px"   /></p>
@@ -149,8 +149,7 @@
                         <img src="https://img.yzcdn.cn/vant/user-inactive.png" style="width: 50px; display: block;"/>
                     </div>
                     <div class="weui-cell__bd">
-                        <p>[[afterread.title]]</p>
-                        <p style="font-size：9px">[[afterread.user.name]]</p>
+                        <p>章节：[[afterread.title]] - [[afterread.user.name]]</p>
                         <p style="font-size: 13px; color: #888;">[[afterread.content]]</p>
                         <div v-if="afterread.files">
                           <p v-for="img in afterread.files" @click="ImagePreview([img.file]);" > <img :src="img.file" width="80px"  /></p>
@@ -173,7 +172,7 @@
 closeable
   position="bottom"
   :style="{ height: '80%' }">
-  <van-field v-model="comment_title" label="输入章节" /></van-field>
+  <van-field v-model="comment_title" label="章节" /></van-field>
   <van-field
   v-model="after_read"
   rows="3"
