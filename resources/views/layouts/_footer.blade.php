@@ -116,7 +116,7 @@ closeable
                 <div class="weui-tabbar__item">
                   <a href="{{route('rent.index')}}">
                     <p class="weui-tabbar__label"><i class="fa fa-3x fa-book" aria-hidden="true"></i></p>
-                    <p class="weui-tabbar__label">借阅中心</p>
+                    <p class="weui-tabbar__label">图书馆</p>
                   </a>
                 </div>
                 <div class="weui-tabbar__item">
