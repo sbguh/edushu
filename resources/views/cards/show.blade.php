@@ -20,7 +20,7 @@
 
         <div class="weui-form-preview__item">
             <label class="weui-form-preview__label">卡号</label>
-            <span class="weui-form-preview__value">{!!DNS1D::getBarcodeSVG($user->cards->card_number, "CODABAR",3,66,"black")!!}</span>
+            <span class="weui-form-preview__value"><img src='data:image/png;base64,{!!DNS1D::getBarcodePNG($user->cards->card_number, "CODABAR")!!} '/></span>
         </div>
 
         <div class="weui-form-preview__item">
