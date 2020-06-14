@@ -9,6 +9,7 @@ use App\Models\Tag;
 use App\Models\Category;
 use App\Models\Rent;
 use App\Models\Comment;
+use App\Models\UserLastUrl;
 use App\Models\CommentFile;
 use Illuminate\Support\Facades\DB;
 use App\Models\Favorite;

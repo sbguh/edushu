@@ -10,7 +10,7 @@
   />
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', '专注于中小学阅读和写作')</title>
+    <title>@yield('title', '中小学生课外图书推荐') - 小学生必读书目 | 小学生必读课外书推荐 | 分级阅读</title>
     <!-- 样式 -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <script src="{{ mix('js/app.js') }}"></script>

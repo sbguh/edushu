@@ -20,6 +20,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
-            'wechat','checkout.notify','payments/wechat-notify'
+            'wechat','checkout.notify','payments/wechat-notify','supermarket/search'
     ];
 }

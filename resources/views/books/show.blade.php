@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', $book->name)
+@section('title', $book->name."有声电子书免费在线阅读 | 免费".$book->name."有声电子书")
 
 
 
@@ -94,6 +94,14 @@
                         <article class="weui-article">
                           <section>
                               {!! $book->description !!}
+
+                              <div class="visible-print text-center">
+                                <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate(Request::url())) !!} ">
+
+                                <p>扫描二维码访问本页</p>
+                                <p><a href="https://book.edushu.co">小学生必读书目</a>, <a href="https://book.edushu.co">小学生必读课外书</a>， <a href="https://www.edushu.co/">共读书房分级阅读培训</a></p>
+                              </div>
+
                           </section>
                         </article>
                     </div>

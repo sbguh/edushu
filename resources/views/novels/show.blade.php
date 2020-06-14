@@ -93,13 +93,14 @@
 
 
         <article class="weui-article">
-          <van-divider>共读书房推荐</van-divider>
+          <van-divider>整本书阅读</van-divider>
           <div>{!!$novel->description!!}</div>
 
           <div class="visible-print text-center">
             <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate(Request::url())) !!} ">
 
           	<p>扫描二维码访问本页</p>
+            <p><a href="https://book.edushu.co">小学生必读书目</a>, <a href="https://book.edushu.co">小学生必读课外书</a>， <a href="https://www.edushu.co/">共读书房分级阅读培训</a></p>
           </div>
 
         </article>

@@ -99,7 +99,7 @@ class Activity extends Resource
                         Image::make('image_group')->disk('edushu')->nullable()->hideFromIndex()->help(
                 '可以上传微信群二维码图片到微信公众号永久素材'
             ),
-             Trix::make('详细描述','description')->alwaysShow()->nullable()->hideFromIndex()->withFiles('edushu'), //带附件
+             Markdown::make('详细描述','description')->alwaysShow()->nullable()->hideFromIndex(), //带附件
 
             BelongsToMany::make('users'),
             HasMany::make('comments'),

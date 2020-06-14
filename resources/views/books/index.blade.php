@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', '中小学生必读书目')
+@section('title', '免费有声电子书 | 在线免费阅读课外书 | 免费小学生必读课外有声电子书')
 
 
 @section('jssdk')

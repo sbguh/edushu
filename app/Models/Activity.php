@@ -127,12 +127,12 @@ class Activity extends Model
               }
           }
 
-/*
-      public function setDescriptionAttribute($value)
+
+      public function setGroupMessageAttribute($value)
           {
-            $attribute_name = "description";
+            $attribute_name = "group_message";
             $value = str_replace(array("<p>","</p>"),"",$value);
-            $this->attributes['description'] = $value;
+            $this->attributes['group_message'] = $value;
             $app = app('wechat.official_account');
           //  dd($this->attributes['image']);
               if( $value ){
@@ -151,7 +151,7 @@ class Activity extends Model
 
           }
 
-*/
+
 
 
     public function setImageAttribute($value)

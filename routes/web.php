@@ -12,7 +12,7 @@
 */
 
 //Route::get('/', 'PagesController@root')->name('root');
-Route::redirect('/', '/books')->name('root');
+Route::redirect('/', '/rents')->name('root');
 
 Route::any('/subscribe', 'WeChatController@subscribe')->name('wechat.subscribe');
 
@@ -66,10 +66,16 @@ Route::group(['middleware' => [env('WE_CHAT_DISPLAY', true)?'wechat.oauth':"web"
     Route::post('users', 'UsersController@store')->name('users.save');
 
     Route::get('cards', 'CardsController@show')->name('cards.show');
-    Route::get('rents', 'NovelsController@index')->name('rent.index');
-    Route::get('rents/{novel}', 'NovelsController@show')->name('novel.show');
+
 
 });
+
+Route::get('rents', 'NovelsController@index')->name('rent.index');
+Route::get('rents/{novel}', 'NovelsController@show')->name('novel.show');
+
+Route::get('supermarket', 'MarketController@index')->name('supermarket.index');
+Route::post('supermarket/search', 'MarketController@search')->name('supermarket.search');
+Route::post('supermarket/update', 'MarketController@update')->name('supermarket.update');
 
 Route::group(['middleware' => [env('WE_CHAT_DISPLAY', true)?'wechat.oauth':"web"]], function () {
   Route::get('products/{product}', 'ProductsController@show')->name('products.show');

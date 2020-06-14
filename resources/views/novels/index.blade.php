@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', '图书馆')
+@section('title', '免费在线图书馆')
 
 
 @section('jssdk')

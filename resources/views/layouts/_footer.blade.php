@@ -110,8 +110,10 @@ closeable
             </div>
             <div class="weui-tabbar">
                 <div class="weui-tabbar__item weui-bar__item_on">
+                  <a href="https://www.edushu.co">
                     <p class="weui-tabbar__label"><i class="fa fa-3x fa-home" aria-hidden="true"></i></p>
-                    <p class="weui-tabbar__label">首页</p>
+                    <p class="weui-tabbar__label">官网</p>
+                  </a>
                 </div>
                 <div class="weui-tabbar__item">
                   <a href="{{route('rent.index')}}">

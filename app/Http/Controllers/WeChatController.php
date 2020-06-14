@@ -459,8 +459,8 @@ file_put_contents(base_path(). '/public/uploads/images/qrcode/'.$result['ticket'
           $buttons = [
             [
                 "type" => "click",
-                "name" => "商城",
-                "url"  => route('books.index')
+                "name" => "官网",
+                "url"  => "https://www.edushu.co"
             ],
 
               [
@@ -503,8 +503,8 @@ file_put_contents(base_path(). '/public/uploads/images/qrcode/'.$result['ticket'
           $buttons = [
   [
       "type" => "view",
-      "name" => "在线商城",
-      "url"  => route('books.index')
+      "name" => "官网",
+      "url"  => "https://www.edushu.co"
   ],
 
   [

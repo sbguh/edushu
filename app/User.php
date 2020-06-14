@@ -142,12 +142,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function rents()
     {
         //return $this->hasMany("App\Models\Rent");
+        /*
         return $this->hasManyThrough(
             'App\Models\Rent',
             'App\Models\Card',
-
-
         );
+        */
     }
 
     public function classrooms()
@@ -168,13 +168,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function order_items()
     {
-
+    /*
         return $this->hasManyThrough(
             'App\Models\OrderItem',
             'App\Models\Order',
 
 
         );
+          */
     }
 
 /*
